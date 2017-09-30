@@ -55,13 +55,15 @@ export type LoggerType =
 
 ```
 
-To put it in words:
+Put it into words:
 
 1. First parameter can be either a string (message) or an object.
   * If first parameter is an object (context), the second parameter must be a string (message).
-2. Arguments after the message parameter are used to enable [printf message formatting](https://en.wikipedia.org/wiki/Printf_format_string).
+1. Arguments after the message parameter are used to enable [printf message formatting](https://en.wikipedia.org/wiki/Printf_format_string).
   * Printf arguments must be of a primitive type (`string | number | boolean | null`).
   * There can be up to 9 printf arguments (or 8 if the first parameter is the context object).
+
+<!-- -->
 
 ```js
 import log from 'roarr';
