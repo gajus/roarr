@@ -213,14 +213,24 @@ Convenience methods for logging a message with `logLevel` context property value
 ```js
 import log from 'roarr';
 
+log.trace('foo');
 log.debug('foo');
+log.info('foo');
+log.warn('foo');
+log.error('foo');
+log.fatal('foo');
 
 ```
 
 Produces output:
 
 ```
-{"context":{"logLevel":"debug"},"message":"foo","sequence":0,"time":1506776210001,"version":"1.0.0"}
+{"context":{"logLevel":"trace"},"message":"foo","sequence":0,"time":1506776210001,"version":"1.0.0"}
+{"context":{"logLevel":"debug"},"message":"foo","sequence":1,"time":1506776210001,"version":"1.0.0"}
+{"context":{"logLevel":"info"},"message":"foo","sequence":2,"time":1506776210001,"version":"1.0.0"}
+{"context":{"logLevel":"warn"},"message":"foo","sequence":3,"time":1506776210001,"version":"1.0.0"}
+{"context":{"logLevel":"error"},"message":"foo","sequence":4,"time":1506776210001,"version":"1.0.0"}
+{"context":{"logLevel":"fatal"},"message":"foo","sequence":5,"time":1506776210001,"version":"1.0.0"}
 
 ```
 
