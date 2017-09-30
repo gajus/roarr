@@ -12,6 +12,14 @@ JSON logger for Node.js.
   * [Prepending context using the global state](#prepending-context-using-the-global-state)
   * [Filtering logs](#filtering-logs)
     * [jq primer](#jq-primer)
+* [API](#api)
+  * [`child`](#child)
+  * [`trace`](#trace)
+  * [`debug`](#debug)
+  * [`info`](#info)
+  * [`warn`](#warn)
+  * [`error`](#error)
+  * [`fatal`](#fatal)
 * [Transports](#transports)
 * [Environment variables](#environment-variables)
 * [Conventions](#conventions)
@@ -26,47 +34,6 @@ ROARR_LOG=true node ./index.js
 
 ```
 
-`roarr` package exports a function that accepts the following API:
-
-```js
-export type LoggerType =
-  (
-    context: MessageContextType,
-    message: string,
-    c?: SprintfArgumentType,
-    d?: SprintfArgumentType,
-    e?: SprintfArgumentType,
-    f?: SprintfArgumentType,
-    g?: SprintfArgumentType,
-    h?: SprintfArgumentType,
-    i?: SprintfArgumentType,
-    k?: SprintfArgumentType
-  ) => void |
-  (
-    message: string,
-    b?: SprintfArgumentType,
-    c?: SprintfArgumentType,
-    d?: SprintfArgumentType,
-    e?: SprintfArgumentType,
-    f?: SprintfArgumentType,
-    g?: SprintfArgumentType,
-    h?: SprintfArgumentType,
-    i?: SprintfArgumentType,
-    k?: SprintfArgumentType
-  ) => void;
-
-```
-
-Put it into words:
-
-1. First parameter can be either a string (message) or an object.
-  * If first parameter is an object (context), the second parameter must be a string (message).
-1. Arguments after the message parameter are used to enable [printf message formatting](https://en.wikipedia.org/wiki/Printf_format_string).
-  * Printf arguments must be of a primitive type (`string | number | boolean | null`).
-  * There can be up to 9 printf arguments (or 8 if the first parameter is the context object).
-
-<!-- -->
-
 ```js
 import log from 'roarr';
 
@@ -74,8 +41,6 @@ log('foo');
 
 log('bar %s', 'baz');
 
-// Creates a child logger appending the provided `context` object
-// to the previous logger context.
 const debug = log.child({
   level: 'debug'
 });
@@ -181,6 +146,81 @@ To filter logs you need to use a JSON processor, e.g. [jq](https://stedolan.gith
 
 ```
 ROARR_LOG=true node ./index.js | jq 'select(.context.level == "warning" or .context.level == "error")'
+
+```
+
+## API
+
+`roarr` package exports a function that accepts the following API:
+
+```js
+export type LoggerType =
+  (
+    context: MessageContextType,
+    message: string,
+    c?: SprintfArgumentType,
+    d?: SprintfArgumentType,
+    e?: SprintfArgumentType,
+    f?: SprintfArgumentType,
+    g?: SprintfArgumentType,
+    h?: SprintfArgumentType,
+    i?: SprintfArgumentType,
+    k?: SprintfArgumentType
+  ) => void |
+  (
+    message: string,
+    b?: SprintfArgumentType,
+    c?: SprintfArgumentType,
+    d?: SprintfArgumentType,
+    e?: SprintfArgumentType,
+    f?: SprintfArgumentType,
+    g?: SprintfArgumentType,
+    h?: SprintfArgumentType,
+    i?: SprintfArgumentType,
+    k?: SprintfArgumentType
+  ) => void;
+
+```
+
+Put it into words:
+
+1. First parameter can be either a string (message) or an object.
+  * If first parameter is an object (context), the second parameter must be a string (message).
+1. Arguments after the message parameter are used to enable [printf message formatting](https://en.wikipedia.org/wiki/Printf_format_string).
+  * Printf arguments must be of a primitive type (`string | number | boolean | null`).
+  * There can be up to 9 printf arguments (or 8 if the first parameter is the context object).
+
+Refer to the [Usage](#usage) documentation for common usage examples.
+
+### `child`
+
+Creates a child logger appending the provided `context` object to the previous logger context.
+
+```js
+type ChildType = (context: MessageContextType) => LoggerType;
+
+```
+
+### `trace`
+### `debug`
+### `info`
+### `warn`
+### `error`
+### `fatal`
+
+Convenience methods for logging a message with `logLevel` context property value set to the name of the convenience method, e.g.
+
+```js
+import log from 'roarr';
+
+log.debug('foo');
+
+```
+
+Produces output:
+
+```
+{"context":{"logLevel":"debug"},"message":"foo","sequence":0,"time":1506776210001,"version":"1.0.0"}
 
 ```
 
