@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+  - 8
+script:
+  - npm run lint
+  - npm run test
+  - nyc --silent npm run test
+  - nyc report --reporter=text-lcov | coveralls
+  - nyc check-coverage --lines 90
+after_success:
+  - NODE_ENV=production npm run build
+  - semantic-release pre
+  - npm publish
+  - semantic-release post
+notifications:
+  email: false
+sudo: false

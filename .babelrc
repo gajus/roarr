@@ -1,0 +1,33 @@
+{
+  "env": {
+    "development": {
+      "plugins": [
+        "transform-object-rest-spread",
+        "transform-flow-comments"
+      ]
+    },
+    "production": {
+      "plugins": [
+        "transform-object-rest-spread",
+        "transform-flow-comments"
+      ]
+    },
+    "test": {
+      "plugins": [
+        "transform-object-rest-spread",
+        "transform-flow-strip-types",
+        "istanbul"
+      ]
+    }
+  },
+  "presets": [
+    [
+      "env",
+      {
+        "browsers": [
+          ">1%"
+        ]
+      }
+    ]
+  ]
+}
