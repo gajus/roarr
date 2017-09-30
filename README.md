@@ -56,10 +56,10 @@ debug({
 Produces output:
 
 ```
-{"context":{},"message":"foo","sequence":0,"time":1506776210001,"version":"1.0.0"}
-{"context":{},"message":"bar baz","sequence":1,"time":1506776210002,"version":"1.0.0"}
-{"context":{"level":"debug"},"message":"qux","sequence":2,"time":1506776210003,"version":"1.0.0"}
-{"context":{"level":"debug","quuz":"corge"},"sequence":3,"message":"quux","time":1506776210004,"version":"1.0.0"}
+{"context":{},"message":"foo","sequence":0,"time":1506776210000,"version":"1.0.0"}
+{"context":{},"message":"bar baz","sequence":1,"time":1506776210000,"version":"1.0.0"}
+{"context":{"level":"debug"},"message":"qux","sequence":2,"time":1506776210000,"version":"1.0.0"}
+{"context":{"level":"debug","quuz":"corge"},"sequence":3,"message":"quux","time":1506776210000,"version":"1.0.0"}
 
 ```
 
@@ -87,9 +87,9 @@ log('baz');
 Produces output:
 
 ```
-{"context":{},"message":"foo","sequence":0,"time":1506776210001,"version":"1.0.0"}
-{"context":{"taskId":1},"message":"bar","sequence":1,"time":1506776210002,"version":"1.0.0"}
-{"context":{},"message":"baz","sequence":2,"time":1506776210003,"version":"1.0.0"}
+{"context":{},"message":"foo","sequence":0,"time":1506776210000,"version":"1.0.0"}
+{"context":{"taskId":1},"message":"bar","sequence":1,"time":1506776210000,"version":"1.0.0"}
+{"context":{},"message":"baz","sequence":2,"time":1506776210000,"version":"1.0.0"}
 
 ```
 
@@ -127,9 +127,9 @@ for (const taskId of taskIds) {
 Produces output:
 
 ```
-{"context":{"taskId":1},"message":"starting task ID 1","sequence":0,"time":1506776210001,"version":"1.0.0"}
-{"context":{"taskId":1},"message":"foo","sequence":1,"time":1506776210002,"version":"1.0.0"}
-{"context":{"taskId":1},"message":"successfully completed task ID 1","sequence":2,"time":1506776210003,"version":"1.0.0"}
+{"context":{"taskId":1},"message":"starting task ID 1","sequence":0,"time":1506776210000,"version":"1.0.0"}
+{"context":{"taskId":1},"message":"foo","sequence":1,"time":1506776210000,"version":"1.0.0"}
+{"context":{"taskId":1},"message":"successfully completed task ID 1","sequence":2,"time":1506776210000,"version":"1.0.0"}
 [...]
 
 ```
@@ -225,12 +225,12 @@ log.fatal('foo');
 Produces output:
 
 ```
-{"context":{"logLevel":"trace"},"message":"foo","sequence":0,"time":1506776210001,"version":"1.0.0"}
-{"context":{"logLevel":"debug"},"message":"foo","sequence":1,"time":1506776210001,"version":"1.0.0"}
-{"context":{"logLevel":"info"},"message":"foo","sequence":2,"time":1506776210001,"version":"1.0.0"}
-{"context":{"logLevel":"warn"},"message":"foo","sequence":3,"time":1506776210001,"version":"1.0.0"}
-{"context":{"logLevel":"error"},"message":"foo","sequence":4,"time":1506776210001,"version":"1.0.0"}
-{"context":{"logLevel":"fatal"},"message":"foo","sequence":5,"time":1506776210001,"version":"1.0.0"}
+{"context":{"logLevel":"trace"},"message":"foo","sequence":0,"time":1506776210000,"version":"1.0.0"}
+{"context":{"logLevel":"debug"},"message":"foo","sequence":1,"time":1506776210000,"version":"1.0.0"}
+{"context":{"logLevel":"info"},"message":"foo","sequence":2,"time":1506776210000,"version":"1.0.0"}
+{"context":{"logLevel":"warn"},"message":"foo","sequence":3,"time":1506776210000,"version":"1.0.0"}
+{"context":{"logLevel":"error"},"message":"foo","sequence":4,"time":1506776210000,"version":"1.0.0"}
+{"context":{"logLevel":"fatal"},"message":"foo","sequence":5,"time":1506776210000,"version":"1.0.0"}
 
 ```
 
