@@ -276,6 +276,9 @@ const instanceId = ulid();
 // The reason we are using `global.ROARR.prepend` as opposed to `roarr#child`
 // is because we want this information to be prepended to all logs, including
 // those of the "my-application" dependencies.
+//
+// Note: If you are adding logger to a package intended to be consumed by other
+// packages, you must not set `global.ROARR.prepend`. Instead, use `roarr#child`.
 global.ROARR.prepend = {
   ...global.ROARR.prepend,
   application: 'my-application',
