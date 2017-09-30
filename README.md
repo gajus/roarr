@@ -23,6 +23,7 @@ JSON logger for Node.js.
 * [Transports](#transports)
 * [Environment variables](#environment-variables)
 * [Conventions](#conventions)
+  * [Context property names](#context-property-names)
   * [Using Roarr in an application](#using-roarr-in-an-application)
 
 ## Usage
@@ -257,6 +258,17 @@ When running the script in a Node.js environment, use environment variables to c
 |`ROARR_LOG`|Boolean|Enables/ disables logging.|`false`|
 
 ## Conventions
+
+### Context property names
+
+Roarr does not have reserved context property names. However, I encourage use of the following conventions:
+
+|Context property name|Use case|
+|---|---|
+|`application`|Name of the application (do not use in code intended for distribution; see `package` property instead).|
+|`package`|Name of the package.|
+|`logLevel`|Human-readable name of the log-level, e.g. "error". See [API](#api) for build-in loggers with a pre-set log-level.|
+|`namespace`|Namespace within a package, e.g. function name. Treat the same way that you would construct namespaces when using the [`debug`](https://github.com/visionmedia/debug) package.|
 
 ### Using Roarr in an application
 
