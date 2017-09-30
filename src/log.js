@@ -16,5 +16,5 @@ export default createLogger((message) => {
   const body = JSON.stringify(message);
 
   // @todo Add browser support.
-  process.stderr.write(body);
+  process.stderr.write(body + '\n');
 });
