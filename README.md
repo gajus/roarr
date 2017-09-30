@@ -20,6 +20,7 @@ JSON logger for Node.js.
   * [`warn`](#warn)
   * [`error`](#error)
   * [`fatal`](#fatal)
+* [CLI tool](#cli-tool)
 * [Transports](#transports)
 * [Environment variables](#environment-variables)
 * [Conventions](#conventions)
@@ -234,6 +235,39 @@ Produces output:
 {"context":{"logLevel":"fatal"},"message":"foo","sequence":5,"time":1506776210000,"version":"1.0.0"}
 
 ```
+
+## CLI tool
+
+Roarr comes with a CLI tool used to pretty-print logs for development purposes.
+
+To format the logs, pipe the program output to `roarr` program, e.g.
+
+```bash
+$ npm install roarr -g
+$ ROARR_LOG=true node index.js | roarr
+
+```
+
+Provided that the `index.js` program produced an output such as:
+
+```
+{"context":{"package":"forward-proxy","namespace":"createHttpProxyServer","logLevel":"info"},"message":"Internal SSL Server running on localhost:62597","sequence":0,"time":1506803138704,"version":"1.0.0"}
+{"context":{"package":"forward-proxy","namespace":"createRequestProcessor","logLevel":"info"},"message":"request start -> http://localhost:62595/","sequence":1,"time":1506803138741,"version":"1.0.0"}
+{"context":{"package":"forward-proxy","namespace":"createLogInterceptor","logLevel":"debug","headers":{"host":"localhost:62595","connection":"close"}},"message":"received request","sequence":2,"time":1506803138741,"version":"1.0.0"}
+{"context":{"package":"forward-proxy","namespace":"createRequestProcessor","logLevel":"info"},"message":"request finished <- http://localhost:62595/","sequence":3,"time":1506803138749,"version":"1.0.0"}
+{"context":{"package":"forward-proxy","namespace":"createLogInterceptor","logLevel":"info","method":"GET","requestHeaders":{"host":"localhost:62595","connection":"close"},"responseHeaders":{"date":"Sat, 30 Sep 2017 20:25:38 GMT","connection":"close","content-length":"7","x-forward-proxy-request-id":"2b746d92-1a8b-4f36-b3cc-5bff57dad94d","x-forward-proxy-cache-hit":"false"},"statusCode":200,"url":"http://localhost:62595/"},"message":"response","sequence":4,"time":1506803138755,"version":"1.0.0"}
+{"context":{"package":"forward-proxy","namespace":"createLogInterceptor","logLevel":"info","method":"GET","requestHeaders":{"host":"localhost:62595","connection":"close"},"responseHeaders":{"date":"Sat, 30 Sep 2017 20:25:38 GMT","content-length":"7","x-forward-proxy-request-id":"2b746d92-1a8b-4f36-b3cc-5bff57dad94d","x-forward-proxy-cache-hit":"true"},"statusCode":200,"url":"http://localhost:62595/"},"message":"response","sequence":5,"time":1506803138762,"version":"1.0.0"}
+
+```
+
+`roarr` CLI program will format the output to look like this:
+
+![CLI output demo](./.README/cli-output-demo.png)
+
+* `@` prefixed value denotes the name of the package.
+* `#` prefixed value denotes the namespace.
+
+Explore other CLI options using `roar --help`.
 
 ## Transports
 
