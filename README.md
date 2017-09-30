@@ -14,6 +14,8 @@ JSON logger for Node.js.
     * [jq primer](#jq-primer)
 * [Transports](#transports)
 * [Environment variables](#environment-variables)
+* [Conventions](#conventions)
+  * [Using Roarr in an application](#using-roarr-in-an-application)
 
 ## Usage
 
@@ -203,3 +205,39 @@ When running the script in a Node.js environment, use environment variables to c
 |Name|Type|Function|Default|
 |---|---|---|---|
 |`ROARR_LOG`|Boolean|Enables/ disables logging.|`false`|
+
+## Conventions
+
+### Using Roarr in an application
+
+I recommend to create a file `Logger.js` in the project directory. Use this file to create an child instance of Roarr with context parameters describing the project and the initialisation instance, e.g.
+
+```js
+/**
+ * @file Example contents of a Logger.js file.
+ */
+
+import log from 'roarr';
+import ulid from 'ulid';
+
+// Instance ID is useful for correlating logs in high concurrency environment.
+const instanceId = ulid();
+
+// The reason we are using `global.ROARR.prepend` as opposed to `roarr#child`
+// is because we want this information to be prepended to all logs, including
+// those of the "my-application" dependencies.
+global.ROARR.prepend = {
+  ...global.ROARR.prepend,
+  application: 'my-application',
+  instanceId
+};
+
+const Logger = log.child({
+  // .foo property is going to appear only in the logs that are created using
+  // the current instance of a Roarr logger.
+  foo: 'bar'
+});
+
+export default Logger;
+
+```
