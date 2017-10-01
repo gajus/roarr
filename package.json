@@ -17,6 +17,7 @@
     "prettyjson": "^1.2.1",
     "split2": "^2.2.0",
     "sprintf-js": "^1.1.1",
+    "ulid": "^1.0.0",
     "yargs": "^9.0.1"
   },
   "description": "JSON logger for Node.js.",

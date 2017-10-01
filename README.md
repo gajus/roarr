@@ -354,9 +354,11 @@ Roarr does not have reserved context property names. However, I encourage use of
 |Context property name|Use case|
 |---|---|
 |`application`|Name of the application (do not use in code intended for distribution; see `package` property instead).|
-|`package`|Name of the package.|
+|`hostname`|Machine hostname. See `roarr augment --append-hostname` option.|
+|`instanceId`|Unique instance ID. Used to distinguish log source in high-concurrency environments. See `roarr augment --append-instance-id` option.|
 |`logLevel`|Human-readable name of the log-level, e.g. "error". See [API](#api) for build-in loggers with a pre-set log-level.|
 |`namespace`|Namespace within a package, e.g. function name. Treat the same way that you would construct namespaces when using the [`debug`](https://github.com/visionmedia/debug) package.|
+|`package`|Name of the package.|
 
 ### Using Roarr in an application
 
