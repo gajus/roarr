@@ -22,7 +22,7 @@ JSON logger for Node.js and browser.
   * [`warn`](#warn)
   * [`error`](#error)
   * [`fatal`](#fatal)
-* [CLI tool](#cli-tool)
+* [CLI program](#cli-program)
 * [Transports](#transports)
 * [Environment variables](#environment-variables)
 * [Conventions](#conventions)
@@ -42,7 +42,7 @@ I needed a logger that:
 * Does not require initialisation.
 * Produces structured data.
 * [Decouples transports](#transports).
-* Has a [CLI program](#cli-tool).
+* Has a [CLI program](#cli-program).
 * Works in Node.js and browser.
 * Configurable using environment variables and [`global`](https://nodejs.org/api/globals.html) namespace.
 
@@ -291,9 +291,9 @@ Produces output:
 
 ```
 
-## CLI tool
+## CLI program
 
-Roarr comes with a CLI tool used to pretty-print logs for development purposes.
+Roarr comes with a CLI program used to pretty-print logs for development purposes.
 
 To format the logs, pipe the program output to `roarr pretty-print` program, e.g.
 
@@ -322,7 +322,9 @@ Provided that the `index.js` program produced an output such as:
 * `@` prefixed value denotes the name of the package.
 * `#` prefixed value denotes the namespace.
 
-Explore other CLI options using `roar --help`.
+The `roarr pretty-print` CLI program is using the context property names suggested in the [conventions](#conventions) to pretty-print the logs for the developer inspection purposes.
+
+Explore other CLI commands and options using `roar --help`.
 
 ## Transports
 
@@ -360,6 +362,8 @@ Roarr does not have reserved context property names. However, I encourage use of
 |`logLevel`|Human-readable name of the log-level, e.g. "error". See [API](#api) for build-in loggers with a pre-set log-level.|
 |`namespace`|Namespace within a package, e.g. function name. Treat the same way that you would construct namespaces when using the [`debug`](https://github.com/visionmedia/debug) package.|
 |`package`|Name of the package.|
+
+The `roarr pretty-print` [CLI program](#cli-program) is using the context property names suggested in the conventions to pretty-print the logs for the developer inspection purposes.
 
 ### Using Roarr in an application
 
