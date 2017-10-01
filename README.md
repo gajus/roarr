@@ -13,6 +13,7 @@ JSON logger for Node.js.
   * [Prepending context using the global state](#prepending-context-using-the-global-state)
   * [Filtering logs](#filtering-logs)
     * [jq primer](#jq-primer)
+* [Log message format](#log-message-format)
 * [API](#api)
   * [`child`](#child)
   * [`trace`](#trace)
@@ -175,6 +176,33 @@ To filter logs you need to use a JSON processor, e.g. [jq](https://stedolan.gith
 ```
 ROARR_LOG=true node ./index.js | jq 'select(.context.level == "warning" or .context.level == "error")'
 
+```
+
+## Log message format
+
+|Property name|Contents|
+|---|---|
+|`context`|Arbitrary, user-provided structured data. See [context property names](#context-property-names).|
+|`message`|User-provided message formatted using [printf](https://en.wikipedia.org/wiki/Printf_format_string).|
+|`sequence`|An incremental ID.|
+|`time`|Unix timestamp in milliseconds.|
+|`version`|Roarr log message format version.|
+
+Example:
+
+```js
+{
+  "context":{
+    "application": "task-runner",
+    "hostname": "mother",
+    "instanceId": "01BVBK4ZJQ182ZWF6FK4EC8FEY",
+    "taskId": 1
+  },
+  "message":"starting task ID 1",
+  "sequence":0,
+  "time":1506776210000,
+  "version":"1.0.0"
+}
 ```
 
 ## API
