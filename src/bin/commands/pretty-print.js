@@ -20,13 +20,14 @@ const logLevelColorMap = {
 };
 
 type LogFormatterConfigurationType = {|
-  +includeContext: boolean
+  +includeContext: boolean,
+  +excludeOrphans: boolean
 |};
 
 const createLogFormatter = (configuration: LogFormatterConfigurationType) => {
   const stream = split((line) => {
     if (!isRoarrLine(line)) {
-      return line + '\n';
+      return configuration.excludeOrphans ? '' : line + '\n';
     }
 
     const message = JSON.parse(line);
@@ -80,6 +81,11 @@ const createLogFormatter = (configuration: LogFormatterConfigurationType) => {
 export const builder = (yargs: Object) => {
   return yargs
     .options({
+      'exclude-orphans': {
+        default: false,
+        describe: 'Excludes messages that cannot be recognized as Roarr log message.',
+        type: 'boolean'
+      },
       'include-context': {
         default: true,
         type: 'boolean'

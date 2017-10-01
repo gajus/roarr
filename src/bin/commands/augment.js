@@ -12,7 +12,8 @@ export const desc = 'Augments Roarr logs with additional information.';
 
 type LogFormatterConfigurationType = {|
   +appendHostname: boolean,
-  +appendInstanceId: boolean
+  +appendInstanceId: boolean,
+  +excludeOrphans: boolean
 |};
 
 const createLogFormatter = (configuration: LogFormatterConfigurationType) => {
@@ -24,7 +25,7 @@ const createLogFormatter = (configuration: LogFormatterConfigurationType) => {
 
   const stream = split((line) => {
     if (!isRoarrLine(line)) {
-      return '';
+      return configuration.excludeOrphans ? '' : line + '\n';
     }
 
     const message = JSON.parse(line);
@@ -53,6 +54,11 @@ export const builder = (yargs: Object) => {
       },
       'append-instance-id': {
         default: false,
+        type: 'boolean'
+      },
+      'exclude-orphans': {
+        default: false,
+        describe: 'Excludes messages that cannot be recognized as Roarr log message.',
         type: 'boolean'
       }
     });
