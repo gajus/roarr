@@ -55,10 +55,12 @@ const createLogFormatter = (configuration: LogFormatterConfigurationType) => {
       /* eslint-disable no-unused-vars */
       const {
         application: tmp0,
-        logLevel: tmp1,
-        namespace: tmp2,
-        package: tmp3,
-        package: tmp4,
+        hostname: tmp1,
+        instanceId: tmp2,
+        logLevel: tmp3,
+        namespace: tmp4,
+        package: tmp5,
+        package: tmp6,
         ...rest
       } = message.context;
 
