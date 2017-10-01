@@ -26,7 +26,7 @@ type LogFormatterConfigurationType = {|
 const createLogFormatter = (configuration: LogFormatterConfigurationType) => {
   const stream = split((line) => {
     if (!isRoarrLine(line)) {
-      return null;
+      return line + '\n';
     }
 
     const message = JSON.parse(line);
@@ -47,8 +47,7 @@ const createLogFormatter = (configuration: LogFormatterConfigurationType) => {
       formattedMessage += ' (#' + message.context.namespace + ')';
     }
 
-    // eslint-disable-next-line no-console
-    console.log(formattedMessage + ': ' + message.message);
+    formattedMessage += ': ' + message.message + '\n';
 
     if (configuration.includeContext && message.context) {
       /* eslint-disable no-unused-vars */
@@ -67,11 +66,11 @@ const createLogFormatter = (configuration: LogFormatterConfigurationType) => {
 
       if (Object.keys(rest).length) {
         // eslint-disable-next-line no-console
-        console.log(prettyjson.render(rest) + '\n');
+        formattedMessage += prettyjson.render(rest) + '\n\n';
       }
     }
 
-    return null;
+    return formattedMessage;
   });
 
   return stream;
