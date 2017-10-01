@@ -324,7 +324,7 @@ Provided that the `index.js` program produced an output such as:
 
 The `roarr pretty-print` CLI program is using the context property names suggested in the [conventions](#conventions) to pretty-print the logs for the developer inspection purposes.
 
-Explore other CLI commands and options using `roar --help`.
+Explore other CLI commands and options using `roarr --help`.
 
 ## Transports
 
