@@ -20,7 +20,7 @@
     "ulid": "^1.0.0",
     "yargs": "^9.0.1"
   },
-  "description": "JSON logger for Node.js.",
+  "description": "JSON logger for Node.js and browser.",
   "devDependencies": {
     "ava": "^0.22.0",
     "babel-cli": "^6.26.0",
