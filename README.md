@@ -194,7 +194,7 @@ Example:
 {
   "context":{
     "application": "task-runner",
-    "hostname": "mother",
+    "hostname": "curiosity.local",
     "instanceId": "01BVBK4ZJQ182ZWF6FK4EC8FEY",
     "taskId": 1
   },
