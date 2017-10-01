@@ -3,6 +3,9 @@
 import split from 'split2';
 import chalk from 'chalk';
 import prettyjson from 'prettyjson';
+import {
+  isRoarrLine
+} from './utilities';
 
 export const command = 'pretty-print';
 export const desc = 'Format logs for user-inspection.';
@@ -14,10 +17,6 @@ const logLevelColorMap = {
   INFO: 'cyan',
   TRACE: 'gray',
   WARN: 'yellow'
-};
-
-const isRoarrLine = (text: string): boolean => {
-  return text.includes('"message"') && text.includes('"sequence"');
 };
 
 type LogFormatterConfigurationType = {|
