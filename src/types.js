@@ -21,28 +21,34 @@ export type MessageType = {|
   +version: string
 |};
 
-export type LoggerType =
-  (
-    context: MessageContextType,
-    message: string,
-    c?: SprintfArgumentType,
-    d?: SprintfArgumentType,
-    e?: SprintfArgumentType,
-    f?: SprintfArgumentType,
-    g?: SprintfArgumentType,
-    h?: SprintfArgumentType,
-    i?: SprintfArgumentType,
-    k?: SprintfArgumentType
-  ) => void |
-  (
-    message: string,
-    b?: SprintfArgumentType,
-    c?: SprintfArgumentType,
-    d?: SprintfArgumentType,
-    e?: SprintfArgumentType,
-    f?: SprintfArgumentType,
-    g?: SprintfArgumentType,
-    h?: SprintfArgumentType,
-    i?: SprintfArgumentType,
-    k?: SprintfArgumentType
-  ) => void;
+declare function Logger (
+  context: MessageContextType,
+  message: string,
+  c?: SprintfArgumentType,
+  d?: SprintfArgumentType,
+  e?: SprintfArgumentType,
+  f?: SprintfArgumentType,
+  g?: SprintfArgumentType,
+  h?: SprintfArgumentType,
+  i?: SprintfArgumentType,
+  k?: SprintfArgumentType
+): void;
+
+// eslint-disable-next-line no-redeclare
+declare function Logger (
+  message: string,
+  b?: SprintfArgumentType,
+  c?: SprintfArgumentType,
+  d?: SprintfArgumentType,
+  e?: SprintfArgumentType,
+  f?: SprintfArgumentType,
+  g?: SprintfArgumentType,
+  h?: SprintfArgumentType,
+  i?: SprintfArgumentType,
+  k?: SprintfArgumentType
+): void;
+
+/**
+ * see https://twitter.com/kuizinas/status/914139352908943360
+ */
+export type LoggerType = typeof Logger;
