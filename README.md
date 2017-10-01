@@ -378,6 +378,9 @@ import log from 'roarr';
 import ulid from 'ulid';
 
 // Instance ID is useful for correlating logs in high concurrency environment.
+//
+// See `roarr augment --append-instance-id` option as an alternative way to
+// append instance ID to all logs.
 const instanceId = ulid();
 
 // The reason we are using `global.ROARR.prepend` as opposed to `roarr#child`
