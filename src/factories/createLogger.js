@@ -41,6 +41,10 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext: Messa
       };
       message = sprintf(a, b, c, d, e, f, g, h, i, k);
     } else {
+      if (typeof b !== 'string') {
+        throw new TypeError('Message must be a string.');
+      }
+
       context = {
         ...global.ROARR.prepend,
         ...parentContext,
