@@ -174,7 +174,7 @@ To filter logs you need to use a JSON processor, e.g. [jq](https://stedolan.gith
 `jq` allows you to filter JSON messages using [`select(boolean_expression)`](https://stedolan.github.io/jq/manual/#select(boolean_expression)), e.g.
 
 ```
-ROARR_LOG=true node ./index.js | jq 'select(.context.level == "warning" or .context.level == "error")'
+ROARR_LOG=true node ./index.js | jq 'select(.context.logLevel == "warning" or .context.logLevel == "error")'
 
 ```
 
