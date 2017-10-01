@@ -266,11 +266,11 @@ Produces output:
 
 Roarr comes with a CLI tool used to pretty-print logs for development purposes.
 
-To format the logs, pipe the program output to `roarr` program, e.g.
+To format the logs, pipe the program output to `roarr pretty-print` program, e.g.
 
 ```bash
 $ npm install roarr -g
-$ ROARR_LOG=true node index.js | roarr
+$ ROARR_LOG=true node index.js | roarr pretty-print
 
 ```
 

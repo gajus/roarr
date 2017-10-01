@@ -1,0 +1,5 @@
+{
+  "rules": {
+    "filenames/match-regex": 0
+  }
+}
