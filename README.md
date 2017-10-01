@@ -8,6 +8,7 @@
 
 JSON logger for Node.js.
 
+* [Motivation](#motivation)
 * [Usage](#usage)
   * [Prepending context using the global state](#prepending-context-using-the-global-state)
   * [Filtering logs](#filtering-logs)
@@ -26,6 +27,31 @@ JSON logger for Node.js.
 * [Conventions](#conventions)
   * [Context property names](#context-property-names)
   * [Using Roarr in an application](#using-roarr-in-an-application)
+
+## Motivation
+
+For a long time I have been a big fan of using [`debug`](https://github.com/visionmedia/debug). `debug` is simple to use, works in Node.js and browser, does not require configuration and it is fast. However, problems arise when you need to parse logs. Anything but one-line text messages cannot be parsed in a safe way.
+
+To log structured data, I have been using [Winston](https://github.com/winstonjs/winston) and [Bunyan](https://github.com/trentm/node-bunyan). These packages are great for application-level logging. I have preferred Bunyan because of the [Bunyan CLI program](https://github.com/trentm/node-bunyan#cli-usage) used to pretty-print logs. However, these packages require program-level configuration – when constructing an instance of a logger, you need to define the transport and the log-level. This makes them unsuitable for use in code designed to be consumed by other applications.
+
+Then there is [pino](https://github.com/pinojs/pino). pino is fast JSON logger, it has CLI program equivalent to Bunyan, it decouples transports, and it has sane default configuration. Unfortunately, you still need to instantiate logger instance at the application-level. This makes it more suitable for application-level logging just like Winston and Bunyan.
+
+I needed a logger that:
+
+* Does not require initialisation.
+* Produces structured data.
+* [Decouples transports](#transports).
+* Has a [CLI program](#cli-tool).
+* Works in Node.js and browser.
+* Configurable using environment variables and [`global`](https://nodejs.org/api/globals.html) namespace.
+
+In other words,
+
+* a logger that I can use in an application code and in dependencies.
+* a logger that allows to correlate logs between the main application code and the dependency code.
+* a logger that works well with transports in external processes.
+
+Roarr is this logger.
 
 ## Usage
 
