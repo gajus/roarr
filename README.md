@@ -192,17 +192,18 @@ Example:
 
 ```js
 {
-  "context":{
+  "context": {
     "application": "task-runner",
     "hostname": "curiosity.local",
     "instanceId": "01BVBK4ZJQ182ZWF6FK4EC8FEY",
     "taskId": 1
   },
-  "message":"starting task ID 1",
-  "sequence":0,
-  "time":1506776210000,
-  "version":"1.0.0"
+  "message": "starting task ID 1",
+  "sequence": 0,
+  "time": 1506776210000,
+  "version": "1.0.0"
 }
+
 ```
 
 ## API
