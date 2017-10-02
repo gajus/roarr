@@ -347,6 +347,7 @@ When running the script in a Node.js environment, use environment variables to c
 |Name|Type|Function|Default|
 |---|---|---|---|
 |`ROARR_LOG`|Boolean|Enables/ disables logging.|`false`|
+|`ROARR_STREAM`|`STDOUT`, `STDERR`|Name of the stream where the logs will be written.|`STDOUT`|
 
 ## Conventions
 

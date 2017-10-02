@@ -8,6 +8,9 @@ import {
 // eslint-disable-next-line no-process-env
 const ROARR_LOG = parseBoolean(process.env.ROARR_LOG) === true;
 
+// eslint-disable-next-line no-process-env
+const ROARR_STREAM = (process.env.ROARR_STREAM || '').toUpperCase() === 'STDERR' ? 'STDERR' : 'STDOUT';
+
 export default createLogger((message) => {
   if (!ROARR_LOG) {
     return;
@@ -16,5 +19,9 @@ export default createLogger((message) => {
   const body = JSON.stringify(message);
 
   // @todo Add browser support.
-  process.stderr.write(body + '\n');
+  if (ROARR_STREAM === 'STDOUT') {
+    process.stderr.write(body + '\n');
+  } else {
+    process.stdout.write(body + '\n');
+  }
 });
