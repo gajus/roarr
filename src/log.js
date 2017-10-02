@@ -20,8 +20,8 @@ export default createLogger((message) => {
 
   // @todo Add browser support.
   if (ROARR_STREAM === 'STDOUT') {
-    process.stderr.write(body + '\n');
-  } else {
     process.stdout.write(body + '\n');
+  } else {
+    process.stderr.write(body + '\n');
   }
 });
