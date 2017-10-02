@@ -48,7 +48,7 @@ const createLogFormatter = (configuration: LogFormatterConfigurationType) => {
 export const builder = (yargs: Object) => {
   return yargs
     .options({
-      'append-hostname-id': {
+      'append-hostname': {
         default: false,
         type: 'boolean'
       },
