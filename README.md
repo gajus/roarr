@@ -29,6 +29,8 @@ JSON logger for Node.js and browser.
   * [Context property names](#context-property-names)
   * [Using Roarr in an application](#using-roarr-in-an-application)
   * [Using Roarr in modules](#using-roarr-in-modules)
+* [Recipes](#recipes)
+  * [Logging errors](#logging-errors)
 
 ## Motivation
 
@@ -429,3 +431,15 @@ export default Roarr.child({
 ```
 
 Roarr does not have reserved context property names. However, I encourage use of the conventions. The `roarr pretty-print` [CLI program](#cli-program) is using the context property names suggested in the [conventions](#conventions) to pretty-print the logs for the developer inspection purposes.
+
+## Recipes
+
+### Logging errors
+
+This is not specific to Roarr – this suggestion applies to any kind of logging.
+
+If you want to include an instance of [`Error`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error) in the context, you must serialize the error.
+
+The least-error prone way to do this is to use an existing library, e.g. [`serialize-error`](https://www.npmjs.com/package/serialize-error).
+
+Without using serialisation, your errors will be logged without the error name and stack trace.
