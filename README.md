@@ -28,6 +28,7 @@ JSON logger for Node.js and browser.
 * [Conventions](#conventions)
   * [Context property names](#context-property-names)
   * [Using Roarr in an application](#using-roarr-in-an-application)
+  * [Using Roarr in modules](#using-roarr-in-modules)
 
 ## Motivation
 
@@ -370,6 +371,8 @@ The `roarr pretty-print` [CLI program](#cli-program) is using the context proper
 
 ### Using Roarr in an application
 
+To avoid code duplication, you can use a singleton pattern to export a logger instance with predefined context properties (e.g. describing the application).
+
 I recommend to create a file `Logger.js` in the project directory. Use this file to create an child instance of Roarr with context parameters describing the project and the initialisation instance, e.g.
 
 ```js
@@ -407,3 +410,22 @@ const Logger = log.child({
 export default Logger;
 
 ```
+
+### Using Roarr in modules
+
+If you are developing a code that is designed to be consumed by other applications/ modules, then you should avoid using global.ROARR (though, there are valid use cases). However, you should still start the project by defining a `Logger.js` file and use log.child instead.
+
+```js
+/**
+ * @file Example contents of a Logger.js file.
+ */
+import Roarr from 'roarr';
+
+export default Roarr.child({
+  domain: 'database',
+  package: 'my-package'
+});
+
+```
+
+Roarr does not have reserved context property names. However, I encourage use of the conventions. The `roarr pretty-print` [CLI program](#cli-program) is using the context property names suggested in the [conventions](#conventions) to pretty-print the logs for the developer inspection purposes.
