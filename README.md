@@ -31,6 +31,7 @@ JSON logger for Node.js and browser.
   * [Using Roarr in modules](#using-roarr-in-modules)
 * [Recipes](#recipes)
   * [Logging errors](#logging-errors)
+  * [Using with Elasticsearch](#using-with-elasticsearch)
 
 ## Motivation
 
@@ -443,3 +444,56 @@ If you want to include an instance of [`Error`](https://developer.mozilla.org/en
 The least-error prone way to do this is to use an existing library, e.g. [`serialize-error`](https://www.npmjs.com/package/serialize-error).
 
 Without using serialisation, your errors will be logged without the error name and stack trace.
+
+### Using with Elasticsearch
+
+If you are using [Elasticsearch](https://www.elastic.co/products/elasticsearch), you will want to create an [index template](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html).
+
+The following serves as the ground work for the index template. It includes the main Roarr log message properties (context, message, time) and the context properties suggested in the [conventions](#conventions).
+
+```json
+{
+  "mappings": {
+    "log_message": {
+      "_source": {
+        "enabled": true
+      },
+      "dynamic": "strict",
+      "properties": {
+        "context": {
+          "dynamic": true,
+          "properties": {
+            "application": {
+              "type": "keyword"
+            },
+            "hostname": {
+              "type": "keyword"
+            },
+            "instanceId": {
+              "type": "keyword"
+            },
+            "logLevel": {
+              "type": "keyword"
+            },
+            "namespace": {
+              "type": "text"
+            },
+            "package": {
+              "type": "text"
+            }
+          }
+        },
+        "message": {
+          "type": "text"
+        },
+        "time": {
+          "format": "epoch_millis",
+          "type": "date"
+        }
+      }
+    }
+  },
+  "template": "logstash-*"
+}
+
+```
