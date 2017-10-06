@@ -32,13 +32,17 @@ const createLogFormatter = (configuration: LogFormatterConfigurationType) => {
 
     const message = JSON.parse(line);
 
-    const logLevel = message.context.logLevel.toUpperCase();
-
-    const logLevelColorName = logLevelColorMap[logLevel] || 'inverse';
-
     let formattedMessage = '';
 
-    formattedMessage = '[' + new Date(message.time).toISOString() + '] ' + chalk[logLevelColorName](logLevel);
+    formattedMessage = '[' + new Date(message.time).toISOString() + ']';
+
+    if (message.context.logLevel) {
+      const logLevel = message.context.logLevel.toUpperCase();
+
+      const logLevelColorName = logLevelColorMap[logLevel] || 'inverse';
+
+      formattedMessage += ' ' + chalk[logLevelColorName](logLevel);
+    }
 
     if (message.context.package) {
       formattedMessage += ' (@' + message.context.package + ')';
