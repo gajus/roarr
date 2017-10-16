@@ -10,6 +10,17 @@ import {
 export const command = 'pretty-print';
 export const desc = 'Format logs for user-inspection.';
 
+/* eslint-disable quote-props */
+const logLevels = {
+  '10': 'TRACE',
+  '20': 'DEBUG',
+  '30': 'INFO',
+  '40': 'WARN',
+  '50': 'ERROR',
+  '60': 'FATAL'
+};
+/* eslint-enable */
+
 const logLevelColorMap = {
   DEBUG: 'gray',
   ERROR: 'red',
@@ -17,6 +28,10 @@ const logLevelColorMap = {
   INFO: 'cyan',
   TRACE: 'gray',
   WARN: 'yellow'
+};
+
+const getLogLevelName = (logLevel: number): string => {
+  return logLevels[logLevel] || 'INFO';
 };
 
 type LogFormatterConfigurationType = {|
@@ -36,12 +51,12 @@ const createLogFormatter = (configuration: LogFormatterConfigurationType) => {
 
     formattedMessage = '[' + new Date(message.time).toISOString() + ']';
 
-    if (message.context.logLevel) {
-      const logLevel = message.context.logLevel.toUpperCase();
+    if (message.context.logLevel && typeof message.context.logLevel === 'number') {
+      const logLevelName = getLogLevelName(message.context.logLevel);
 
-      const logLevelColorName = logLevelColorMap[logLevel] || 'inverse';
+      const logLevelColorName = logLevelColorMap[logLevelName];
 
-      formattedMessage += ' ' + chalk[logLevelColorName](logLevel);
+      formattedMessage += ' ' + chalk[logLevelColorName](logLevelName + ' (' + message.context.logLevel + ')');
     }
 
     if (message.context.package) {

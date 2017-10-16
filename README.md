@@ -75,7 +75,7 @@ log('foo');
 log('bar %s', 'baz');
 
 const debug = log.child({
-  level: 'debug'
+  logLevel: 10
 });
 
 debug('qux');
@@ -91,8 +91,8 @@ Produces output:
 ```
 {"context":{},"message":"foo","sequence":0,"time":1506776210000,"version":"1.0.0"}
 {"context":{},"message":"bar baz","sequence":1,"time":1506776210000,"version":"1.0.0"}
-{"context":{"level":"debug"},"message":"qux","sequence":2,"time":1506776210000,"version":"1.0.0"}
-{"context":{"level":"debug","quuz":"corge"},"sequence":3,"message":"quux","time":1506776210000,"version":"1.0.0"}
+{"context":{"logLevel":10},"message":"qux","sequence":2,"time":1506776210000,"version":"1.0.0"}
+{"context":{"logLevel":10,"quuz":"corge"},"sequence":3,"message":"quux","time":1506776210000,"version":"1.0.0"}
 
 ```
 
@@ -178,7 +178,7 @@ To filter logs you need to use a JSON processor, e.g. [jq](https://stedolan.gith
 `jq` allows you to filter JSON messages using [`select(boolean_expression)`](https://stedolan.github.io/jq/manual/#select(boolean_expression)), e.g.
 
 ```
-ROARR_LOG=true node ./index.js | jq 'select(.context.logLevel == "warning" or .context.logLevel == "error")'
+ROARR_LOG=true node ./index.js | jq 'select(.context.logLevel > 40)'
 
 ```
 
@@ -286,12 +286,12 @@ log.fatal('foo');
 Produces output:
 
 ```
-{"context":{"logLevel":"trace"},"message":"foo","sequence":0,"time":1506776210000,"version":"1.0.0"}
-{"context":{"logLevel":"debug"},"message":"foo","sequence":1,"time":1506776210000,"version":"1.0.0"}
-{"context":{"logLevel":"info"},"message":"foo","sequence":2,"time":1506776210000,"version":"1.0.0"}
-{"context":{"logLevel":"warn"},"message":"foo","sequence":3,"time":1506776210000,"version":"1.0.0"}
-{"context":{"logLevel":"error"},"message":"foo","sequence":4,"time":1506776210000,"version":"1.0.0"}
-{"context":{"logLevel":"fatal"},"message":"foo","sequence":5,"time":1506776210000,"version":"1.0.0"}
+{"context":{"logLevel":10},"message":"foo","sequence":0,"time":1506776210000,"version":"1.0.0"}
+{"context":{"logLevel":20},"message":"foo","sequence":1,"time":1506776210000,"version":"1.0.0"}
+{"context":{"logLevel":30},"message":"foo","sequence":2,"time":1506776210000,"version":"1.0.0"}
+{"context":{"logLevel":40},"message":"foo","sequence":3,"time":1506776210000,"version":"1.0.0"}
+{"context":{"logLevel":50},"message":"foo","sequence":4,"time":1506776210000,"version":"1.0.0"}
+{"context":{"logLevel":60},"message":"foo","sequence":5,"time":1506776210000,"version":"1.0.0"}
 
 ```
 
@@ -310,12 +310,12 @@ $ ROARR_LOG=true node index.js | roarr pretty-print
 Provided that the `index.js` program produced an output such as:
 
 ```
-{"context":{"package":"forward-proxy","namespace":"createHttpProxyServer","logLevel":"info"},"message":"Internal SSL Server running on localhost:62597","sequence":0,"time":1506803138704,"version":"1.0.0"}
-{"context":{"package":"forward-proxy","namespace":"createRequestProcessor","logLevel":"info"},"message":"request start -> http://localhost:62595/","sequence":1,"time":1506803138741,"version":"1.0.0"}
-{"context":{"package":"forward-proxy","namespace":"createLogInterceptor","logLevel":"debug","headers":{"host":"localhost:62595","connection":"close"}},"message":"received request","sequence":2,"time":1506803138741,"version":"1.0.0"}
-{"context":{"package":"forward-proxy","namespace":"createRequestProcessor","logLevel":"info"},"message":"request finished <- http://localhost:62595/","sequence":3,"time":1506803138749,"version":"1.0.0"}
-{"context":{"package":"forward-proxy","namespace":"createLogInterceptor","logLevel":"info","method":"GET","requestHeaders":{"host":"localhost:62595","connection":"close"},"responseHeaders":{"date":"Sat, 30 Sep 2017 20:25:38 GMT","connection":"close","content-length":"7","x-forward-proxy-request-id":"2b746d92-1a8b-4f36-b3cc-5bff57dad94d","x-forward-proxy-cache-hit":"false"},"statusCode":200,"url":"http://localhost:62595/"},"message":"response","sequence":4,"time":1506803138755,"version":"1.0.0"}
-{"context":{"package":"forward-proxy","namespace":"createLogInterceptor","logLevel":"info","method":"GET","requestHeaders":{"host":"localhost:62595","connection":"close"},"responseHeaders":{"date":"Sat, 30 Sep 2017 20:25:38 GMT","content-length":"7","x-forward-proxy-request-id":"2b746d92-1a8b-4f36-b3cc-5bff57dad94d","x-forward-proxy-cache-hit":"true"},"statusCode":200,"url":"http://localhost:62595/"},"message":"response","sequence":5,"time":1506803138762,"version":"1.0.0"}
+{"context":{"package":"forward-proxy","namespace":"createHttpProxyServer","logLevel":30},"message":"Internal SSL Server running on localhost:62597","sequence":0,"time":1506803138704,"version":"1.0.0"}
+{"context":{"package":"forward-proxy","namespace":"createRequestProcessor","logLevel":30},"message":"request start -> http://localhost:62595/","sequence":1,"time":1506803138741,"version":"1.0.0"}
+{"context":{"package":"forward-proxy","namespace":"createLogInterceptor","logLevel":20,"headers":{"host":"localhost:62595","connection":"close"}},"message":"received request","sequence":2,"time":1506803138741,"version":"1.0.0"}
+{"context":{"package":"forward-proxy","namespace":"createRequestProcessor","logLevel":30},"message":"request finished <- http://localhost:62595/","sequence":3,"time":1506803138749,"version":"1.0.0"}
+{"context":{"package":"forward-proxy","namespace":"createLogInterceptor","logLevel":30,"method":"GET","requestHeaders":{"host":"localhost:62595","connection":"close"},"responseHeaders":{"date":"Sat, 30 Sep 2017 20:25:38 GMT","connection":"close","content-length":"7","x-forward-proxy-request-id":"2b746d92-1a8b-4f36-b3cc-5bff57dad94d","x-forward-proxy-cache-hit":"false"},"statusCode":200,"url":"http://localhost:62595/"},"message":"response","sequence":4,"time":1506803138755,"version":"1.0.0"}
+{"context":{"package":"forward-proxy","namespace":"createLogInterceptor","logLevel":30,"method":"GET","requestHeaders":{"host":"localhost:62595","connection":"close"},"responseHeaders":{"date":"Sat, 30 Sep 2017 20:25:38 GMT","content-length":"7","x-forward-proxy-request-id":"2b746d92-1a8b-4f36-b3cc-5bff57dad94d","x-forward-proxy-cache-hit":"true"},"statusCode":200,"url":"http://localhost:62595/"},"message":"response","sequence":5,"time":1506803138762,"version":"1.0.0"}
 
 ```
 
@@ -366,11 +366,24 @@ Roarr does not have reserved context property names. However, I encourage use of
 |`application`|Name of the application (do not use in code intended for distribution; see `package` property instead).|
 |`hostname`|Machine hostname. See `roarr augment --append-hostname` option.|
 |`instanceId`|Unique instance ID. Used to distinguish log source in high-concurrency environments. See `roarr augment --append-instance-id` option.|
-|`logLevel`|Human-readable name of the log-level, e.g. "error". See [API](#api) for build-in loggers with a pre-set log-level.|
+|`logLevel`|A numeric value indicating the [log level](#log-levels). See [API](#api) for the build-in loggers with a pre-set log-level.|
 |`namespace`|Namespace within a package, e.g. function name. Treat the same way that you would construct namespaces when using the [`debug`](https://github.com/visionmedia/debug) package.|
 |`package`|Name of the package.|
 
 The `roarr pretty-print` [CLI program](#cli-program) is using the context property names suggested in the conventions to pretty-print the logs for the developer inspection purposes.
+
+#### Log levels
+
+The `roarr pretty-print` [CLI program](#cli-program) translates `logLevel` values to the following human-readable names:
+
+|`logLevel`|Human-readable name|
+|---|---|
+|10|TRACE|
+|20|DEBUG|
+|30|INFO|
+|40|WARN|
+|50|ERROR|
+|60|FATAL|
 
 ### Using Roarr in an application
 
@@ -473,7 +486,7 @@ The following serves as the ground work for the index template. It includes the 
               "type": "keyword"
             },
             "logLevel": {
-              "type": "keyword"
+              "type": "integer"
             },
             "namespace": {
               "type": "text"

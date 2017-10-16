@@ -16,14 +16,14 @@ type OnMessageEventHandlerType = (message: MessageType) => void;
 
 const version = '1.0.0';
 
-const logLevels = [
-  'trace',
-  'debug',
-  'info',
-  'warn',
-  'error',
-  'fatal'
-];
+const logLevels = {
+  debug: 20,
+  error: 50,
+  fatal: 60,
+  info: 30,
+  trace: 10,
+  warn: 40
+};
 
 const createLogger = (onMessage: OnMessageEventHandlerType, parentContext: MessageContextType = {}) => {
   // eslint-disable-next-line id-length
@@ -70,11 +70,13 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext: Messa
     });
   };
 
-  for (const logLevel of logLevels) {
+  const logLevelNames = Object.keys(logLevels);
+
+  for (const logLevelName of logLevelNames) {
     // eslint-disable-next-line id-length
-    log[logLevel] = (a, b, c, d, e, f, g, h, i, k) => {
+    log[logLevelName] = (a, b, c, d, e, f, g, h, i, k) => {
       return log.child({
-        logLevel
+        logLevel: logLevels[logLevelName]
       })(a, b, c, d, e, f, g, h, i, k);
     };
   }

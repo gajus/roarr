@@ -234,7 +234,7 @@ test('convenience methods trace, debug, info, warn, error and fatal prepend a lo
   t.deepEqual(log.messages, [
     {
       context: {
-        logLevel: 'trace'
+        logLevel: 10
       },
       message: 'foo 0',
       sequence: 0,
@@ -243,7 +243,7 @@ test('convenience methods trace, debug, info, warn, error and fatal prepend a lo
     },
     {
       context: {
-        logLevel: 'debug'
+        logLevel: 20
       },
       message: 'foo 1',
       sequence: 1,
@@ -252,7 +252,7 @@ test('convenience methods trace, debug, info, warn, error and fatal prepend a lo
     },
     {
       context: {
-        logLevel: 'info'
+        logLevel: 30
       },
       message: 'foo 2',
       sequence: 2,
@@ -261,7 +261,7 @@ test('convenience methods trace, debug, info, warn, error and fatal prepend a lo
     },
     {
       context: {
-        logLevel: 'warn'
+        logLevel: 40
       },
       message: 'foo 3',
       sequence: 3,
@@ -270,7 +270,7 @@ test('convenience methods trace, debug, info, warn, error and fatal prepend a lo
     },
     {
       context: {
-        logLevel: 'error'
+        logLevel: 50
       },
       message: 'foo 4',
       sequence: 4,
@@ -279,7 +279,7 @@ test('convenience methods trace, debug, info, warn, error and fatal prepend a lo
     },
     {
       context: {
-        logLevel: 'fatal'
+        logLevel: 60
       },
       message: 'foo 5',
       sequence: 5,
