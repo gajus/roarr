@@ -177,10 +177,19 @@ To filter logs you need to use a JSON processor, e.g. [jq](https://stedolan.gith
 
 `jq` allows you to filter JSON messages using [`select(boolean_expression)`](https://stedolan.github.io/jq/manual/#select(boolean_expression)), e.g.
 
-```
+```bash
 ROARR_LOG=true node ./index.js | jq 'select(.context.logLevel > 40)'
 
 ```
+
+Combine it with `roarr pretty-print` to pretty-print a subset of the logs:
+
+```bash
+ROARR_LOG=true node ./index.js | jq -cM 'select(.context.logLevel > 40)'
+
+```
+
+(Notice the use of `-cM` parameters to disable JSON colarization and formatting.)
 
 ## Log message format
 
