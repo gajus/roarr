@@ -39,7 +39,7 @@
     "nock": "^9.0.27",
     "nyc": "^11.3.0",
     "semantic-release": "^8.2.0",
-    "sinon": "^4.1.0"
+    "sinon": "^4.1.1"
   },
   "engines": {
     "node": ">=8.0"

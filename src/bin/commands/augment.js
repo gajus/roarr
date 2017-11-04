@@ -2,7 +2,9 @@
 
 import os from 'os';
 import split from 'split2';
-import ulid from 'ulid';
+import {
+  ulid
+} from 'ulid';
 import {
   isRoarrLine
 } from './utilities';
