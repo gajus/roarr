@@ -465,6 +465,26 @@ If you want to include an instance of [`Error`](https://developer.mozilla.org/en
 
 The least-error prone way to do this is to use an existing library, e.g. [`serialize-error`](https://www.npmjs.com/package/serialize-error).
 
+```js
+import log from 'roarr';
+import serializeError from 'serialize-error';
+
+// [..]
+
+send((error, result) => {
+  if (error) {
+    log.error({
+      error: serializeError(error)
+    }, 'message not sent due to a remote error');
+
+    return;
+  }
+
+  // [..]
+});
+
+```
+
 Without using serialisation, your errors will be logged without the error name and stack trace.
 
 ### Using with Elasticsearch
