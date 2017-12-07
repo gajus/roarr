@@ -191,6 +191,23 @@ ROARR_LOG=true node ./index.js | jq -cM 'select(.context.logLevel > 40)'
 
 (Notice the use of `-cM` parameters to disable JSON colarization and formatting.)
 
+If your application outputs non-JSON output, jq will fail with an error similar to:
+
+```
+parse error: Invalid numeric literal at line 1, column 5
+Error: write EPIPE
+    at _errnoException (util.js:1031:13)
+    at WriteWrap.afterWrite (net.js:873:14)
+
+```
+
+To ignore the non-JSON output, use jq `-R` flag (raw input) in combination with [`fromjson`](https://stedolan.github.io/jq/manual/#Convertto/fromJSON), e.g.
+
+```bash
+ROARR_LOG=true node ./index.js | jq -cRM 'fromjson? | select(.context.logLevel > 40)'
+
+```
+
 ## Log message format
 
 |Property name|Contents|
