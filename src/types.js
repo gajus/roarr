@@ -1,8 +1,13 @@
 // @flow
 
+// eslint-disable-next-line no-use-before-define
+export type SerializableType = string | number | boolean | null | SerializableArrayType | SerializableObjectType;
+
 export type SerializableObjectType = {
-  +[key: string]: string | number | null | SerializableObjectType
+  +[key: string]: SerializableType
 };
+
+export type SerializableArrayType = SerializableType[];
 
 export type RoarrGlobalStateType = {
   prepend: SerializableObjectType,
@@ -15,7 +20,7 @@ export type MessageContextType = SerializableObjectType;
 
 export type MessageType = {|
   +context: MessageContextType,
-  +message: string,
+  +message: SerializableType,
   +sequence: number,
   +time: number,
   +version: string
