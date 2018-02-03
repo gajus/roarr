@@ -34,24 +34,30 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext: Messa
     let context;
     let message;
 
+    context = {
+      ...global.ROARR.prepend,
+      ...parentContext
+    };
+
     if (typeof a === 'string') {
-      context = {
-        ...global.ROARR.prepend,
-        ...parentContext
-      };
       message = sprintf(a, b, c, d, e, f, g, h, i, k);
-    } else {
-      if (typeof b !== 'string') {
-        throw new TypeError('Message must be a string.');
+    } else if (typeof a === 'object') {
+      if (b === undefined) {
+        message = a;
+      } else {
+        context = {
+          ...context,
+          ...a
+        };
+
+        if (typeof b === 'string') {
+          message = sprintf(b, c, d, e, f, g, h, i, k);
+        } else {
+          message = b;
+        }
       }
-
-      context = {
-        ...global.ROARR.prepend,
-        ...parentContext,
-        ...a
-      };
-
-      message = sprintf(b, c, d, e, f, g, h, i, k);
+    } else {
+      message = a;
     }
 
     onMessage({

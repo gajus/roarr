@@ -47,6 +47,98 @@ test('creates a simple message', (t) => {
   ]);
 });
 
+test('creates an object message', (t) => {
+  const log = createLoggerWithHistory();
+
+  log({
+    foo: {
+      bar: 'baz'
+    }
+  });
+
+  t.deepEqual(log.messages, [
+    {
+      context: {},
+      message: {
+        foo: {
+          bar: 'baz'
+        }
+      },
+      sequence,
+      time,
+      version
+    }
+  ]);
+});
+
+test('creates an array message', (t) => {
+  const log = createLoggerWithHistory();
+
+  log([{
+    foo: 'bar'
+  }]);
+
+  t.deepEqual(log.messages, [
+    {
+      context: {},
+      message: [{
+        foo: 'bar'
+      }],
+      sequence,
+      time,
+      version
+    }
+  ]);
+});
+
+test('creates a null message', (t) => {
+  const log = createLoggerWithHistory();
+
+  log(null);
+
+  t.deepEqual(log.messages, [
+    {
+      context: {},
+      message: null,
+      sequence,
+      time,
+      version
+    }
+  ]);
+});
+
+test('creates a number message', (t) => {
+  const log = createLoggerWithHistory();
+
+  log(2);
+
+  t.deepEqual(log.messages, [
+    {
+      context: {},
+      message: 2,
+      sequence,
+      time,
+      version
+    }
+  ]);
+});
+
+test('creates a boolean message', (t) => {
+  const log = createLoggerWithHistory();
+
+  log(false);
+
+  t.deepEqual(log.messages, [
+    {
+      context: {},
+      message: false,
+      sequence,
+      time,
+      version
+    }
+  ]);
+});
+
 test('formats message using sprintf', (t) => {
   const log = createLoggerWithHistory();
 
@@ -76,6 +168,114 @@ test('creates message with a context', (t) => {
         foo: 'bar'
       },
       message: 'baz',
+      sequence,
+      time,
+      version
+    }
+  ]);
+});
+
+test('creates an object message with a context', (t) => {
+  const log = createLoggerWithHistory();
+
+  log({
+    foo: 'bar'
+  }, {
+    bar: 'foo'
+  });
+
+  t.deepEqual(log.messages, [
+    {
+      context: {
+        foo: 'bar'
+      },
+      message: {
+        bar: 'foo'
+      },
+      sequence,
+      time,
+      version
+    }
+  ]);
+});
+
+test('creates an array message with a context', (t) => {
+  const log = createLoggerWithHistory();
+
+  log({
+    foo: 'bar'
+  }, [{
+    bar: 'foo'
+  }]);
+
+  t.deepEqual(log.messages, [
+    {
+      context: {
+        foo: 'bar'
+      },
+      message: [{
+        bar: 'foo'
+      }],
+      sequence,
+      time,
+      version
+    }
+  ]);
+});
+
+test('creates a null message with a context', (t) => {
+  const log = createLoggerWithHistory();
+
+  log({
+    foo: 'bar'
+  }, null);
+
+  t.deepEqual(log.messages, [
+    {
+      context: {
+        foo: 'bar'
+      },
+      message: null,
+      sequence,
+      time,
+      version
+    }
+  ]);
+});
+
+test('creates a boolean message with a context', (t) => {
+  const log = createLoggerWithHistory();
+
+  log({
+    foo: 'bar'
+  }, false);
+
+  t.deepEqual(log.messages, [
+    {
+      context: {
+        foo: 'bar'
+      },
+      message: false,
+      sequence,
+      time,
+      version
+    }
+  ]);
+});
+
+test('creates a number message with a context', (t) => {
+  const log = createLoggerWithHistory();
+
+  log({
+    foo: 'bar'
+  }, 2);
+
+  t.deepEqual(log.messages, [
+    {
+      context: {
+        foo: 'bar'
+      },
+      message: 2,
       sequence,
       time,
       version
