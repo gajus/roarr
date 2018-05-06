@@ -6,6 +6,7 @@ import createRoarrInititialGlobalState from '../../src/factories/createRoarrInit
 test('creates new state', (t) => {
   const state = createRoarrInititialGlobalState({});
 
+  delete state.flush;
   delete state.write;
 
   t.deepEqual(state, {
@@ -23,6 +24,7 @@ test('respects existing sequence', (t) => {
     sequence: 1
   });
 
+  delete state.flush;
   delete state.write;
 
   t.deepEqual(state, {
@@ -42,6 +44,7 @@ test('appends the latest version', (t) => {
     ]
   });
 
+  delete state.flush;
   delete state.write;
 
   t.deepEqual(state, {

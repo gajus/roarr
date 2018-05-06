@@ -11,7 +11,7 @@ import {
   ROARR_BUFFER_SIZE,
   ROARR_STREAM
 } from '../config';
-import createWrite from './createWrite';
+import createWriter from './createWriter';
 
 // eslint-disable-next-line flowtype/no-weak-types
 export default (currentState: Object): RoarrGlobalStateType => {
@@ -36,10 +36,13 @@ export default (currentState: Object): RoarrGlobalStateType => {
   };
 
   if (currentIsLatestVersion || !newState.write) {
-    newState.write = createWrite(newState, {
+    const Writer = createWriter({
       bufferSize: ROARR_BUFFER_SIZE,
       stream: ROARR_STREAM
     });
+
+    newState.write = Writer.write;
+    newState.flush = Writer.flush;
   }
 
   return newState;
