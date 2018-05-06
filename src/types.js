@@ -4,10 +4,11 @@ export type SerializableObjectType = {
   +[key: string]: string | number | null | SerializableObjectType
 };
 
-export type RoarrGlobalStateType = {
-  prepend: SerializableObjectType,
-  sequence: number
-};
+export type RoarrGlobalStateType = {|
+  +prepend: SerializableObjectType,
+  +sequence: number,
+  +versions: $ReadOnlyArray<string>
+|};
 
 export type SprintfArgumentType = string | number | boolean | null;
 
