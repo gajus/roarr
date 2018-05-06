@@ -4,7 +4,7 @@
 
 import parseBoolean from 'boolean';
 
-const ROARR_BUFFER_SIZE = parseInt(process.env.ROARR_BUFFER_SIZE, 10) || 1024 * 8;
+const ROARR_BUFFER_SIZE = process.env.ROARR_BUFFER_SIZE === undefined ? 1024 * 8 : parseInt(process.env.ROARR_BUFFER_SIZE, 10);
 const ROARR_LOG = parseBoolean(process.env.ROARR_LOG) === true;
 const ROARR_STREAM = (process.env.ROARR_STREAM || 'STDOUT').toUpperCase();
 
