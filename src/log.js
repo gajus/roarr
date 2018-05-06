@@ -5,8 +5,7 @@ import {
   createRoarrInititialGlobalState
 } from './factories';
 import {
-  ROARR_LOG,
-  ROARR_STREAM
+  ROARR_LOG
 } from './config';
 
 global.ROARR = createRoarrInititialGlobalState(global.ROARR || {});
@@ -18,10 +17,5 @@ export default createLogger((message) => {
 
   const body = JSON.stringify(message);
 
-  // @todo Add browser support.
-  if (ROARR_STREAM === 'STDOUT') {
-    process.stdout.write(body + '\n');
-  } else {
-    process.stderr.write(body + '\n');
-  }
+  global.ROARR.write(body);
 });
