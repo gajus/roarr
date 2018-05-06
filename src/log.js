@@ -1,15 +1,13 @@
 // @flow
 
-import parseBoolean from 'boolean';
 import {
   createLogger
 } from './factories';
+import {
+  ROARR_LOG,
+  ROARR_STREAM
+} from './config';
 
-// eslint-disable-next-line no-process-env
-const ROARR_LOG = parseBoolean(process.env.ROARR_LOG) === true;
-
-// eslint-disable-next-line no-process-env
-const ROARR_STREAM = (process.env.ROARR_STREAM || '').toUpperCase() === 'STDERR' ? 'STDERR' : 'STDOUT';
 
 export default createLogger((message) => {
   if (!ROARR_LOG) {
