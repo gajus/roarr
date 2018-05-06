@@ -378,6 +378,7 @@ When running the script in a Node.js environment, use environment variables to c
 |---|---|---|---|
 |`ROARR_LOG`|Boolean|Enables/ disables logging.|`false`|
 |`ROARR_STREAM`|`STDOUT`, `STDERR`|Name of the stream where the logs will be written.|`STDOUT`|
+|`ROARR_BUFFER_SIZE`|Number|Configures the buffer size used to determine when to write the log. To disable buffering set `ROARR_BUFFER_SIZE` to `0`.|`8192`|
 
 When using `ROARR_STREAM=STDERR`, use [`3>&1 1>&2 2>&3 3>&-`](https://stackoverflow.com/a/2381643/368691) to pipe stderr output.
 

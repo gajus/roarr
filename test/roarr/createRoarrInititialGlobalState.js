@@ -9,6 +9,7 @@ test('creates new state', (t) => {
   delete state.write;
 
   t.deepEqual(state, {
+    buffer: '',
     prepend: {},
     sequence: 0,
     versions: [
@@ -25,6 +26,7 @@ test('respects existing sequence', (t) => {
   delete state.write;
 
   t.deepEqual(state, {
+    buffer: '',
     prepend: {},
     sequence: 1,
     versions: [
@@ -43,6 +45,7 @@ test('appends the latest version', (t) => {
   delete state.write;
 
   t.deepEqual(state, {
+    buffer: '',
     prepend: {},
     sequence: 0,
     versions: [

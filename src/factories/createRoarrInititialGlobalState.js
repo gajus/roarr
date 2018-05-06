@@ -8,6 +8,7 @@ import type {
   RoarrGlobalStateType
 } from '../types';
 import {
+  ROARR_BUFFER_SIZE,
   ROARR_STREAM
 } from '../config';
 import createWrite from './createWrite';
@@ -22,6 +23,7 @@ export default (currentState: Object): RoarrGlobalStateType => {
 
   if (!versions.length || cmp(version, versions[versions.length - 1]) === 1) {
     write = createWrite({
+      bufferSize: ROARR_BUFFER_SIZE,
       stream: ROARR_STREAM
     });
   }
@@ -33,6 +35,7 @@ export default (currentState: Object): RoarrGlobalStateType => {
   versions.sort(cmp);
 
   return {
+    buffer: '',
     prepend: {},
     sequence: 0,
     ...currentState,
