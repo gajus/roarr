@@ -8,9 +8,6 @@ import type {
   MessageContextType,
   MessageType
 } from '../types';
-import createRoarrInititialGlobalState from './createRoarrInititialGlobalState';
-
-global.ROARR = global.ROARR || createRoarrInititialGlobalState();
 
 type OnMessageEventHandlerType = (message: MessageType) => void;
 
