@@ -9,9 +9,7 @@ script:
   - nyc check-coverage --lines 90
 after_success:
   - NODE_ENV=production npm run build
-  - semantic-release pre
-  - npm publish
-  - semantic-release post
+  - semantic-release
 notifications:
   email: false
 sudo: false
