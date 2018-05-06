@@ -19,14 +19,7 @@ export default (currentState: Object): RoarrGlobalStateType => {
 
   versions.sort(cmp);
 
-  let write = currentState.write;
-
-  if (!versions.length || cmp(version, versions[versions.length - 1]) === 1) {
-    write = createWrite({
-      bufferSize: ROARR_BUFFER_SIZE,
-      stream: ROARR_STREAM
-    });
-  }
+  const currentIsLatestVersion = !versions.length || cmp(version, versions[versions.length - 1]) === 1;
 
   if (!versions.includes(version)) {
     versions.push(version);
@@ -34,12 +27,20 @@ export default (currentState: Object): RoarrGlobalStateType => {
 
   versions.sort(cmp);
 
-  return {
+  const newState = {
     buffer: '',
     prepend: {},
     sequence: 0,
     ...currentState,
-    versions,
-    write
+    versions
   };
+
+  if (currentIsLatestVersion || !newState.write) {
+    newState.write = createWrite(newState, {
+      bufferSize: ROARR_BUFFER_SIZE,
+      stream: ROARR_STREAM
+    });
+  }
+
+  return newState;
 };

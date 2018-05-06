@@ -5,11 +5,13 @@ export type SerializableObjectType = {
 };
 
 export type RoarrGlobalStateType = {|
-  +buffer: string,
-  +prepend: SerializableObjectType,
-  +sequence: number,
-  +versions: $ReadOnlyArray<string>,
-  +write: (message: string) => void
+  buffer: string,
+  flush: (message: string) => void,
+  prepend: SerializableObjectType,
+  registeredFlush: boolean,
+  sequence: number,
+  versions: $ReadOnlyArray<string>,
+  write: (message: string) => void
 |};
 
 export type SprintfArgumentType = string | number | boolean | null;
