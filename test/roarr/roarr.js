@@ -13,7 +13,7 @@ const time = -1;
 const version = '1.0.0';
 
 beforeEach(() => {
-  global.ROARR = createRoarrInititialGlobalState();
+  global.ROARR = createRoarrInititialGlobalState({});
 });
 
 const createLoggerWithHistory = () => {

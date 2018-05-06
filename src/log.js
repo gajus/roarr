@@ -9,7 +9,7 @@ import {
   ROARR_STREAM
 } from './config';
 
-global.ROARR = global.ROARR || createRoarrInititialGlobalState();
+global.ROARR = createRoarrInititialGlobalState(global.ROARR || {});
 
 export default createLogger((message) => {
   if (!ROARR_LOG) {

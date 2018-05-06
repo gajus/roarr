@@ -3,10 +3,12 @@
 import type {
   RoarrGlobalStateType
 } from '../types';
+// eslint-disable-next-line flowtype/no-weak-types
+export default (currentState: Object): RoarrGlobalStateType => {
 
-export default (): RoarrGlobalStateType => {
   return {
     prepend: {},
-    sequence: 0
+    sequence: 0,
+    ...currentState
   };
 };
