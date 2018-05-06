@@ -22,12 +22,12 @@ const logLevels = {
 /* eslint-enable */
 
 const logLevelColorMap = {
-  DEBUG: 'gray',
-  ERROR: 'red',
-  FATAL: 'red',
-  INFO: 'cyan',
-  TRACE: 'gray',
-  WARN: 'yellow'
+  DEBUG: chalk.gray,
+  ERROR: chalk.red,
+  FATAL: chalk.red,
+  INFO: chalk.cyan,
+  TRACE: chalk.gray,
+  WARN: chalk.yellow
 };
 
 const getLogLevelName = (logLevel: number): string => {
@@ -56,7 +56,11 @@ const createLogFormatter = (configuration: LogFormatterConfigurationType) => {
 
       const logLevelColorName = logLevelColorMap[logLevelName];
 
-      formattedMessage += ' ' + chalk[logLevelColorName](logLevelName + ' (' + message.context.logLevel + ')');
+      if (!logLevelColorName) {
+        throw new Error('Unexpected state.');
+      }
+
+      formattedMessage += ' ' + logLevelColorName(logLevelName + ' (' + message.context.logLevel + ')');
     }
 
     if (message.context.package) {
