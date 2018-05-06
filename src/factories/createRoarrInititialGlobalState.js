@@ -1,5 +1,6 @@
 // @flow
 
+import cmp from 'semver-compare';
 import {
   cmp
 } from 'semver-compare';
