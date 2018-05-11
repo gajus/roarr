@@ -10,7 +10,6 @@ JSON logger for Node.js and browser.
 
 * [Motivation](#motivation)
 * [Usage](#usage)
-  * [Prepending context using the global state](#prepending-context-using-the-global-state)
   * [Filtering logs](#filtering-logs)
     * [jq primer](#jq-primer)
 * [Log message format](#log-message-format)
@@ -48,7 +47,7 @@ I needed a logger that:
 * [Decouples transports](#transports).
 * Has a [CLI program](#cli-program).
 * Works in Node.js and browser.
-* Configurable using environment variables and [`global`](https://nodejs.org/api/globals.html) namespace.
+* Configurable using environment variables.
 
 In other words,
 
@@ -93,77 +92,6 @@ Produces output:
 {"context":{},"message":"bar baz","sequence":1,"time":1506776210000,"version":"1.0.0"}
 {"context":{"logLevel":10},"message":"qux","sequence":2,"time":1506776210000,"version":"1.0.0"}
 {"context":{"logLevel":10,"quuz":"corge"},"sequence":3,"message":"quux","time":1506776210000,"version":"1.0.0"}
-
-```
-
-### Prepending context using the global state
-
-Prepending context using the global state will affect all `roarr` logs.
-
-```js
-import log from 'roarr';
-
-log('foo');
-
-global.ROARR.prepend = {
-  taskId: 1
-};
-
-log('bar');
-
-global.ROARR.prepend = {};
-
-log('baz');
-
-```
-
-Produces output:
-
-```
-{"context":{},"message":"foo","sequence":0,"time":1506776210000,"version":"1.0.0"}
-{"context":{"taskId":1},"message":"bar","sequence":1,"time":1506776210000,"version":"1.0.0"}
-{"context":{},"message":"baz","sequence":2,"time":1506776210000,"version":"1.0.0"}
-
-```
-
-Prepending context using the global state is useful when the desired result is to associate all logs with a specific context for a duration of an operation, e.g. to correlate the main process logs with the dependency logs.
-
-```js
-import log from 'roarr';
-import foo from 'foo';
-
-const taskIds = [
-  1,
-  2,
-  3
-];
-
-for (const taskId of taskIds) {
-  global.ROARR = global.ROARR || {};
-  global.ROARR.prepend = {
-    taskId
-  };
-
-  log('starting task ID %d', taskId);
-
-  // In this example, `foo` is an arbitrary third-party dependency that is using
-  // roarr logger.
-  foo(taskId);
-
-  log('successfully completed task ID %d', taskId);
-
-  global.ROARR.prepend = {};
-}
-
-```
-
-Produces output:
-
-```
-{"context":{"taskId":1},"message":"starting task ID 1","sequence":0,"time":1506776210000,"version":"1.0.0"}
-{"context":{"taskId":1},"message":"foo","sequence":1,"time":1506776210000,"version":"1.0.0"}
-{"context":{"taskId":1},"message":"successfully completed task ID 1","sequence":2,"time":1506776210000,"version":"1.0.0"}
-[...]
 
 ```
 
@@ -424,25 +352,6 @@ I recommend to create a file `Logger.js` in the project directory. Use this file
  */
 
 import log from 'roarr';
-import ulid from 'ulid';
-
-// Instance ID is useful for correlating logs in high concurrency environment.
-//
-// See `roarr augment --append-instance-id` option as an alternative way to
-// append instance ID to all logs.
-const instanceId = ulid();
-
-// The reason we are using `global.ROARR.prepend` as opposed to `roarr#child`
-// is because we want this information to be prepended to all logs, including
-// those of the "my-application" dependencies.
-//
-// Note: If you are adding logger to a package intended to be consumed by other
-// packages, you must not set `global.ROARR.prepend`. Instead, use `roarr#child`.
-global.ROARR.prepend = {
-  ...global.ROARR.prepend,
-  application: 'my-application',
-  instanceId
-};
 
 const Logger = log.child({
   // .foo property is going to appear only in the logs that are created using
@@ -451,23 +360,6 @@ const Logger = log.child({
 });
 
 export default Logger;
-
-```
-
-### Using Roarr in modules
-
-If you are developing a code that is designed to be consumed by other applications/ modules, then you should avoid using global.ROARR (though, there are valid use cases). However, you should still start the project by defining a `Logger.js` file and use log.child instead.
-
-```js
-/**
- * @file Example contents of a Logger.js file.
- */
-import Roarr from 'roarr';
-
-export default Roarr.child({
-  domain: 'database',
-  package: 'my-package'
-});
 
 ```
 

@@ -195,32 +195,6 @@ test('appends context to the previous child context (overrides)', (t) => {
   ]);
 });
 
-test('prepends global.ROARR.prepend context', (t) => {
-  const log = createLoggerWithHistory();
-
-  global.ROARR.prepend = {
-    bar: 'BAR 0',
-    foo: 'FOO'
-  };
-
-  log({
-    bar: 'BAR 1'
-  }, 'baz');
-
-  t.deepEqual(log.messages, [
-    {
-      context: {
-        bar: 'BAR 1',
-        foo: 'FOO'
-      },
-      message: 'baz',
-      sequence,
-      time,
-      version
-    }
-  ]);
-});
-
 test('convenience methods trace, debug, info, warn, error and fatal prepend a logLevel property', (t) => {
   const log = createLoggerWithHistory();
 

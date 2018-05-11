@@ -33,7 +33,6 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext: Messa
 
     if (typeof a === 'string') {
       context = {
-        ...global.ROARR.prepend,
         ...parentContext
       };
       message = sprintf(a, b, c, d, e, f, g, h, i, k);
@@ -43,7 +42,6 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext: Messa
       }
 
       context = {
-        ...global.ROARR.prepend,
         ...parentContext,
         ...a
       };
