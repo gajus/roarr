@@ -42,6 +42,7 @@ Then there is [pino](https://github.com/pinojs/pino). pino is fast JSON logger, 
 
 I needed a logger that:
 
+* Does not block the event cycle (=fast).
 * Does not require initialisation.
 * Produces structured data.
 * [Decouples transports](#transports).
