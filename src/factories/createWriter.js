@@ -8,13 +8,12 @@ type WriteConfigurationType = {|
 // @todo Add browser support.
 export default (configuration: WriteConfigurationType) => {
   const stream = configuration.stream.toUpperCase() === 'STDOUT' ? process.stdout : process.stderr;
-  const write = stream.write.bind(stream);
 
   if (!configuration.bufferSize) {
     return {
       flush: () => {},
       write: (message: string) => {
-        write(message + '\n');
+        stream.write(message + '\n');
       }
     };
   }
@@ -28,7 +27,7 @@ export default (configuration: WriteConfigurationType) => {
 
     global.ROARR.buffer = '';
 
-    write(buffer);
+    stream.write(buffer);
   };
 
   return {
