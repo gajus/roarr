@@ -116,8 +116,12 @@ export const builder = (yargs: Object) => {
     });
 };
 
-// eslint-disable-next-line flowtype/no-weak-types
-export const handler = (argv: Object) => {
+type ArgvType = {|
+  +excludeOrphans: boolean,
+  +includeContext: boolean
+|};
+
+export const handler = (argv: ArgvType) => {
   process.stdin
     .pipe(createLogFormatter(argv))
     .pipe(process.stdout);
