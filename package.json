@@ -70,6 +70,7 @@
   },
   "scripts": {
     "build": "rm -fr ./dist && NODE_ENV=production babel ./src --out-dir ./dist --copy-files --source-maps && flow-copy-source src dist",
+    "dev": "NODE_ENV=production babel ./src --out-dir ./dist --copy-files --source-maps --watch",
     "generate-types": "babel-node ./src/bin/generate-types.js",
     "lint": "eslint ./src ./test && flow",
     "test": "NODE_ENV=test ava --serial --verbose"
