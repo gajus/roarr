@@ -210,12 +210,67 @@ Refer to the [Usage documentation](#usage) for common usage examples.
 
 ### `child`
 
+The `child` function has two signatures:
+
+1. Accepts an object.
+2. Accepts a function.
+
+#### Object input
+
 Creates a child logger appending the provided `context` object to the previous logger context.
 
 ```js
 type ChildType = (context: MessageContextType) => LoggerType;
 
 ```
+
+Example:
+
+```js
+import log from 'roarr';
+
+const childLog = log.child({
+  foo: 'bar'
+});
+
+log.debug('foo 1');
+childLog.debug('foo 2');
+
+// {"context":{"logLevel":20},"message":"foo 1","sequence":0,"time":1531914529921,"version":"1.0.0"}
+// {"context":{"foo":"bar","logLevel":20},"message":"foo 2","sequence":1,"time":1531914529922,"version":"1.0.0"}
+
+```
+
+#### Function input
+
+Creates a child logger where every message is intercepted.
+
+```js
+type ChildType = (context: TranslatorType) => LoggerType;
+
+```
+
+Example:
+
+```js
+import log from 'roarr';
+
+const childLog = log.child((message) => {
+  return {
+    ...message,
+    message: message.message.replace('foo', 'bar')
+  }
+});
+
+log.debug('foo 1');
+childLog.debug('foo 2');
+
+// {"context":{"logLevel":20},"message":"foo 1","sequence":0,"time":1531914656076,"version":"1.0.0"}
+// {"context":{"logLevel":20},"message":"bar 2","sequence":1,"time":1531914656077,"version":"1.0.0"}
+
+```
+
+Example:
 
 ### `trace`
 ### `debug`

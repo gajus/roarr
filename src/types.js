@@ -26,6 +26,8 @@ export type MessageType = {|
   +version: string
 |};
 
+export type TranslatorType = (message: MessageType) => MessageType;
+
 declare function Logger (
   context: MessageContextType,
   message: string,

@@ -6,7 +6,8 @@ import {
 import type {
   LoggerType,
   MessageContextType,
-  MessageType
+  MessageType,
+  TranslatorType
 } from '../types';
 
 type OnMessageEventHandlerType = (message: MessageType) => void;
@@ -58,7 +59,16 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext: Messa
     });
   };
 
-  log.child = (context: MessageContextType) => {
+  log.child = (context: TranslatorType | MessageContextType) => {
+    if (typeof context === 'function') {
+      return createLogger((message) => {
+        if (typeof context !== 'function') {
+          throw new Error('Unexpected state.');
+        }
+        onMessage(context(message))
+      }, parentContext);
+    }
+
     return createLogger(onMessage, {
       ...parentContext,
       ...context

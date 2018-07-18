@@ -7,6 +7,10 @@ import {
 import {
   ROARR_LOG
 } from './config';
+export type {
+  MessageType,
+  TranslatorType
+} from './types';
 
 global.ROARR = createRoarrInititialGlobalState(global.ROARR || {});
 

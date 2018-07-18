@@ -195,6 +195,29 @@ test('appends context to the previous child context (overrides)', (t) => {
   ]);
 });
 
+test('translates child message', (t) => {
+  const log = createLoggerWithHistory();
+
+  log
+    .child((message) => {
+      return {
+        ...message,
+        message: message.message + 'bar'
+      }
+    })
+    ('foo');
+
+  t.deepEqual(log.messages, [
+    {
+      context: {},
+      message: 'foobar',
+      sequence,
+      time,
+      version
+    }
+  ]);
+});
+
 test('convenience methods trace, debug, info, warn, error and fatal prepend a logLevel property', (t) => {
   const log = createLoggerWithHistory();
 
