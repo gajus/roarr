@@ -23,6 +23,7 @@ JSON logger for Node.js and browser.
   * [`warn`](#warn)
   * [`error`](#error)
   * [`fatal`](#fatal)
+* [Middlewares](#middlewares)
 * [CLI program](#cli-program)
 * [Transports](#transports)
 * [Environment variables](#environment-variables)
@@ -243,6 +244,8 @@ childLog.debug('foo 2');
 
 ```
 
+Refer to [middlewares](#middlewares) documentation for use case examples.
+
 #### Function parameter
 
 Creates a child logger where every message is intercepted.
@@ -306,6 +309,34 @@ Produces output:
 {"context":{"logLevel":60},"message":"foo","sequence":5,"time":1506776210000,"version":"1.0.0"}
 
 ```
+
+## Middlewares
+
+Roarr logger supports middlewares implemented as [`child`](#child) message translate functions, e.g.
+
+```js
+import log from 'roarr';
+import createSerializeErrorMiddleware from '@roarr/middleware-serialize-error';
+
+const childLog = log.child(createSerializeErrorMiddleware());
+
+const error = new Error('foo');
+
+log.debug({error}, 'bar');
+childLog.debug({error}, 'bar');
+
+// {"context":{"logLevel":20,"error":{}},"message":"bar","sequence":0,"time":1531918373676,"version":"1.0.0"}
+// {"context":{"logLevel":20,"error":{"name":"Error","message":"foo","stack":"[REDACTED]"}},"message":"bar","sequence":1,"time":1531918373678,"version":"1.0.0"}
+
+```
+
+Roarr middlwares enable translation of every bit of information that is used to construct a log message.
+
+The following are the official middlewares:
+
+* [`@roarr/middleware-serialize-error`](https://github.com/gajus/roarr-middleware-serialize-error)
+
+Raise an issue to add your middleware of your own creation.
 
 ## CLI program
 
