@@ -203,9 +203,8 @@ test('translates child message', (t) => {
       return {
         ...message,
         message: message.message + 'bar'
-      }
-    })
-    ('foo');
+      };
+    })('foo');
 
   t.deepEqual(log.messages, [
     {

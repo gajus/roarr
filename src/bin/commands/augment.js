@@ -9,9 +9,6 @@ import {
   isRoarrLine
 } from './utilities';
 
-export const command = 'augment';
-export const desc = 'Augments Roarr logs with additional information.';
-
 type LogFormatterConfigurationType = {|
   +appendHostname: boolean,
   +appendInstanceId: boolean,
@@ -45,6 +42,9 @@ const createLogFormatter = (configuration: LogFormatterConfigurationType) => {
 
   return stream;
 };
+
+export const command = 'augment';
+export const desc = 'Augments Roarr logs with additional information.';
 
 // eslint-disable-next-line flowtype/no-weak-types
 export const builder = (yargs: Object) => {

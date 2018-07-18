@@ -63,9 +63,9 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext: Messa
     if (typeof context === 'function') {
       return createLogger((message) => {
         if (typeof context !== 'function') {
-          throw new Error('Unexpected state.');
+          throw new TypeError('Unexpected state.');
         }
-        onMessage(context(message))
+        onMessage(context(message));
       }, parentContext);
     }
 

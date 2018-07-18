@@ -7,8 +7,15 @@ import {
   isRoarrLine
 } from './utilities';
 
-export const command = 'pretty-print';
-export const desc = 'Format logs for user-inspection.';
+type ArgvType = {|
+  +excludeOrphans: boolean,
+  +includeContext: boolean
+|};
+
+type LogFormatterConfigurationType = {|
+  +includeContext: boolean,
+  +excludeOrphans: boolean
+|};
 
 /* eslint-disable quote-props */
 const logLevels = {
@@ -33,11 +40,6 @@ const logLevelColorMap = {
 const getLogLevelName = (logLevel: number): string => {
   return logLevels[logLevel] || 'INFO';
 };
-
-type LogFormatterConfigurationType = {|
-  +includeContext: boolean,
-  +excludeOrphans: boolean
-|};
 
 const createLogFormatter = (configuration: LogFormatterConfigurationType) => {
   const stream = split((line) => {
@@ -100,6 +102,9 @@ const createLogFormatter = (configuration: LogFormatterConfigurationType) => {
   return stream;
 };
 
+export const command = 'pretty-print';
+export const desc = 'Format logs for user-inspection.';
+
 // eslint-disable-next-line flowtype/no-weak-types
 export const builder = (yargs: Object) => {
   return yargs
@@ -115,11 +120,6 @@ export const builder = (yargs: Object) => {
       }
     });
 };
-
-type ArgvType = {|
-  +excludeOrphans: boolean,
-  +includeContext: boolean
-|};
 
 export const handler = (argv: ArgvType) => {
   process.stdin

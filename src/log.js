@@ -7,10 +7,6 @@ import {
 import {
   ROARR_LOG
 } from './config';
-export type {
-  MessageType,
-  TranslatorType
-} from './types';
 
 global.ROARR = createRoarrInititialGlobalState(global.ROARR || {});
 
@@ -25,6 +21,11 @@ if (!global.ROARR.registeredFlush) {
     }
   });
 }
+
+export type {
+  MessageType,
+  TranslatorType
+} from './types';
 
 export default createLogger((message) => {
   if (!ROARR_LOG) {
