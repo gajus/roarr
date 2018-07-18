@@ -15,6 +15,8 @@ JSON logger for Node.js and browser.
 * [Log message format](#log-message-format)
 * [API](#api)
   * [`child`](#child)
+    * [Object parameter](#object-parameter)
+    * [Function parameter](#object-parameter)
   * [`trace`](#trace)
   * [`debug`](#debug)
   * [`info`](#info)
@@ -215,7 +217,7 @@ The `child` function has two signatures:
 1. Accepts an object.
 2. Accepts a function.
 
-#### Object input
+#### Object parameter
 
 Creates a child logger appending the provided `context` object to the previous logger context.
 
@@ -241,7 +243,7 @@ childLog.debug('foo 2');
 
 ```
 
-#### Function input
+#### Function parameter
 
 Creates a child logger where every message is intercepted.
 
