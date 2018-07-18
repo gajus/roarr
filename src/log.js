@@ -24,7 +24,7 @@ if (!global.ROARR.registeredFlush) {
 
 export type {
   MessageType,
-  TranslatorType
+  TranslateMessageFunctionType
 } from './types';
 
 export default createLogger((message) => {

@@ -246,7 +246,7 @@ childLog.debug('foo 2');
 Creates a child logger where every message is intercepted.
 
 ```js
-type ChildType = (context: TranslatorType) => LoggerType;
+type ChildType = (translateMessage: TranslateMessageFunctionType) => LoggerType;
 
 ```
 

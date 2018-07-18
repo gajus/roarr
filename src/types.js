@@ -28,7 +28,7 @@ export type MessageType = {|
   +version: string
 |};
 
-export type TranslatorType = (message: MessageType) => MessageType;
+export type TranslateMessageFunctionType = (message: MessageType) => MessageType;
 
 declare function Logger (
   context: MessageContextType,

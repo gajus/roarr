@@ -7,7 +7,7 @@ import type {
   LoggerType,
   MessageContextType,
   MessageType,
-  TranslatorType
+  TranslateMessageFunctionType
 } from '../types';
 
 type OnMessageEventHandlerType = (message: MessageType) => void;
@@ -59,7 +59,7 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext: Messa
     });
   };
 
-  log.child = (context: TranslatorType | MessageContextType) => {
+  log.child = (context: TranslateMessageFunctionType | MessageContextType) => {
     if (typeof context === 'function') {
       return createLogger((message) => {
         if (typeof context !== 'function') {
