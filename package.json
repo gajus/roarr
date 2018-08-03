@@ -44,7 +44,7 @@
     "sinon": "^6.1.4"
   },
   "engines": {
-    "node": ">=8.0"
+    "node": ">=6.0"
   },
   "husky": {
     "hooks": {
