@@ -25,6 +25,8 @@ JSON logger for Node.js and browser.
   * [`fatal`](#fatal)
 * [Middlewares](#middlewares)
 * [CLI program](#cli-program)
+  * [`pretty-print` program](#pretty-print-program)
+  * [`filter` program](#filter-program)
 * [Transports](#transports)
 * [Environment variables](#environment-variables)
 * [Conventions](#conventions)
@@ -103,7 +105,7 @@ Produces output:
 
 Roarr is designed to print all or none logs (refer to the [`ROARR_LOG` environment variable](#environment-variables) documentation).
 
-To filter logs you need to use a JSON processor, e.g. [jq](https://stedolan.github.io/jq/).
+To filter logs you need to use [`roarr filter` CLI program](#filter-program) or a JSON processor such as [jq](https://stedolan.github.io/jq/).
 
 ### jq primer
 
@@ -139,6 +141,8 @@ To ignore the non-JSON output, use jq `-R` flag (raw input) in combination with 
 ROARR_LOG=true node ./index.js | jq -cRM 'fromjson? | select(.context.logLevel > 40)'
 
 ```
+
+For a simplified way of filtering Roarr logs, refer to [`roarr filter` CLI program](#filter-program).
 
 ## Log message format
 
@@ -340,6 +344,8 @@ Raise an issue to add your middleware of your own creation.
 
 ## CLI program
 
+### `pretty-print` program
+
 Roarr comes with a CLI program used to pretty-print logs for development purposes.
 
 To format the logs, pipe the program output to `roarr pretty-print` program, e.g.
@@ -372,6 +378,28 @@ Provided that the `index.js` program produced an output such as:
 The `roarr pretty-print` CLI program is using the context property names suggested in the [conventions](#conventions) to pretty-print the logs for the developer inspection purposes.
 
 Explore other CLI commands and options using `roarr --help`.
+
+### `filter` program
+
+[Log filtering](#filtering-logs) can be done using a JSON processor such as `jq`. However, `jq` [does make it easy to ignore invalid JSON](https://github.com/stedolan/jq/issues/1547).
+
+Roarr `filter` CLI program allows to filter only Roarr JSON messages ignoring all the other content, e.g.
+
+```bash
+$ echo '
+{"context":{"package":"raygun","namespace":"createHttpProxyServer","logLevel":40},"message":"internal SSL Server running on 0.0.0.0:59222","sequence":0,"time":1533310067405,"version":"1.0.0"}
+{"context":{"package":"raygun","namespace":"createHttpProxyServer","logLevel":40},"message":"gracefully shutting down the proxy server","sequence":1,"time":1533310067438,"version":"1.0.0"}
+{"context":{"package":"raygun","namespace":"createOnCloseEventHandler","logLevel":30},"message":"raygun server closed","sequence":2,"time":1533310067439,"version":"1.0.0"}
+foo bar
+{"foo": "bar"}
+{"context":{"package":"raygun","namespace":"createOnCloseEventHandler","logLevel":30},"message":"internal SSL close","sequence":3,"time":1533310067439,"version":"1.0.0"}
+' | roarr filter 'select(.context.logLevel > 30)' | roarr pretty-print
+[2018-08-03T15:27:47.405Z] WARN (40) (@raygun) (#createHttpProxyServer): internal SSL Server running on 0.0.0.0:59222
+[2018-08-03T15:27:47.438Z] WARN (40) (@raygun) (#createHttpProxyServer): gracefully shutting down the proxy server
+foo bar
+{"foo": "bar"}
+
+```
 
 ## Transports
 
