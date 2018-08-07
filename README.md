@@ -384,6 +384,16 @@ foo bar
 
 ```
 
+To use `roarr filter` program, you must install peer dependency `node-jq`:
+
+```bash
+# If Roarr is installed locally:
+$ npm install node-jq
+# or, if Roarr is installed globally:
+$ npm install node-jq -g
+
+```
+
 ### `pretty-print` program
 
 Roarr `pretty-print` CLI program pretty-prints logs for the development purposes.

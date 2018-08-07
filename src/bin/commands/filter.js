@@ -2,9 +2,7 @@
 
 import split from 'split2';
 import through from 'through2';
-import {
-  run
-} from 'node-jq';
+import optional from 'optional';
 import {
   isRoarrLine
 } from './utilities';
@@ -19,7 +17,7 @@ type LogFilterConfigurationType = {|
   +jqExpression: string
 |};
 
-const filterLog = (configuration: LogFilterConfigurationType, line: string, callback: (error?: Error, line?: string) => {}) => {
+const filterLog = (run, configuration: LogFilterConfigurationType, line: string, callback: (error?: Error, line?: string) => {}) => {
   if (!isRoarrLine(line)) {
     callback(undefined, configuration.excludeOrphans ? '' : line + '\n');
 
@@ -54,13 +52,19 @@ export const builder = (yargs: Object) => {
 };
 
 export const handler = (argv: ArgvType) => {
+  const jq = optional('node-jq');
+
+  if (!jq) {
+    throw new Error('Must install `node-jq` dependency to use `roarr filter`.');
+  }
+
   // argv
   process.stdin
     .pipe(split())
     .pipe(through((chunk, encoding, callback) => {
       const line = chunk.toString();
 
-      filterLog(argv, line, callback);
+      filterLog(jq.run, argv, line, callback);
     }))
     .pipe(process.stdout);
 };
