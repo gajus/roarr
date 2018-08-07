@@ -23,7 +23,7 @@ const logLevels = {
   warn: 40
 };
 
-const createLogger = (onMessage: OnMessageEventHandlerType, parentContext: MessageContextType = {}) => {
+const createLogger = (onMessage: OnMessageEventHandlerType, parentContext?: MessageContextType): LoggerType => {
   // eslint-disable-next-line id-length
   const log: LoggerType = (a, b, c, d, e, f, g, h, i, k) => {
     const time = Date.now();
@@ -34,7 +34,7 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext: Messa
 
     if (typeof a === 'string') {
       context = {
-        ...parentContext
+        ...parentContext || {}
       };
       message = sprintf(a, b, c, d, e, f, g, h, i, k);
     } else {
@@ -43,7 +43,7 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext: Messa
       }
 
       context = {
-        ...parentContext,
+        ...parentContext || {},
         ...a
       };
 
@@ -59,7 +59,7 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext: Messa
     });
   };
 
-  log.child = (context: TranslateMessageFunctionType | MessageContextType) => {
+  log.child = (context: TranslateMessageFunctionType | MessageContextType): LoggerType => {
     if (typeof context === 'function') {
       return createLogger((message) => {
         if (typeof context !== 'function') {

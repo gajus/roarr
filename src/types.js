@@ -2,9 +2,9 @@
 
 /* eslint-disable import/exports-last, flowtype/require-types-at-top */
 
-export type SerializableObjectType = {
+export type SerializableObjectType = {|
   +[key: string]: string | number | null | SerializableObjectType
-};
+|};
 
 export type RoarrGlobalStateType = {|
   buffer: string,
