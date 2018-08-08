@@ -23,6 +23,7 @@ if (!global.ROARR.registeredFlush) {
 }
 
 export type {
+  LoggerType,
   MessageType,
   TranslateMessageFunctionType
 } from './types';
