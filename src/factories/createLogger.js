@@ -25,7 +25,7 @@ const logLevels = {
 
 const createLogger = (onMessage: OnMessageEventHandlerType, parentContext?: MessageContextType): LoggerType => {
   // eslint-disable-next-line id-length
-  const log: LoggerType = (a, b, c, d, e, f, g, h, i, k) => {
+  const log = (a, b, c, d, e, f, g, h, i, k) => {
     const time = Date.now();
     const sequence = global.ROARR.sequence++;
 
@@ -75,17 +75,17 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext?: Mess
     });
   };
 
-  const logLevelNames = Object.keys(logLevels);
-
-  for (const logLevelName of logLevelNames) {
+  for (const logLevel of Object.keys(logLevels)) {
     // eslint-disable-next-line id-length
-    log[logLevelName] = (a, b, c, d, e, f, g, h, i, k) => {
+    log[logLevel] = (a, b, c, d, e, f, g, h, i, k): LoggerType => {
       return log.child({
-        logLevel: logLevels[logLevelName]
+        logLevel: logLevels[logLevel]
       })(a, b, c, d, e, f, g, h, i, k);
     };
   }
 
+  // @see https://github.com/facebook/flow/issues/6705
+  // $FlowFixMe
   return log;
 };
 

@@ -2,9 +2,9 @@
 
 /* eslint-disable import/exports-last, flowtype/require-types-at-top */
 
-export type SerializableObjectType = {|
+export type SerializableObjectType = {
   +[key: string]: string | number | null | SerializableObjectType
-|};
+};
 
 export type RoarrGlobalStateType = {|
   buffer: string,
@@ -60,4 +60,14 @@ declare function Logger (
 /**
  * see https://twitter.com/kuizinas/status/914139352908943360
  */
-export type LoggerType = typeof Logger;
+export type LoggerType = {|
+  // eslint-disable-next-line no-undef
+  [[call]]: Logger,
+  +child: (context: TranslateMessageFunctionType | MessageContextType) => LoggerType,
+  +debug: Logger,
+  +error: Logger,
+  +fatal: Logger,
+  +info: Logger,
+  +trace: Logger,
+  +warn: Logger
+|};
