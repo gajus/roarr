@@ -390,7 +390,7 @@ To use `roarr filter` program, you must install peer dependency `node-jq`:
 # If Roarr is installed locally:
 $ npm install node-jq
 # or, if Roarr is installed globally:
-$ npm install node-jq -g
+$ (cd "$(command -v roarr | perl -pe 's/[^\/]+\/roarr//')/lib/node_modules/roarr" && npm install node-jq)
 
 ```
 
