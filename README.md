@@ -25,9 +25,6 @@ JSON logger for Node.js and browser.
   * [`fatal`](#fatal)
 * [Middlewares](#middlewares)
 * [CLI program](#cli-program)
-  * [`augment` program](#filter-program)
-  * [`filter` program](#filter-program)
-  * [`pretty-print` program](#pretty-print-program)
 * [Transports](#transports)
 * [Environment variables](#environment-variables)
 * [Conventions](#conventions)
@@ -345,87 +342,18 @@ Raise an issue to add your middleware of your own creation.
 
 ## CLI program
 
-Explore all CLI commands and options using `roarr --help`.
-
-### `augment` program
-
-Roarr `augment` CLI program appends additional information to every log message prior to sending to the log aggregator, e.g.
-
-```bash
-$ echo '{"context":{"package":"raygun","namespace":"createHttpProxyServer","logLevel":40},"message":"internal SSL Server running on 0.0.0.0:59222","sequence":0,"time":1533310067405,"version":"1.0.0"}
-{"context":{"package":"raygun","namespace":"createHttpProxyServer","logLevel":40},"message":"gracefully shutting down the proxy server","sequence":1,"time":1533310067438,"version":"1.0.0"}
-{"context":{"package":"raygun","namespace":"createOnCloseEventHandler","logLevel":30},"message":"raygun server closed","sequence":2,"time":1533310067439,"version":"1.0.0"}
-{"context":{"package":"raygun","namespace":"createOnCloseEventHandler","logLevel":30},"message":"internal SSL close","sequence":3,"time":1533310067439,"version":"1.0.0"}' | roarr augment --append-hostname true --append-instance-id true
-{"context":{"package":"raygun","namespace":"createHttpProxyServer","logLevel":40,"hostname":"curiosity.local","instanceId":"01CM07A7DGAB6YV25396FD772Q"},"message":"internal SSL Server running on 0.0.0.0:59222","sequence":0,"time":1533310067405,"version":"1.0.0"}
-{"context":{"package":"raygun","namespace":"createHttpProxyServer","logLevel":40,"hostname":"curiosity.local","instanceId":"01CM07A7DGAB6YV25396FD772Q"},"message":"gracefully shutting down the proxy server","sequence":1,"time":1533310067438,"version":"1.0.0"}
-{"context":{"package":"raygun","namespace":"createOnCloseEventHandler","logLevel":30,"hostname":"curiosity.local","instanceId":"01CM07A7DGAB6YV25396FD772Q"},"message":"raygun server closed","sequence":2,"time":1533310067439,"version":"1.0.0"}
-{"context":{"package":"raygun","namespace":"createOnCloseEventHandler","logLevel":30,"hostname":"curiosity.local","instanceId":"01CM07A7DGAB6YV25396FD772Q"},"message":"internal SSL close","sequence":3,"time":1533310067439,"version":"1.0.0"}
-```
-
-### `filter` program
-
-[Log filtering](#filtering-logs) can be done using a JSON processor such as `jq`. However, `jq` [does make it easy to ignore invalid JSON](https://github.com/stedolan/jq/issues/1547).
-
-Roarr `filter` CLI program filters Roarr JSON messages while passing through all the other content, e.g.
-
-```bash
-$ echo '
-{"context":{"package":"raygun","namespace":"createHttpProxyServer","logLevel":40},"message":"internal SSL Server running on 0.0.0.0:59222","sequence":0,"time":1533310067405,"version":"1.0.0"}
-{"context":{"package":"raygun","namespace":"createHttpProxyServer","logLevel":40},"message":"gracefully shutting down the proxy server","sequence":1,"time":1533310067438,"version":"1.0.0"}
-{"context":{"package":"raygun","namespace":"createOnCloseEventHandler","logLevel":30},"message":"raygun server closed","sequence":2,"time":1533310067439,"version":"1.0.0"}
-foo bar
-{"foo": "bar"}
-{"context":{"package":"raygun","namespace":"createOnCloseEventHandler","logLevel":30},"message":"internal SSL close","sequence":3,"time":1533310067439,"version":"1.0.0"}
-' | roarr filter 'select(.context.logLevel > 30)' | roarr pretty-print
-[2018-08-03T15:27:47.405Z] WARN (40) (@raygun) (#createHttpProxyServer): internal SSL Server running on 0.0.0.0:59222
-[2018-08-03T15:27:47.438Z] WARN (40) (@raygun) (#createHttpProxyServer): gracefully shutting down the proxy server
-foo bar
-{"foo": "bar"}
-
-```
-
-To use `roarr filter` program, you must install peer dependency `node-jq`:
-
-```bash
-# If Roarr is installed locally:
-$ npm install node-jq
-# or, if Roarr is installed globally:
-$ (cd "$(command -v roarr | perl -pe 's/[^\/]+\/roarr//')/lib/node_modules/roarr" && npm install node-jq)
-
-```
-
-### `pretty-print` program
-
-Roarr `pretty-print` CLI program pretty-prints logs for the development purposes.
-
-To format the logs, pipe the program output to `roarr pretty-print` program, e.g.
-
-```bash
-$ npm install roarr -g
-$ ROARR_LOG=true node index.js | roarr pretty-print
-
-```
-
-Provided that the `index.js` program produced an output such as:
-
-```
-{"context":{"package":"forward-proxy","namespace":"createHttpProxyServer","logLevel":30},"message":"Internal SSL Server running on localhost:62597","sequence":0,"time":1506803138704,"version":"1.0.0"}
-{"context":{"package":"forward-proxy","namespace":"createRequestProcessor","logLevel":30},"message":"request start -> http://localhost:62595/","sequence":1,"time":1506803138741,"version":"1.0.0"}
-{"context":{"package":"forward-proxy","namespace":"createLogInterceptor","logLevel":20,"headers":{"host":"localhost:62595","connection":"close"}},"message":"received request","sequence":2,"time":1506803138741,"version":"1.0.0"}
-{"context":{"package":"forward-proxy","namespace":"createRequestProcessor","logLevel":30},"message":"request finished <- http://localhost:62595/","sequence":3,"time":1506803138749,"version":"1.0.0"}
-{"context":{"package":"forward-proxy","namespace":"createLogInterceptor","logLevel":30,"method":"GET","requestHeaders":{"host":"localhost:62595","connection":"close"},"responseHeaders":{"date":"Sat, 30 Sep 2017 20:25:38 GMT","connection":"close","content-length":"7","x-forward-proxy-request-id":"2b746d92-1a8b-4f36-b3cc-5bff57dad94d","x-forward-proxy-cache-hit":"false"},"statusCode":200,"url":"http://localhost:62595/"},"message":"response","sequence":4,"time":1506803138755,"version":"1.0.0"}
-{"context":{"package":"forward-proxy","namespace":"createLogInterceptor","logLevel":30,"method":"GET","requestHeaders":{"host":"localhost:62595","connection":"close"},"responseHeaders":{"date":"Sat, 30 Sep 2017 20:25:38 GMT","content-length":"7","x-forward-proxy-request-id":"2b746d92-1a8b-4f36-b3cc-5bff57dad94d","x-forward-proxy-cache-hit":"true"},"statusCode":200,"url":"http://localhost:62595/"},"message":"response","sequence":5,"time":1506803138762,"version":"1.0.0"}
-
-```
-
-`roarr pretty-print` CLI program will format the output to look like this:
+Roarr CLI program provides ability to augment, filter and pretty-print Roarr logs.
 
 ![CLI output demo](./.README/cli-output-demo.png)
 
-* `@` prefixed value denotes the name of the package.
-* `#` prefixed value denotes the namespace.
+CLI program has been moved to a separate package [`@roarr/cli`](https://github.com/gajus/roarr-cli).
 
-The `roarr pretty-print` CLI program is using the context property names suggested in the [conventions](#conventions) to pretty-print the logs for the developer inspection purposes.
+```bash
+npm install @roarr/cli -g
+
+```
+
+Explore all CLI commands and options using `roarr --help` or refer to [`@roarr/cli`](https://github.com/gajus/roarr-cli) documentation.
 
 ## Transports
 

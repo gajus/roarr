@@ -12,15 +12,8 @@
   "bin": "./dist/bin/index.js",
   "dependencies": {
     "boolean": "^0.1.3",
-    "chalk": "^2.4.1",
-    "optional": "^0.1.4",
-    "prettyjson": "^1.2.1",
     "semver-compare": "^1.0.0",
-    "split2": "^2.2.0",
-    "sprintf-js": "^1.1.1",
-    "through2": "^2.0.3",
-    "ulid": "^2.3.0",
-    "yargs": "^12.0.1"
+    "sprintf-js": "^1.1.1"
   },
   "description": "JSON logger for Node.js and browser.",
   "devDependencies": {
@@ -70,9 +63,6 @@
       "@babel/register"
     ],
     "sourceMap": false
-  },
-  "peerDependencies": {
-    "node-jq": "^1.3.1"
   },
   "repository": {
     "type": "git",
