@@ -77,7 +77,7 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext?: Mess
 
   for (const logLevel of Object.keys(logLevels)) {
     // eslint-disable-next-line id-length
-    log[logLevel] = (a, b, c, d, e, f, g, h, i, k): LoggerType => {
+    log[logLevel] = (a, b, c, d, e, f, g, h, i, k) => {
       return log.child({
         logLevel: logLevels[logLevel]
       })(a, b, c, d, e, f, g, h, i, k);
