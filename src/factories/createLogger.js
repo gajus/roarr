@@ -9,6 +9,9 @@ import type {
   MessageType,
   TranslateMessageFunctionType
 } from '../types';
+import {
+  ROARR_LOG
+} from '../config';
 
 type OnMessageEventHandlerType = (message: MessageType) => void;
 
@@ -26,6 +29,10 @@ const logLevels = {
 const createLogger = (onMessage: OnMessageEventHandlerType, parentContext?: MessageContextType): LoggerType => {
   // eslint-disable-next-line id-length
   const log = (a, b, c, d, e, f, g, h, i, k) => {
+    if (!ROARR_LOG && !global.ROARR_LOG) {
+      return;
+    }
+
     const time = Date.now();
     const sequence = global.ROARR.sequence++;
 

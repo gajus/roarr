@@ -14,6 +14,7 @@ const version = '1.0.0';
 
 beforeEach(() => {
   global.ROARR = createRoarrInititialGlobalState({});
+  global.ROARR_LOG = true;
 });
 
 const createLoggerWithHistory = () => {
