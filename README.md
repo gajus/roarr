@@ -34,7 +34,7 @@ JSON logger for Node.js and browser.
 * [Recipes](#recipes)
   * [Logging errors](#logging-errors)
   * [Using with Elasticsearch](#using-with-elasticsearch)
-  * [Documenting use of Roarr][#documenting-use-of-roarr]
+  * [Documenting use of Roarr](#documenting-use-of-roarr)
 
 ## Motivation
 
