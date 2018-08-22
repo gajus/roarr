@@ -522,7 +522,7 @@ The following serves as the ground work for the index template. It includes the 
 
 ```
 
-### Document use of Roarr
+### Documenting use of Roarr
 
 If your package is using Roarr, include instructions to README.md describing how to enable logging, e.g.
 
