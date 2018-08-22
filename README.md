@@ -34,6 +34,7 @@ JSON logger for Node.js and browser.
 * [Recipes](#recipes)
   * [Logging errors](#logging-errors)
   * [Using with Elasticsearch](#using-with-elasticsearch)
+  * [Documenting use of Roarr][#documenting-use-of-roarr]
 
 ## Motivation
 
@@ -518,5 +519,18 @@ The following serves as the ground work for the index template. It includes the 
   },
   "template": "logstash-*"
 }
+
+```
+
+### Document use of Roarr
+
+If your package is using Roarr, include instructions to README.md describing how to enable logging, e.g.
+
+```markdown
+## Logging
+
+This package is using [`roarr`](https://www.npmjs.com/package/roarr) logger to log the program's state.
+
+Export `ROARR_LOG=true` environment variable to enable log printing to stdout.
 
 ```
