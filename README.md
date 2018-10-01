@@ -533,4 +533,6 @@ This package is using [`roarr`](https://www.npmjs.com/package/roarr) logger to l
 
 Export `ROARR_LOG=true` environment variable to enable log printing to stdout.
 
+Use [`roarr-cli`](https://github.com/gajus/roarr-cli) program to pretty-print the logs.
+
 ```
