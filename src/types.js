@@ -62,12 +62,12 @@ declare function Logger (
  */
 export type LoggerType = {|
   // eslint-disable-next-line no-undef
-  [[call]]: Logger,
+  [[call]]: typeof Logger,
   +child: (context: TranslateMessageFunctionType | MessageContextType) => LoggerType,
-  +debug: Logger,
-  +error: Logger,
-  +fatal: Logger,
-  +info: Logger,
-  +trace: Logger,
-  +warn: Logger
+  +debug: typeof Logger,
+  +error: typeof Logger,
+  +fatal: typeof Logger,
+  +info: typeof Logger,
+  +trace: typeof Logger,
+  +warn: typeof Logger
 |};
