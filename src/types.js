@@ -3,7 +3,7 @@
 /* eslint-disable import/exports-last, flowtype/require-types-at-top */
 
 export type SerializableObjectType = {
-  +[key: string]: string | number | null | SerializableObjectType
+  +[key: string]: string | number | null | SerializableObjectType | $ReadOnlyArray<SerializableObjectType>
 };
 
 export type RoarrGlobalStateType = {|
