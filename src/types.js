@@ -3,7 +3,7 @@
 /* eslint-disable import/exports-last, flowtype/require-types-at-top */
 
 // eslint-disable-next-line no-use-before-define
-type SerializableObjectValueType = string | number | boolean | SerializableObjectType | $ReadOnlyArray<SerializableObjectValueType>;
+type SerializableObjectValueType = string | number | boolean | null | SerializableObjectType | $ReadOnlyArray<SerializableObjectValueType>;
 
 export type SerializableObjectType = {
   +[key: string]: SerializableObjectValueType
