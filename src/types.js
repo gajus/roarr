@@ -2,11 +2,10 @@
 
 /* eslint-disable import/exports-last, flowtype/require-types-at-top */
 
-// eslint-disable-next-line no-use-before-define
-type SerializableObjectValueType = string | number | boolean | null | SerializableObjectType | $ReadOnlyArray<SerializableObjectValueType>;
+export type SerializableValueType = string | number | boolean | null | {+[key: string]: SerializableValueType} | $ReadOnlyArray<SerializableValueType>;
 
 export type SerializableObjectType = {
-  +[key: string]: SerializableObjectValueType
+  +[key: string]: SerializableValueType
 };
 
 export type RoarrGlobalStateType = {|
