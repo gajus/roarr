@@ -22,19 +22,19 @@
     "@babel/plugin-transform-flow-strip-types": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/register": "^7.0.0",
-    "ava": "^1.0.0-beta.8",
+    "ava": "^1.0.0-rc.1",
     "babel-plugin-istanbul": "^5.1.0",
     "babel-plugin-transform-export-default-name": "^2.0.4",
     "coveralls": "^3.0.2",
-    "eslint": "^5.6.1",
+    "eslint": "^5.7.0",
     "eslint-config-canonical": "^13.0.0",
-    "flow-bin": "^0.82.0",
+    "flow-bin": "^0.83.0",
     "flow-copy-source": "^2.0.2",
-    "husky": "^1.1.0",
-    "nock": "^10.0.0",
+    "husky": "^1.1.2",
+    "nock": "^10.0.1",
     "nyc": "^13.1.0",
-    "semantic-release": "^15.9.16",
-    "sinon": "^6.3.4"
+    "semantic-release": "^15.10.4",
+    "sinon": "^7.0.0"
   },
   "engines": {
     "node": ">=6.0"
