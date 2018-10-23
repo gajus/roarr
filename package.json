@@ -30,6 +30,7 @@
     "eslint-config-canonical": "^13.0.0",
     "flow-bin": "^0.83.0",
     "flow-copy-source": "^2.0.2",
+    "gitdown": "^2.5.4",
     "husky": "^1.1.2",
     "nock": "^10.0.1",
     "nyc": "^13.1.0",
@@ -41,6 +42,7 @@
   },
   "husky": {
     "hooks": {
+      "post-commit": "npm run create-readme && git add README.md && git commit -m 'docs: generate docs' --no-verify",
       "pre-commit": "npm run lint && npm run test && npm run build"
     }
   },
@@ -70,6 +72,7 @@
   },
   "scripts": {
     "build": "rm -fr ./dist && NODE_ENV=production babel ./src --out-dir ./dist --copy-files --source-maps && flow-copy-source src dist",
+    "create-readme": "gitdown ./.README/README.md --output-file ./README.md",
     "dev": "NODE_ENV=production babel ./src --out-dir ./dist --copy-files --source-maps --watch",
     "lint": "eslint ./src ./test && flow",
     "test": "NODE_ENV=test ava --serial --verbose"
