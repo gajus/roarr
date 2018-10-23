@@ -34,6 +34,7 @@ JSON logger for Node.js and browser.
 * [Recipes](#recipes)
   * [Logging errors](#logging-errors)
   * [Using with Elasticsearch](#using-with-elasticsearch)
+  * [Using with Scalyr](#using-with-scalyr)
   * [Documenting use of Roarr](#documenting-use-of-roarr)
 
 ## Motivation
@@ -521,6 +522,28 @@ The following serves as the ground work for the index template. It includes the 
 }
 
 ```
+
+### Using with Scalyr
+
+If you are using [Scalyr](https://www.scalyr.com/), you will want to create a custom parser `RoarrLogger`:
+
+```js
+{
+  patterns: {
+    tsPattern: "\\w{3},\\s\\d{2}\\s\\w{3}\\s\\d{4}\\s[\\d:]+",
+    tsPattern_8601: "\\d{4}-\\d{2}-\\d{2}T[\\d:.]+Z"
+  }
+  formats: [
+    {format: "${parse=json}$"},
+    {format: ".*\"time\":$timestamp=number$,.*"},
+    {format: "$timestamp=tsPattern$ GMT $detail$"},
+    {format: "$timestamp=tsPattern_8601$ $detail$"}
+  ]
+}
+
+```
+
+and configure the individual programs to use `RoarrLogger`. In case of Kubernetes, this means adding a `log.config.scalyr.com/attributes.parser: RoarrLogger` annotation to the associated deployment, pod or container.
 
 ### Documenting use of Roarr
 
