@@ -20,7 +20,8 @@ export type RoarrGlobalStateType = {|
 
 export type SprintfArgumentType = string | number | boolean | null;
 
-export type MessageContextType = SerializableObjectType;
+// eslint-disable-next-line flowtype/no-weak-types
+export type MessageContextType = Object;
 
 export type MessageType = {|
   +context: MessageContextType,
