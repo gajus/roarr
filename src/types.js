@@ -8,14 +8,18 @@ export type SerializableObjectType = {
   +[key: string]: SerializableValueType
 };
 
+export type WriterType = {|
+  +flush: (message: string) => void,
+  +write: (message: string) => void
+|};
+
 export type RoarrGlobalStateType = {|
   buffer: string,
-  flush: (message: string) => void,
   prepend: SerializableObjectType,
   registeredFlush: boolean,
   sequence: number,
   versions: $ReadOnlyArray<string>,
-  write: (message: string) => void
+  ...WriterType
 |};
 
 export type SprintfArgumentType = string | number | boolean | null;

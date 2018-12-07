@@ -27,7 +27,7 @@ export default (currentState: Object): RoarrGlobalStateType => {
 
   versions.sort(cmp);
 
-  const newState = {
+  let newState = {
     buffer: '',
     prepend: {},
     sequence: 0,
@@ -36,13 +36,13 @@ export default (currentState: Object): RoarrGlobalStateType => {
   };
 
   if (currentIsLatestVersion || !newState.write) {
-    const Writer = createWriter({
-      bufferSize: ROARR_BUFFER_SIZE,
-      stream: ROARR_STREAM
-    });
-
-    newState.write = Writer.write;
-    newState.flush = Writer.flush;
+    newState = {
+      ...newState,
+      ...createWriter({
+        bufferSize: ROARR_BUFFER_SIZE,
+        stream: ROARR_STREAM
+      })
+    };
   }
 
   return newState;

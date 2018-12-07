@@ -1,23 +1,24 @@
 // @flow
 
+import type {
+  WriterType
+} from '../types';
+
 type WriteConfigurationType = {|
   +bufferSize: number,
   +stream: 'STDOUT' | 'STDERR'
 |};
 
-// @todo Add browser support.
-export default (configuration: WriteConfigurationType) => {
-  const stream = configuration.stream.toUpperCase() === 'STDOUT' ? process.stdout : process.stderr;
+const createBlockingWriter = (stream: stream$Writable): WriterType => {
+  return {
+    flush: () => {},
+    write: (message: string) => {
+      stream.write(message + '\n');
+    }
+  };
+};
 
-  if (!configuration.bufferSize) {
-    return {
-      flush: () => {},
-      write: (message: string) => {
-        stream.write(message + '\n');
-      }
-    };
-  }
-
+const createBufferedWriter = (stream: stream$Writable, bufferSize: number): WriterType => {
   const flush = () => {
     if (!global.ROARR.buffer) {
       return;
@@ -35,11 +36,22 @@ export default (configuration: WriteConfigurationType) => {
     write: (message: string) => {
       global.ROARR.buffer += message + '\n';
 
-      if (global.ROARR.buffer.length > configuration.bufferSize) {
+      if (global.ROARR.buffer.length > bufferSize) {
         flush();
       }
 
       // @todo Write messages when the event loop is not busy.
     }
   };
+};
+
+// @todo Add browser support.
+export default (configuration: WriteConfigurationType): WriterType => {
+  const stream = configuration.stream.toUpperCase() === 'STDOUT' ? process.stdout : process.stderr;
+
+  if (configuration.bufferSize) {
+    return createBufferedWriter(stream, configuration.bufferSize);
+  } else {
+    return createBlockingWriter(stream);
+  }
 };
