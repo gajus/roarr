@@ -1,5 +1,6 @@
 // @flow
 
+import stringify from 'json-stringify-safe';
 import {
   sprintf
 } from 'sprintf-js';
@@ -49,10 +50,10 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext?: Mess
         throw new TypeError('Message must be a string.');
       }
 
-      context = {
+      context = JSON.parse(stringify({
         ...parentContext || {},
         ...a
-      };
+      }));
 
       message = sprintf(b, c, d, e, f, g, h, i, k);
     }
