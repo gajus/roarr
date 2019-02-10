@@ -1,5 +1,7 @@
 // @flow
 
+/* eslint-disable fp/no-delete */
+
 import test from 'ava';
 import createRoarrInititialGlobalState from '../../src/factories/createRoarrInititialGlobalState';
 
