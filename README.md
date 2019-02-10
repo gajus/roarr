@@ -17,6 +17,7 @@ JSON logger for Node.js and browser.
     * [Log message format](#roarr-log-message-format)
     * [API](#roarr-api)
         * [`child`](#roarr-api-child)
+        * [`getContext`](#roarr-api-getcontext)
         * [`trace`](#roarr-api-trace)
         * [`debug`](#roarr-api-debug)
         * [`info`](#roarr-api-info)
@@ -288,7 +289,10 @@ childLog.debug('foo 2');
 
 ```
 
-Example:
+<a name="roarr-api-getcontext"></a>
+### <code>getContext</code>
+
+Returns the current context.
 
 <a name="roarr-api-trace"></a>
 ### <code>trace</code>
