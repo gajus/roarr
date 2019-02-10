@@ -252,7 +252,9 @@ childLog.debug('foo 2');
 
 ```
 
-Example:
+### `getContext`
+
+Returns the current context.
 
 ### `trace`
 ### `debug`

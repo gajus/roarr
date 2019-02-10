@@ -83,6 +83,12 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext?: Mess
     });
   };
 
+  log.getContext = (): MessageContextType => {
+    return {
+      ...parentContext || {}
+    };
+  };
+
   for (const logLevel of Object.keys(logLevels)) {
     // eslint-disable-next-line id-length
     log[logLevel] = (a, b, c, d, e, f, g, h, i, k) => {

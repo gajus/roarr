@@ -74,6 +74,7 @@ export type LoggerType = {|
   +debug: typeof Logger,
   +error: typeof Logger,
   +fatal: typeof Logger,
+  +getContext: () => MessageContextType,
   +info: typeof Logger,
   +trace: typeof Logger,
   +warn: typeof Logger
