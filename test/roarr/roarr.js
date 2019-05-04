@@ -311,3 +311,19 @@ test('convenience methods trace, debug, info, warn, error and fatal prepend a lo
     }
   ]);
 });
+
+test('avoid `[sprintf] unexpected placeholder` when a simple message ha some %', (t) => {
+  const log = createLoggerWithHistory();
+  log.trace('http://commons.wikimedia.org/wiki/Special:FilePath/Cucumis%20anguria.JPG');
+  t.deepEqual(log.messages, [
+    {
+      context: {
+        logLevel: 10
+      },
+      message: 'http://commons.wikimedia.org/wiki/Special:FilePath/Cucumis%20anguria.JPG',
+      sequence: 0,
+      time,
+      version
+    }
+  ]);
+});

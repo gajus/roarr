@@ -44,7 +44,14 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext?: Mess
       context = {
         ...parentContext || {}
       };
-      message = sprintf(a, b, c, d, e, f, g, h, i, k);
+      // eslint-disable-next-line object-property-newline
+      const {...args} = {a, b, c, d, e, f, g, h, i, k};
+      // eslint-disable-next-line max-statements-per-line
+      const hasOnlyOneParamValued = 1 === Object.values(args).reduce((acc, val) => {
+        // eslint-disable-next-line no-return-assign, no-param-reassign
+        return acc += typeof val === 'undefined' ? 0 : 1;
+      }, 0);
+      message = hasOnlyOneParamValued ? sprintf('%s', a) : sprintf(a, b, c, d, e, f, g, h, i, k);
     } else {
       if (typeof b !== 'string') {
         throw new TypeError('Message must be a string.');
