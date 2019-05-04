@@ -44,10 +44,12 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext?: Mess
       context = {
         ...parentContext || {}
       };
-      // eslint-disable-next-line object-property-newline
+      // eslint-disable-next-line id-length, object-property-newline
       const {...args} = {a, b, c, d, e, f, g, h, i, k};
-      // eslint-disable-next-line max-statements-per-line
-      const hasOnlyOneParamValued = 1 === Object.values(args).reduce((acc, val) => {
+      const vals = Object.keys(args).map((key) => {
+        return args[key];
+      });
+      const hasOnlyOneParamValued = 1 === vals.reduce((acc, val) => {
         // eslint-disable-next-line no-return-assign, no-param-reassign
         return acc += typeof val === 'undefined' ? 0 : 1;
       }, 0);
