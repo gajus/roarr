@@ -1,7 +1,7 @@
 <a name="roarr"></a>
 # Roarr
 
-![[GitSpo Mentions](https://gitspo.com/mentions/gajus/roarr)](https://gitspo.com/badges/gajus/roarr?style=flat-square)
+[![GitSpo Mentions](https://gitspo.com/badges/gajus/roarr?style=flat-square)](https://gitspo.com/mentions/gajus/roarr)
 [![Travis build status](http://img.shields.io/travis/gajus/roarr/master.svg?style=flat-square)](https://travis-ci.org/gajus/roarr)
 [![Coveralls](https://img.shields.io/coveralls/gajus/roarr.svg?style=flat-square)](https://coveralls.io/github/gajus/roarr)
 [![NPM version](http://img.shields.io/npm/v/roarr.svg?style=flat-square)](https://www.npmjs.org/package/roarr)
