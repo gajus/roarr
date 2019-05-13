@@ -129,7 +129,7 @@ ROARR_LOG=true node ./index.js | jq -cM 'select(.context.logLevel > 40)'
 
 ```
 
-(Notice the use of `-cM` parameters to disable JSON colarization and formatting.)
+(Notice the use of `-cM` parameters to disable JSON colorization and formatting.)
 
 If your application outputs non-JSON output, jq will fail with an error similar to:
 
