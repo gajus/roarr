@@ -3,6 +3,7 @@ dist
 node_modules
 *.log
 .*
+!.github
 !.babelrc
 !.editorconfig
 !.eslintignore
