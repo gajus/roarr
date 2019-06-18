@@ -8,7 +8,7 @@
 [![Canonical Code Style](https://img.shields.io/badge/code%20style-canonical-blue.svg?style=flat-square)](https://github.com/gajus/canonical)
 [![Twitter Follow](https://img.shields.io/twitter/follow/kuizinas.svg?style=social&label=Follow)](https://twitter.com/kuizinas)
 
-JSON logger for Node.js and browser.
+JSON logger for Node.js.
 
 * [Roarr](#roarr)
     * [Motivation](#roarr-motivation)
@@ -42,7 +42,7 @@ JSON logger for Node.js and browser.
 <a name="roarr-motivation"></a>
 ## Motivation
 
-For a long time I have been a big fan of using [`debug`](https://github.com/visionmedia/debug). `debug` is simple to use, works in Node.js and browser, does not require configuration and it is fast. However, problems arise when you need to parse logs. Anything but one-line text messages cannot be parsed in a safe way.
+For a long time I have been a big fan of using [`debug`](https://github.com/visionmedia/debug). `debug` is simple to use, works in Node.js, does not require configuration and it is fast. However, problems arise when you need to parse logs. Anything but one-line text messages cannot be parsed in a safe way.
 
 To log structured data, I have been using [Winston](https://github.com/winstonjs/winston) and [Bunyan](https://github.com/trentm/node-bunyan). These packages are great for application-level logging. I have preferred Bunyan because of the [Bunyan CLI program](https://github.com/trentm/node-bunyan#cli-usage) used to pretty-print logs. However, these packages require program-level configuration – when constructing an instance of a logger, you need to define the transport and the log-level. This makes them unsuitable for use in code designed to be consumed by other applications.
 
@@ -55,7 +55,7 @@ I needed a logger that:
 * Produces structured data.
 * [Decouples transports](#transports).
 * Has a [CLI program](#cli-program).
-* Works in Node.js and browser.
+* Works in Node.js.
 * Configurable using environment variables.
 
 In other words,
