@@ -16,14 +16,14 @@ test('creates new state', (t) => {
     prepend: {},
     sequence: 0,
     versions: [
-      '1.0.0'
-    ]
+      '1.0.0',
+    ],
   });
 });
 
 test('respects existing sequence', (t) => {
   const state = createRoarrInititialGlobalState({
-    sequence: 1
+    sequence: 1,
   });
 
   delete state.flush;
@@ -34,16 +34,16 @@ test('respects existing sequence', (t) => {
     prepend: {},
     sequence: 1,
     versions: [
-      '1.0.0'
-    ]
+      '1.0.0',
+    ],
   });
 });
 
 test('appends the latest version', (t) => {
   const state = createRoarrInititialGlobalState({
     versions: [
-      '0.0.1'
-    ]
+      '0.0.1',
+    ],
   });
 
   delete state.flush;
@@ -55,8 +55,8 @@ test('appends the latest version', (t) => {
     sequence: 0,
     versions: [
       '0.0.1',
-      '1.0.0'
-    ]
+      '1.0.0',
+    ],
   });
 });
 
@@ -69,9 +69,9 @@ test('sets "write" method if current is the first version', (t) => {
 test('overrides "write" method if current is the latest version', (t) => {
   const state = createRoarrInititialGlobalState({
     versions: [
-      '0.0.1'
+      '0.0.1',
     ],
-    write: 'foo'
+    write: 'foo',
   });
 
   t.true(typeof state.write === 'function');
@@ -80,9 +80,9 @@ test('overrides "write" method if current is the latest version', (t) => {
 test('does not override "write" method if current is not the latest version', (t) => {
   const state = createRoarrInititialGlobalState({
     versions: [
-      '2.0.0'
+      '2.0.0',
     ],
-    write: 'foo'
+    write: 'foo',
   });
 
   t.true(state.write === 'foo');

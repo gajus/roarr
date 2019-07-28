@@ -7,7 +7,7 @@ global.ROARR = createRoarrInititialGlobalState({});
 
 const Writer = createWriter({
   bufferSize: 1024 * 8,
-  stream: 'STDOUT'
+  stream: 'STDOUT',
 });
 
 for (let i = 0; i < 1 * 1000 * 1000; i++) {

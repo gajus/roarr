@@ -2,7 +2,7 @@
 
 import {
   createLogger,
-  createRoarrInititialGlobalState
+  createRoarrInititialGlobalState,
 } from './factories';
 
 global.ROARR = createRoarrInititialGlobalState(global.ROARR || {});
@@ -22,7 +22,7 @@ if (!global.ROARR.registeredFlush) {
 export type {
   LoggerType,
   MessageType,
-  TranslateMessageFunctionType
+  TranslateMessageFunctionType,
 } from './types';
 
 export default createLogger((message) => {

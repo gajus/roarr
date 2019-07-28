@@ -5,12 +5,12 @@
 export type SerializableValueType = string | number | boolean | null | {+[key: string]: SerializableValueType} | $ReadOnlyArray<SerializableValueType>;
 
 export type SerializableObjectType = {
-  +[key: string]: SerializableValueType
+  +[key: string]: SerializableValueType,
 };
 
 export type WriterType = {|
   +flush: (message: string) => void,
-  +write: (message: string) => void
+  +write: (message: string) => void,
 |};
 
 export type RoarrGlobalStateType = {|
@@ -19,7 +19,7 @@ export type RoarrGlobalStateType = {|
   registeredFlush: boolean,
   sequence: number,
   versions: $ReadOnlyArray<string>,
-  ...WriterType
+  ...WriterType,
 |};
 
 export type SprintfArgumentType = string | number | boolean | null;
@@ -32,7 +32,7 @@ export type MessageType = {|
   +message: string,
   +sequence: number,
   +time: number,
-  +version: string
+  +version: string,
 |};
 
 export type TranslateMessageFunctionType = (message: MessageType) => MessageType;
@@ -77,5 +77,5 @@ export type LoggerType = {|
   +getContext: () => MessageContextType,
   +info: typeof Logger,
   +trace: typeof Logger,
-  +warn: typeof Logger
+  +warn: typeof Logger,
 |};

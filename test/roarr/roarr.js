@@ -3,7 +3,7 @@
 /* eslint-disable ava/test-title, flowtype/no-weak-types */
 
 import test, {
-  beforeEach
+  beforeEach,
 } from 'ava';
 import createLogger from '../../src/factories/createLogger';
 import createRoarrInititialGlobalState from '../../src/factories/createRoarrInititialGlobalState';
@@ -23,7 +23,7 @@ const createLoggerWithHistory = () => {
   const log: any = createLogger((message) => {
     messages.push({
       ...message,
-      time
+      time,
     });
   });
 
@@ -43,8 +43,8 @@ test('creates a simple message', (t) => {
       message: 'foo',
       sequence,
       time,
-      version
-    }
+      version,
+    },
   ]);
 });
 
@@ -56,21 +56,21 @@ test('replaces circular references with [Circular]', (t) => {
   bar.bar = bar;
 
   log({
-    bar
+    bar,
   }, 'foo');
 
   t.deepEqual(log.messages, [
     {
       context: {
         bar: {
-          bar: '[Circular ~.bar]'
-        }
+          bar: '[Circular ~.bar]',
+        },
       },
       message: 'foo',
       sequence,
       time,
-      version
-    }
+      version,
+    },
   ]);
 });
 
@@ -85,8 +85,8 @@ test('formats message using sprintf', (t) => {
       message: 'foo bar',
       sequence,
       time,
-      version
-    }
+      version,
+    },
   ]);
 });
 
@@ -94,19 +94,19 @@ test('creates message with a context', (t) => {
   const log = createLoggerWithHistory();
 
   log({
-    foo: 'bar'
+    foo: 'bar',
   }, 'baz');
 
   t.deepEqual(log.messages, [
     {
       context: {
-        foo: 'bar'
+        foo: 'bar',
       },
       message: 'baz',
       sequence,
       time,
-      version
-    }
+      version,
+    },
   ]);
 });
 
@@ -114,19 +114,19 @@ test('formats message using sprintf (with context)', (t) => {
   const log = createLoggerWithHistory();
 
   log({
-    foo: 'bar'
+    foo: 'bar',
   }, 'baz %s', 'qux');
 
   t.deepEqual(log.messages, [
     {
       context: {
-        foo: 'bar'
+        foo: 'bar',
       },
       message: 'baz qux',
       sequence,
       time,
-      version
-    }
+      version,
+    },
   ]);
 });
 
@@ -138,13 +138,13 @@ test('creates logger with a context', (t) => {
   t.deepEqual(log.messages, [
     {
       context: {
-        foo: 'bar'
+        foo: 'bar',
       },
       message: 'baz',
       sequence,
       time,
-      version
-    }
+      version,
+    },
   ]);
 });
 
@@ -157,13 +157,13 @@ test('prepends context to the message context', (t) => {
     {
       context: {
         baz: 'qux',
-        foo: 'bar'
+        foo: 'bar',
       },
       message: 'quux',
       sequence,
       time,
-      version
-    }
+      version,
+    },
   ]);
 });
 
@@ -175,13 +175,13 @@ test('prepends context to the message context (is overriden)', (t) => {
   t.deepEqual(log.messages, [
     {
       context: {
-        foo: 'bar 1'
+        foo: 'bar 1',
       },
       message: 'quux',
       sequence,
       time,
-      version
-    }
+      version,
+    },
   ]);
 });
 
@@ -194,13 +194,13 @@ test('appends context to the previous child context', (t) => {
     {
       context: {
         baz: 'qux',
-        foo: 'bar'
+        foo: 'bar',
       },
       message: 'quux',
       sequence,
       time,
-      version
-    }
+      version,
+    },
   ]);
 });
 
@@ -212,13 +212,13 @@ test('appends context to the previous child context (overrides)', (t) => {
   t.deepEqual(log.messages, [
     {
       context: {
-        foo: 'bar 1'
+        foo: 'bar 1',
       },
       message: 'qux',
       sequence,
       time,
-      version
-    }
+      version,
+    },
   ]);
 });
 
@@ -229,7 +229,7 @@ test('translates child message', (t) => {
     .child((message) => {
       return {
         ...message,
-        message: message.message + 'bar'
+        message: message.message + 'bar',
       };
     })('foo');
 
@@ -239,8 +239,8 @@ test('translates child message', (t) => {
       message: 'foobar',
       sequence,
       time,
-      version
-    }
+      version,
+    },
   ]);
 });
 
@@ -257,57 +257,57 @@ test('convenience methods trace, debug, info, warn, error and fatal prepend a lo
   t.deepEqual(log.messages, [
     {
       context: {
-        logLevel: 10
+        logLevel: 10,
       },
       message: 'foo 0',
       sequence: 0,
       time,
-      version
+      version,
     },
     {
       context: {
-        logLevel: 20
+        logLevel: 20,
       },
       message: 'foo 1',
       sequence: 1,
       time,
-      version
+      version,
     },
     {
       context: {
-        logLevel: 30
+        logLevel: 30,
       },
       message: 'foo 2',
       sequence: 2,
       time,
-      version
+      version,
     },
     {
       context: {
-        logLevel: 40
+        logLevel: 40,
       },
       message: 'foo 3',
       sequence: 3,
       time,
-      version
+      version,
     },
     {
       context: {
-        logLevel: 50
+        logLevel: 50,
       },
       message: 'foo 4',
       sequence: 4,
       time,
-      version
+      version,
     },
     {
       context: {
-        logLevel: 60
+        logLevel: 60,
       },
       message: 'foo 5',
       sequence: 5,
       time,
-      version
-    }
+      version,
+    },
   ]);
 });

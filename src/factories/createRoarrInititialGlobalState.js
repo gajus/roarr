@@ -2,14 +2,14 @@
 
 import cmp from 'semver-compare';
 import {
-  version
+  version,
 } from '../../package.json';
 import type {
-  RoarrGlobalStateType
+  RoarrGlobalStateType,
 } from '../types';
 import {
   ROARR_BUFFER_SIZE,
-  ROARR_STREAM
+  ROARR_STREAM,
 } from '../config';
 import createWriter from './createWriter';
 
@@ -32,7 +32,7 @@ export default (currentState: Object): RoarrGlobalStateType => {
     prepend: {},
     sequence: 0,
     ...currentState,
-    versions
+    versions,
   };
 
   if (currentIsLatestVersion || !newState.write) {
@@ -40,8 +40,8 @@ export default (currentState: Object): RoarrGlobalStateType => {
       ...newState,
       ...createWriter({
         bufferSize: ROARR_BUFFER_SIZE,
-        stream: ROARR_STREAM
-      })
+        stream: ROARR_STREAM,
+      }),
     };
   }
 

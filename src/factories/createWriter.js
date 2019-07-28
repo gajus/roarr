@@ -1,12 +1,12 @@
 // @flow
 
 import type {
-  WriterType
+  WriterType,
 } from '../types';
 
 type WriteConfigurationType = {|
   +bufferSize: number,
-  +stream: 'STDOUT' | 'STDERR'
+  +stream: 'STDOUT' | 'STDERR',
 |};
 
 const createBlockingWriter = (stream: stream$Writable): WriterType => {
@@ -14,7 +14,7 @@ const createBlockingWriter = (stream: stream$Writable): WriterType => {
     flush: () => {},
     write: (message: string) => {
       stream.write(message + '\n');
-    }
+    },
   };
 };
 
@@ -41,7 +41,7 @@ const createBufferedWriter = (stream: stream$Writable, bufferSize: number): Writ
       }
 
       // @todo Write messages when the event loop is not busy.
-    }
+    },
   };
 };
 

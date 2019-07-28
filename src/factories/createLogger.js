@@ -2,16 +2,16 @@
 
 import stringify from 'json-stringify-safe';
 import {
-  sprintf
+  sprintf,
 } from 'sprintf-js';
 import type {
   LoggerType,
   MessageContextType,
   MessageType,
-  TranslateMessageFunctionType
+  TranslateMessageFunctionType,
 } from '../types';
 import {
-  ROARR_LOG
+  ROARR_LOG,
 } from '../config';
 
 type OnMessageEventHandlerType = (message: MessageType) => void;
@@ -24,11 +24,11 @@ const logLevels = {
   fatal: 60,
   info: 30,
   trace: 10,
-  warn: 40
+  warn: 40,
 };
 
 const createLogger = (onMessage: OnMessageEventHandlerType, parentContext?: MessageContextType): LoggerType => {
-  // eslint-disable-next-line id-length
+  // eslint-disable-next-line id-length, unicorn/prevent-abbreviations
   const log = (a, b, c, d, e, f, g, h, i, k) => {
     if (!ROARR_LOG && !global.ROARR_LOG) {
       return;
@@ -42,7 +42,7 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext?: Mess
 
     if (typeof a === 'string') {
       context = {
-        ...parentContext || {}
+        ...parentContext || {},
       };
       message = sprintf(a, b, c, d, e, f, g, h, i, k);
     } else {
@@ -52,7 +52,7 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext?: Mess
 
       context = JSON.parse(stringify({
         ...parentContext || {},
-        ...a
+        ...a,
       }));
 
       message = sprintf(b, c, d, e, f, g, h, i, k);
@@ -63,7 +63,7 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext?: Mess
       message,
       sequence,
       time,
-      version
+      version,
     });
   };
 
@@ -79,21 +79,21 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext?: Mess
 
     return createLogger(onMessage, {
       ...parentContext,
-      ...context
+      ...context,
     });
   };
 
   log.getContext = (): MessageContextType => {
     return {
-      ...parentContext || {}
+      ...parentContext || {},
     };
   };
 
   for (const logLevel of Object.keys(logLevels)) {
-    // eslint-disable-next-line id-length
+    // eslint-disable-next-line id-length, unicorn/prevent-abbreviations
     log[logLevel] = (a, b, c, d, e, f, g, h, i, k) => {
       return log.child({
-        logLevel: logLevels[logLevel]
+        logLevel: logLevels[logLevel],
       })(a, b, c, d, e, f, g, h, i, k);
     };
   }
