@@ -78,7 +78,7 @@ Roarr logger API for producing logs is the same in Node.js and browser.
 1. Import `roarr`
 2. Use any of the [API](#api) methods to log messages.
 
-e.g.
+Example:
 
 ```js
 import log from 'roarr';
