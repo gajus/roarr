@@ -8,12 +8,9 @@ import createRoarrInititialGlobalState from '../../src/factories/createRoarrInit
 test('creates new state', (t) => {
   const state = createRoarrInititialGlobalState({});
 
-  delete state.flush;
   delete state.write;
 
   t.deepEqual(state, {
-    buffer: '',
-    prepend: {},
     sequence: 0,
     versions: [
       '1.0.0',
@@ -26,12 +23,9 @@ test('respects existing sequence', (t) => {
     sequence: 1,
   });
 
-  delete state.flush;
   delete state.write;
 
   t.deepEqual(state, {
-    buffer: '',
-    prepend: {},
     sequence: 1,
     versions: [
       '1.0.0',
@@ -46,12 +40,9 @@ test('appends the latest version', (t) => {
     ],
   });
 
-  delete state.flush;
   delete state.write;
 
   t.deepEqual(state, {
-    buffer: '',
-    prepend: {},
     sequence: 0,
     versions: [
       '0.0.1',

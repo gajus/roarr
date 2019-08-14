@@ -2,6 +2,7 @@
 
 /* eslint-disable ava/test-title, flowtype/no-weak-types */
 
+import createGlobalThis from 'globalthis';
 import test, {
   beforeEach,
 } from 'ava';
@@ -13,8 +14,9 @@ const time = -1;
 const version = '1.0.0';
 
 beforeEach(() => {
-  global.ROARR = createRoarrInititialGlobalState({});
-  global.ROARR_LOG = true;
+  const globalThis = createGlobalThis();
+
+  globalThis.ROARR = createRoarrInititialGlobalState({});
 });
 
 const createLoggerWithHistory = () => {

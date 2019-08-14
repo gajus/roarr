@@ -39,84 +39,94 @@ Roarr is this logger.
 
 ## Usage
 
-Roarr logging is disabled by default. To enable logging, you must start program with an environment variable `ROARR_LOG` set to `true`, e.g.
+### Producing logs
 
-```bash
-ROARR_LOG=true node ./index.js
+Roarr logger API for producing logs is the same in Node.js and browser.
 
-```
+1. Import `roarr`
+2. Use any of the [API](#api) methods to log messages.
+
+e.g.
 
 ```js
 import log from 'roarr';
 
 log('foo');
 
-log('bar %s', 'baz');
+```
 
-const debug = log.child({
-  logLevel: 10
-});
+### Consuming logs
 
-debug('qux');
+Roarr logs are consumed differently in Node.js and browser.
 
-debug({
-  quuz: 'corge'
-}, 'quux');
+#### Node.js
+
+In Node.js, Roarr logging is disabled by default. To enable logging, you must start program with an environment variable `ROARR_LOG` set to `true`, e.g.
+
+```bash
+ROARR_LOG=true node ./index.js
 
 ```
 
-Produces output:
+All logs will be written to stdout.
+
+#### Browser
+
+In a browser, you must implement `globalThis.ROARR.write` method to read logs, e.g.
+
+```js
+globalThis.ROARR.write = () => {};
 
 ```
-{"context":{},"message":"foo","sequence":0,"time":1506776210000,"version":"1.0.0"}
-{"context":{},"message":"bar baz","sequence":1,"time":1506776210000,"version":"1.0.0"}
-{"context":{"logLevel":10},"message":"qux","sequence":2,"time":1506776210000,"version":"1.0.0"}
-{"context":{"logLevel":10,"quuz":"corge"},"sequence":3,"message":"quux","time":1506776210000,"version":"1.0.0"}
+
+The API of the `ROARR.write` is:
+
+```js
+(message: string) => void;
+
+```
+
+Example implementation:
+
+```js
+// Ensure that `globalThis.ROARR` is configured.
+globalThis.ROARR = globalThis.ROARR || {};
+
+globalThis.ROARR.write = (message) => {
+  console.log(JSON.parse(message));
+};
 
 ```
 
 ### Filtering logs
 
-Roarr is designed to print all or none logs (refer to the [`ROARR_LOG` environment variable](#environment-variables) documentation).
+#### Node.js
 
-To filter logs you need to use [`roarr filter` CLI program](#filter-program) or a JSON processor such as [jq](https://stedolan.github.io/jq/).
+In Node.js, Roarr prints all or none logs (refer to the [`ROARR_LOG` environment variable](#environment-variables) documentation).
 
-### jq primer
-
-`jq` allows you to filter JSON messages using [`select(boolean_expression)`](https://stedolan.github.io/jq/manual/#select(boolean_expression)), e.g.
+Use [`roarr filter` CLI program](#filter-program) to filter the logs that are written to stdout by the program, e.g.
 
 ```bash
-ROARR_LOG=true node ./index.js | jq 'select(.context.logLevel > 40)'
+ROARR_LOG=true node ./index.js | roarr filter '{"context.logLevel":{gt:30}}'
 
 ```
 
-Combine it with `roarr pretty-print` to pretty-print a subset of the logs:
+Alternatively, use a JSON processor such as [jq](https://stedolan.github.io/jq/)
 
-```bash
-ROARR_LOG=true node ./index.js | jq -cM 'select(.context.logLevel > 40)'
+#### Browser
 
-```
+In a browser, Roarr calls `globalThis.ROARR.write` for every log message. Implement your own custom logic to filter logs, e.g.
 
-(Notice the use of `-cM` parameters to disable JSON colorization and formatting.)
+```js
+globalThis.ROARR.write = (message) => {
+  const payload = JSON.parse(message);
 
-If your application outputs non-JSON output, jq will fail with an error similar to:
-
-```
-parse error: Invalid numeric literal at line 1, column 5
-Error: write EPIPE
-    at _errnoException (util.js:1031:13)
-    at WriteWrap.afterWrite (net.js:873:14)
+  if (payload.context.logLevel > 30) {
+    console.log(payload);
+  }
+};
 
 ```
-
-To ignore the non-JSON output, use jq `-R` flag (raw input) in combination with [`fromjson`](https://stedolan.github.io/jq/manual/#Convertto/fromJSON), e.g.
-
-```bash
-ROARR_LOG=true node ./index.js | jq -cRM 'fromjson? | select(.context.logLevel > 40)'
-
-```
-
-For a simplified way of filtering Roarr logs, refer to [`roarr filter` CLI program](#filter-program).
 
 ## Log message format
 
@@ -148,7 +158,7 @@ Example:
 
 ## API
 
-`roarr` package exports a function that accepts the following API:
+`roarr` package exports a function with the following API:
 
 ```js
 export type LoggerType =
@@ -198,12 +208,12 @@ The `child` function has two signatures:
 
 #### Object parameter
 
-Creates a child logger appending the provided `context` object to the previous logger context.
-
 ```js
-type ChildType = (context: MessageContextType) => LoggerType;
+(context: MessageContextType) => LoggerType;
 
 ```
+
+Creates a child logger appending the provided `context` object to the previous logger context.
 
 Example:
 
@@ -226,12 +236,12 @@ Refer to [middlewares](#middlewares) documentation for use case examples.
 
 #### Function parameter
 
-Creates a child logger where every message is intercepted.
-
 ```js
-type ChildType = (translateMessage: TranslateMessageFunctionType) => LoggerType;
+(translateMessage: TranslateMessageFunctionType) => LoggerType;
 
 ```
+
+Creates a child logger where every message is intercepted.
 
 Example:
 
@@ -241,7 +251,7 @@ import log from 'roarr';
 const childLog = log.child((message) => {
   return {
     ...message,
-    message: message.message.replace('foo', 'bar')
+    message: message.message.replace('foo', 'bar'),
   }
 });
 
@@ -257,6 +267,21 @@ childLog.debug('foo 2');
 
 Returns the current context.
 
+Example:
+
+```js
+import log from 'roarr';
+
+const childLogger = log.child({
+  foo: 'bar'
+});
+
+childLogger.getContext();
+
+// {foo: 'bar'}
+
+```
+
 ### `trace`
 ### `debug`
 ### `info`
@@ -264,7 +289,7 @@ Returns the current context.
 ### `error`
 ### `fatal`
 
-Convenience methods for logging a message with `logLevel` context property value set to the name of the convenience method, e.g.
+Convenience methods for logging a message with `logLevel` context property value set to a numeric value representing the [log level](#log-levels), e.g.
 
 ```js
 import log from 'roarr';
@@ -320,7 +345,7 @@ Raise an issue to add your middleware of your own creation.
 
 ## CLI program
 
-Roarr CLI program provides ability to augment, filter and pretty-print Roarr logs.
+Roarr CLI program provides ability to filter and pretty-print Roarr logs.
 
 ![CLI output demo](./.README/cli-output-demo.png)
 
@@ -347,15 +372,14 @@ Depending on your configuration, consider one of the following log transports:
 * [logagent](https://github.com/sematext/logagent-js) for aggregating at a process level (written in JavaScript).
 * [Fluentd](https://www.fluentd.org/) for aggregating logs at a container orchestration level (e.g. Kubernetes) (written in Ruby).
 
-## Environment variables
+## Node.js environment variables
 
-When running the script in a Node.js environment, use environment variables to control `roarr` behaviour.
+Use environment variables to control `roarr` behaviour.
 
 |Name|Type|Function|Default|
 |---|---|---|---|
 |`ROARR_LOG`|Boolean|Enables/ disables logging.|`false`|
 |`ROARR_STREAM`|`STDOUT`, `STDERR`|Name of the stream where the logs will be written.|`STDOUT`|
-|`ROARR_BUFFER_SIZE`|Number|Configures the buffer size. Buffer is used to store messages before printing them to the stdout/ stderr. Recommended buffer size depends on how often program produces logs. Experiment with values 1024, 2048, 4096 and 8192.|`0` (disabled)|
 
 When using `ROARR_STREAM=STDERR`, use [`3>&1 1>&2 2>&3 3>&-`](https://stackoverflow.com/a/2381643/368691) to pipe stderr output.
 
@@ -368,11 +392,9 @@ Roarr does not have reserved context property names. However, I encourage use of
 |Context property name|Use case|
 |---|---|
 |`application`|Name of the application (do not use in code intended for distribution; see `package` property instead).|
-|`hostname`|Machine hostname. See `roarr augment --append-hostname` option.|
-|`instanceId`|Unique instance ID. Used to distinguish log source in high-concurrency environments. See `roarr augment --append-instance-id` option.|
 |`logLevel`|A numeric value indicating the [log level](#log-levels). See [API](#api) for the build-in loggers with a pre-set log-level.|
 |`namespace`|Namespace within a package, e.g. function name. Treat the same way that you would construct namespaces when using the [`debug`](https://github.com/visionmedia/debug) package.|
-|`package`|Name of the package.|
+|`package`|Name of the NPM package.|
 
 The `roarr pretty-print` [CLI program](#cli-program) is using the context property names suggested in the conventions to pretty-print the logs for the developer inspection purposes.
 
@@ -393,7 +415,7 @@ The `roarr pretty-print` [CLI program](#cli-program) translates `logLevel` value
 
 To avoid code duplication, you can use a singleton pattern to export a logger instance with predefined context properties (e.g. describing the application).
 
-I recommend to create a file `Logger.js` in the project directory. Use this file to create an child instance of Roarr with context parameters describing the project and the initialisation instance, e.g.
+I recommend to create a file `Logger.js` in the project directory. Inside this file create and export a child instance of Roarr with context parameters describing the project and the script instance, e.g.
 
 ```js
 /**
@@ -412,7 +434,7 @@ export default Logger;
 
 ```
 
-Roarr does not have reserved context property names. However, I encourage use of the conventions. The `roarr pretty-print` [CLI program](#cli-program) is using the context property names suggested in the [conventions](#conventions) to pretty-print the logs for the developer inspection purposes.
+Roarr does not have reserved context property names. However, I encourage use of the [conventions](#conventions).
 
 ## Recipes
 
@@ -523,9 +545,9 @@ and configure the individual programs to use `RoarrLogger`. In case of Kubernete
 
 ### Documenting use of Roarr
 
-If your package is using Roarr, include instructions to README.md describing how to enable logging, e.g.
+If your package is using Roarr, include instructions in `README.md` describing how to enable logging, e.g.
 
-```markdown
+```md
 ## Logging
 
 This package is using [`roarr`](https://www.npmjs.com/package/roarr) logger to log the program's state.

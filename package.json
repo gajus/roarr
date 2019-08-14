@@ -20,6 +20,8 @@
   },
   "dependencies": {
     "boolean": "^1.0.0",
+    "detect-node": "^2.0.4",
+    "globalthis": "^1.0.0",
     "json-stringify-safe": "^5.0.1",
     "semver-compare": "^1.0.0",
     "sprintf-js": "^1.1.2"
@@ -50,8 +52,8 @@
   },
   "husky": {
     "hooks": {
-      "post-commit": "npm run create-readme && git add README.md && git commit -m 'docs: generate docs' --no-verify",
-      "pre-commit": "npm run lint && npm run test && npm run build"
+      "pre-commit": "npm run lint && npm run test && npm run build",
+      "pre-push": "gitdown ./.README/README.md --output-file ./README.md --check"
     }
   },
   "keywords": [

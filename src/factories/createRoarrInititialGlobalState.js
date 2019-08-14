@@ -1,17 +1,14 @@
 // @flow
 
 import cmp from 'semver-compare';
+import environmentIsNode from 'detect-node';
 import {
   version,
 } from '../../package.json';
 import type {
   RoarrGlobalStateType,
 } from '../types';
-import {
-  ROARR_BUFFER_SIZE,
-  ROARR_STREAM,
-} from '../config';
-import createWriter from './createWriter';
+import createNodeWriter from './createNodeWriter';
 
 // eslint-disable-next-line flowtype/no-weak-types
 export default (currentState: Object): RoarrGlobalStateType => {
@@ -28,20 +25,15 @@ export default (currentState: Object): RoarrGlobalStateType => {
   versions.sort(cmp);
 
   let newState = {
-    buffer: '',
-    prepend: {},
     sequence: 0,
     ...currentState,
     versions,
   };
 
-  if (currentIsLatestVersion || !newState.write) {
+  if (environmentIsNode && (currentIsLatestVersion || !newState.write)) {
     newState = {
       ...newState,
-      ...createWriter({
-        bufferSize: ROARR_BUFFER_SIZE,
-        stream: ROARR_STREAM,
-      }),
+      ...createNodeWriter(),
     };
   }
 

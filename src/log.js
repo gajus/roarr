@@ -1,23 +1,14 @@
 // @flow
 
+import createGlobalThis from 'globalthis';
 import {
   createLogger,
   createRoarrInititialGlobalState,
 } from './factories';
 
-global.ROARR = createRoarrInititialGlobalState(global.ROARR || {});
+const globalThis = createGlobalThis();
 
-// We want to register just one event listener for 'exit' event
-// across all instances of Roarr.
-if (!global.ROARR.registeredFlush) {
-  global.ROARR.registeredFlush = true;
-
-  process.on('exit', () => {
-    if (global.ROARR.flush) {
-      global.ROARR.flush();
-    }
-  });
-}
+globalThis.ROARR = createRoarrInititialGlobalState(globalThis.ROARR || {});
 
 export type {
   LoggerType,
@@ -26,7 +17,9 @@ export type {
 } from './types';
 
 export default createLogger((message) => {
-  const body = JSON.stringify(message);
+  if (globalThis.ROARR.write) {
+    const body = JSON.stringify(message);
 
-  global.ROARR.write(body);
+    globalThis.ROARR.write(body);
+  }
 });

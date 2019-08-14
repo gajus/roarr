@@ -1,5 +1,6 @@
 // @flow
 
+import createGlobalThis from 'globalthis';
 import stringify from 'json-stringify-safe';
 import {
   sprintf,
@@ -7,35 +8,20 @@ import {
 import type {
   LoggerType,
   MessageContextType,
-  MessageType,
+  MessageEventHandlerType,
   TranslateMessageFunctionType,
 } from '../types';
 import {
-  ROARR_LOG,
-} from '../config';
+  logLevels,
+} from '../constants';
 
-type OnMessageEventHandlerType = (message: MessageType) => void;
+const globalThis = createGlobalThis();
 
-const version = '1.0.0';
-
-const logLevels = {
-  debug: 20,
-  error: 50,
-  fatal: 60,
-  info: 30,
-  trace: 10,
-  warn: 40,
-};
-
-const createLogger = (onMessage: OnMessageEventHandlerType, parentContext?: MessageContextType): LoggerType => {
+const createLogger = (onMessage: MessageEventHandlerType, parentContext?: MessageContextType): LoggerType => {
   // eslint-disable-next-line id-length, unicorn/prevent-abbreviations
   const log = (a, b, c, d, e, f, g, h, i, k) => {
-    if (!ROARR_LOG && !global.ROARR_LOG) {
-      return;
-    }
-
     const time = Date.now();
-    const sequence = global.ROARR.sequence++;
+    const sequence = globalThis.ROARR.sequence++;
 
     let context;
     let message;
@@ -63,7 +49,7 @@ const createLogger = (onMessage: OnMessageEventHandlerType, parentContext?: Mess
       message,
       sequence,
       time,
-      version,
+      version: '1.0.0',
     });
   };
 

@@ -9,14 +9,10 @@ export type SerializableObjectType = {
 };
 
 export type WriterType = {|
-  +flush: (message: string) => void,
   +write: (message: string) => void,
 |};
 
 export type RoarrGlobalStateType = {|
-  buffer: string,
-  prepend: SerializableObjectType,
-  registeredFlush: boolean,
   sequence: number,
   versions: $ReadOnlyArray<string>,
   ...WriterType,
@@ -79,3 +75,5 @@ export type LoggerType = {|
   +trace: typeof Logger,
   +warn: typeof Logger,
 |};
+
+export type MessageEventHandlerType = (message: MessageType) => void;
