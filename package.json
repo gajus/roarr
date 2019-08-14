@@ -36,6 +36,7 @@
     "babel-plugin-istanbul": "^5.2.0",
     "babel-plugin-transform-export-default-name": "^2.0.4",
     "coveralls": "^3.0.5",
+    "cross-env": "^5.2.0",
     "eslint": "^6.1.0",
     "eslint-config-canonical": "^17.3.2",
     "flow-bin": "^0.104.0",
@@ -79,11 +80,11 @@
     "url": "git@github.com:gajus/roarr.git"
   },
   "scripts": {
-    "build": "rm -fr ./dist && NODE_ENV=production babel ./src --out-dir ./dist --copy-files --source-maps && flow-copy-source src dist",
+    "build": "rm -fr ./dist && cross-env NODE_ENV=production babel ./src --out-dir ./dist --copy-files --source-maps && flow-copy-source src dist",
     "create-readme": "gitdown ./.README/README.md --output-file ./README.md",
-    "dev": "NODE_ENV=production babel ./src --out-dir ./dist --copy-files --source-maps --watch",
+    "dev": "cross-env NODE_ENV=production babel ./src --out-dir ./dist --copy-files --source-maps --watch",
     "lint": "eslint ./src ./test && flow",
-    "test": "NODE_ENV=test ava --serial --verbose"
+    "test": "cross-env NODE_ENV=test ava --serial --verbose"
   },
   "version": "1.0.0"
 }
