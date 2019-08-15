@@ -30,11 +30,13 @@ export default (currentState: Object): RoarrGlobalStateType => {
     versions,
   };
 
-  if (environmentIsNode && (currentIsLatestVersion || !newState.write)) {
-    newState = {
-      ...newState,
-      ...createNodeWriter(),
-    };
+  if (environmentIsNode) {
+    if (currentIsLatestVersion || !newState.write) {
+      newState = {
+        ...newState,
+        ...createNodeWriter(),
+      };
+    }
   }
 
   return newState;
