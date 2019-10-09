@@ -19,7 +19,7 @@
     ]
   },
   "dependencies": {
-    "boolean": "^1.0.0",
+    "boolean": "^2.0.2",
     "detect-node": "^2.0.4",
     "globalthis": "^1.0.0",
     "json-stringify-safe": "^5.0.1",
@@ -28,24 +28,24 @@
   },
   "description": "JSON logger for Node.js and browser.",
   "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.5.5",
-    "@babel/node": "^7.5.5",
-    "@babel/plugin-transform-flow-strip-types": "^7.4.4",
-    "@babel/preset-env": "^7.5.5",
-    "@babel/register": "^7.5.5",
-    "ava": "^2.2.0",
+    "@babel/cli": "^7.6.3",
+    "@babel/core": "^7.6.3",
+    "@babel/node": "^7.6.3",
+    "@babel/plugin-transform-flow-strip-types": "^7.6.3",
+    "@babel/preset-env": "^7.6.3",
+    "@babel/register": "^7.6.2",
+    "ava": "^2.4.0",
     "babel-plugin-istanbul": "^5.2.0",
     "babel-plugin-transform-export-default-name": "^2.0.4",
-    "coveralls": "^3.0.5",
-    "eslint": "^6.1.0",
-    "eslint-config-canonical": "^17.3.2",
-    "flow-bin": "^0.104.0",
-    "flow-copy-source": "^2.0.7",
+    "coveralls": "^3.0.6",
+    "eslint": "^6.5.1",
+    "eslint-config-canonical": "^17.7.0",
+    "flow-bin": "^0.109.0",
+    "flow-copy-source": "^2.0.8",
     "gitdown": "^3.1.1",
-    "husky": "^3.0.1",
+    "husky": "^3.0.8",
     "nyc": "^14.1.1",
-    "semantic-release": "^15.13.18"
+    "semantic-release": "^15.13.24"
   },
   "engines": {
     "node": ">=6.0"
