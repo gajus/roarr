@@ -2,10 +2,11 @@
 
 /* eslint-disable import/exports-last, flowtype/require-types-at-top */
 
-export type SerializableValueType = string | number | boolean | null | {+[key: string]: SerializableValueType} | $ReadOnlyArray<SerializableValueType>;
+export type SerializableValueType = string | number | boolean | null | {+[key: string]: SerializableValueType, ...} | $ReadOnlyArray<SerializableValueType>;
 
 export type SerializableObjectType = {
   +[key: string]: SerializableValueType,
+  ...,
 };
 
 export type WriterType = {|

@@ -8,6 +8,7 @@ import createRoarrInititialGlobalState from '../../src/factories/createRoarrInit
 test('creates new state', (t) => {
   const state = createRoarrInititialGlobalState({});
 
+  // $FlowFixMe
   delete state.write;
 
   t.deepEqual(state, {
@@ -23,6 +24,7 @@ test('respects existing sequence', (t) => {
     sequence: 1,
   });
 
+  // $FlowFixMe
   delete state.write;
 
   t.deepEqual(state, {
@@ -40,6 +42,7 @@ test('appends the latest version', (t) => {
     ],
   });
 
+  // $FlowFixMe
   delete state.write;
 
   t.deepEqual(state, {

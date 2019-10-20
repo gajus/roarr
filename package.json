@@ -28,8 +28,8 @@
   },
   "description": "JSON logger for Node.js and browser.",
   "devDependencies": {
-    "@babel/cli": "^7.6.3",
-    "@babel/core": "^7.6.3",
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
     "@babel/node": "^7.6.3",
     "@babel/plugin-transform-flow-strip-types": "^7.6.3",
     "@babel/preset-env": "^7.6.3",
@@ -37,15 +37,15 @@
     "ava": "^2.4.0",
     "babel-plugin-istanbul": "^5.2.0",
     "babel-plugin-transform-export-default-name": "^2.0.4",
-    "coveralls": "^3.0.6",
+    "coveralls": "^3.0.7",
     "eslint": "^6.5.1",
     "eslint-config-canonical": "^17.7.0",
     "flow-bin": "^0.109.0",
     "flow-copy-source": "^2.0.8",
     "gitdown": "^3.1.1",
-    "husky": "^3.0.8",
+    "husky": "^3.0.9",
     "nyc": "^14.1.1",
-    "semantic-release": "^15.13.24"
+    "semantic-release": "^15.13.27"
   },
   "engines": {
     "node": ">=6.0"
