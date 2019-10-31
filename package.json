@@ -38,14 +38,14 @@
     "babel-plugin-istanbul": "^5.2.0",
     "babel-plugin-transform-export-default-name": "^2.0.4",
     "coveralls": "^3.0.7",
-    "eslint": "^6.5.1",
+    "eslint": "^6.6.0",
     "eslint-config-canonical": "^17.7.0",
-    "flow-bin": "^0.109.0",
+    "flow-bin": "^0.111.0",
     "flow-copy-source": "^2.0.8",
-    "gitdown": "^3.1.1",
+    "gitdown": "^3.1.2",
     "husky": "^3.0.9",
     "nyc": "^14.1.1",
-    "semantic-release": "^15.13.27"
+    "semantic-release": "^15.13.28"
   },
   "engines": {
     "node": ">=6.0"
