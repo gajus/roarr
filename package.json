@@ -19,7 +19,7 @@
     ]
   },
   "dependencies": {
-    "boolean": "^2.0.2",
+    "boolean": "^2.0.3",
     "detect-node": "^2.0.4",
     "globalthis": "^1.0.0",
     "json-stringify-safe": "^5.0.1",
