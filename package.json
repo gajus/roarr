@@ -48,7 +48,7 @@
     "semantic-release": "^15.13.30"
   },
   "engines": {
-    "node": ">=6.0"
+    "node": ">=8.0"
   },
   "husky": {
     "hooks": {
