@@ -1,6 +1,8 @@
 // @flow
 
-import boolean from 'boolean';
+import {
+  boolean,
+} from 'boolean';
 import createGlobalThis from 'globalthis';
 import environmentIsNode from 'detect-node';
 import {
