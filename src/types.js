@@ -67,6 +67,7 @@ declare function Logger (
 export type LoggerType = {|
   // eslint-disable-next-line no-undef
   [[call]]: typeof Logger,
+  +adopt: <T>(routine: () => Promise<T>, context: MessageContextType) => Promise<T>,
   +child: (context: TranslateMessageFunctionType | MessageContextType) => LoggerType,
   +debug: typeof Logger,
   +error: typeof Logger,

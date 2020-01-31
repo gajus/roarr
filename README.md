@@ -18,6 +18,8 @@ JSON logger for Node.js and browser.
         * [Filtering logs](#roarr-usage-filtering-logs)
     * [Log message format](#roarr-log-message-format)
     * [API](#roarr-api)
+        * [`adopt`](#roarr-api-adopt)
+        * [Requirements](#roarr-api-requirements)
         * [`child`](#roarr-api-child)
         * [`getContext`](#roarr-api-getcontext)
         * [`trace`](#roarr-api-trace)
@@ -239,8 +241,55 @@ To put it into words:
 
 Refer to the [Usage documentation](#usage) for common usage examples.
 
+<a name="roarr-api-adopt"></a>
+### <code>adopt</code>
+
+```js
+<T>(routine: () => Promise<T>, context: MessageContextType) => Promise<T>,
+
+```
+
+`adopt` function uses Node.js [`domain`](https://nodejs.org/api/domain.html) to pass-down context properties.
+
+When using `adopt`, context properties will be added to all _all_ Roarr messages within the same asynchronous context, e.g.
+
+```js
+await log.adopt(
+  async () => {
+    log('foo 0');
+
+    await log.adopt(
+      () => {
+        log('foo 1');
+      },
+      {
+        baz: 'baz 1',
+      },
+    );
+  },
+  {
+    bar: 'bar 0',
+  },
+);
+
+// {"context":{"bar":"bar 0"},"message":"foo 0","sequence":0,"time":1531914656076,"version":"1.0.0"}
+// {"context":{"bar":"bar 0","baz":"baz 1"},"message":"foo 1","sequence":1,"time":1531914656077,"version":"1.0.0"}]
+
+```
+
+<a name="roarr-api-requirements"></a>
+### Requirements
+
+* `adopt` method only works in Node.js.
+* You must shim Node.js using [`domain-parent`](https://github.com/gajus/domain-parent).
+
 <a name="roarr-api-child"></a>
 ### <code>child</code>
+
+```js
+(context: TranslateMessageFunctionType | MessageContextType) => LoggerType,
+
+```
 
 The `child` function has two signatures:
 

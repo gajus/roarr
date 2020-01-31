@@ -199,7 +199,52 @@ To put it into words:
 
 Refer to the [Usage documentation](#usage) for common usage examples.
 
+### `adopt`
+
+```js
+<T>(routine: () => Promise<T>, context: MessageContextType) => Promise<T>,
+
+```
+
+`adopt` function uses Node.js [`domain`](https://nodejs.org/api/domain.html) to pass-down context properties.
+
+When using `adopt`, context properties will be added to all _all_ Roarr messages within the same asynchronous context, e.g.
+
+```js
+await log.adopt(
+  async () => {
+    log('foo 0');
+
+    await log.adopt(
+      () => {
+        log('foo 1');
+      },
+      {
+        baz: 'baz 1',
+      },
+    );
+  },
+  {
+    bar: 'bar 0',
+  },
+);
+
+// {"context":{"bar":"bar 0"},"message":"foo 0","sequence":0,"time":1531914656076,"version":"1.0.0"}
+// {"context":{"bar":"bar 0","baz":"baz 1"},"message":"foo 1","sequence":1,"time":1531914656077,"version":"1.0.0"}]
+
+```
+
+### Requirements
+
+* `adopt` method only works in Node.js.
+* You must shim Node.js using [`domain-parent`](https://github.com/gajus/domain-parent).
+
 ### `child`
+
+```js
+(context: TranslateMessageFunctionType | MessageContextType) => LoggerType,
+
+```
 
 The `child` function has two signatures:
 
