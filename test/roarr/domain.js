@@ -51,6 +51,10 @@ test('inherits context from domain', async (t) => {
 
   await log.adopt(
     () => {
+      t.deepEqual(log.getContext(), {
+        bar: 'bar',
+      });
+
       log('foo');
     },
     {
@@ -71,15 +75,24 @@ test('inherits context from domain', async (t) => {
   ]);
 });
 
-test.only('inherits context from domain (deep)', async (t) => {
+test('inherits context from domain (deep)', async (t) => {
   const log = createLoggerWithHistory();
 
   await log.adopt(
     async () => {
+      t.deepEqual(log.getContext(), {
+        bar: 'bar 0',
+      });
+
       log('foo 0');
 
       await log.adopt(
         () => {
+          t.deepEqual(log.getContext(), {
+            bar: 'bar 0',
+            baz: 'baz 1',
+          });
+
           log('foo 1');
         },
         {

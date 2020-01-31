@@ -1,7 +1,7 @@
 // @flow
 
 import createGlobalThis from 'globalthis';
-import isNode from 'detect-node';
+import environmentIsNode from 'detect-node';
 import stringify from 'json-stringify-safe';
 import {
   sprintf,
@@ -20,7 +20,7 @@ const globalThis = createGlobalThis();
 
 let domain;
 
-if (isNode) {
+if (environmentIsNode) {
   // eslint-disable-next-line global-require
   domain = require('domain');
 }

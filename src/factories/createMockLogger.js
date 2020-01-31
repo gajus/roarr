@@ -16,6 +16,10 @@ const createMockLogger = (onMessage: MessageEventHandlerType, parentContext?: Me
     //
   };
 
+  log.adopt = async (routine) => {
+    return routine();
+  };
+
   // eslint-disable-next-line no-unused-vars
   log.child = (context: TranslateMessageFunctionType | MessageContextType): LoggerType => {
     return createMockLogger(onMessage, parentContext);
