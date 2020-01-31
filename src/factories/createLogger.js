@@ -67,7 +67,7 @@ const getFirstParentDomainContext = () => {
   let currentDomain = process.domain;
 
   // $FlowFixMe
-  if (currentDomain.roarr && currentDomain.roarr.context) {
+  if (currentDomain && currentDomain.roarr && currentDomain.roarr.context) {
     return currentDomain.roarr.context;
   }
 

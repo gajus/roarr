@@ -5,9 +5,6 @@
 import domain from 'domain';
 import createGlobalThis from 'globalthis';
 import shim from 'domain-parent/shim';
-import {
-  createOutputInterceptor
-} from 'output-interceptor';
 import test, {
   beforeEach,
 } from 'ava';
