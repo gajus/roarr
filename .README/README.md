@@ -234,7 +234,7 @@ await log.adopt(
 
 ```
 
-### Requirements
+#### Requirements
 
 * `adopt` method only works in Node.js.
 * You must shim Node.js using [`domain-parent`](https://github.com/gajus/domain-parent).

@@ -19,7 +19,6 @@ JSON logger for Node.js and browser.
     * [Log message format](#roarr-log-message-format)
     * [API](#roarr-api)
         * [`adopt`](#roarr-api-adopt)
-        * [Requirements](#roarr-api-requirements)
         * [`child`](#roarr-api-child)
         * [`getContext`](#roarr-api-getcontext)
         * [`trace`](#roarr-api-trace)
@@ -277,8 +276,8 @@ await log.adopt(
 
 ```
 
-<a name="roarr-api-requirements"></a>
-### Requirements
+<a name="roarr-api-adopt-requirements"></a>
+#### Requirements
 
 * `adopt` method only works in Node.js.
 * You must shim Node.js using [`domain-parent`](https://github.com/gajus/domain-parent).
