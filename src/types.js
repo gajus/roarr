@@ -6,7 +6,7 @@ export type SerializableValueType = string | number | boolean | null | {+[key: s
 
 export type SerializableObjectType = {
   +[key: string]: SerializableValueType,
-  ...,
+  ...
 };
 
 export type WriterType = {|
@@ -16,7 +16,7 @@ export type WriterType = {|
 export type RoarrGlobalStateType = {|
   sequence: number,
   versions: $ReadOnlyArray<string>,
-  ...WriterType,
+  ...WriterType
 |};
 
 export type SprintfArgumentType = string | number | boolean | null;
