@@ -59,6 +59,34 @@ const getParentDomainContext = () => {
   return domainContext;
 };
 
+const getFirstParentDomainContext = () => {
+  if (!domain) {
+    return {};
+  }
+
+  let currentDomain = process.domain;
+
+  // $FlowFixMe
+  if (currentDomain.roarr && currentDomain.roarr.context) {
+    return currentDomain.roarr.context;
+  }
+
+  // $FlowFixMe
+  if (!currentDomain || !currentDomain.parentDomain) {
+    return {};
+  }
+
+  while (currentDomain && currentDomain.parentDomain) {
+    currentDomain = currentDomain.parentDomain;
+
+    if (currentDomain.roarr && currentDomain.roarr.context) {
+      return currentDomain.roarr.context;
+    }
+  }
+
+  return {};
+};
+
 const createLogger = (onMessage: MessageEventHandlerType, parentContext?: MessageContextType): LoggerType => {
   // eslint-disable-next-line id-length, unicorn/prevent-abbreviations
   const log = (a, b, c, d, e, f, g, h, i, k) => {
@@ -70,8 +98,7 @@ const createLogger = (onMessage: MessageEventHandlerType, parentContext?: Messag
 
     if (typeof a === 'string') {
       context = {
-        // $FlowFixMe
-        ...domain && process.domain && process.domain.roarr && process.domain.roarr.context,
+        ...getFirstParentDomainContext(),
         ...parentContext || {},
       };
       message = sprintf(a, b, c, d, e, f, g, h, i, k);
@@ -81,8 +108,7 @@ const createLogger = (onMessage: MessageEventHandlerType, parentContext?: Messag
       }
 
       context = JSON.parse(stringify({
-        // $FlowFixMe
-        ...domain && process.domain && process.domain.roarr && process.domain.roarr.context,
+        ...getFirstParentDomainContext(),
         ...parentContext || {},
         ...a,
       }));
@@ -110,8 +136,7 @@ const createLogger = (onMessage: MessageEventHandlerType, parentContext?: Messag
     }
 
     return createLogger(onMessage, {
-      // $FlowFixMe
-      ...domain && process.domain && process.domain.roarr && process.domain.roarr.context,
+      ...getFirstParentDomainContext(),
       ...parentContext,
       ...context,
     });
@@ -119,8 +144,7 @@ const createLogger = (onMessage: MessageEventHandlerType, parentContext?: Messag
 
   log.getContext = (): MessageContextType => {
     return {
-      // $FlowFixMe
-      ...domain && process.domain && process.domain.roarr && process.domain.roarr.context,
+      ...getFirstParentDomainContext(),
       ...parentContext || {},
     };
   };
@@ -137,7 +161,7 @@ const createLogger = (onMessage: MessageEventHandlerType, parentContext?: Messag
         // $FlowFixMe
         adoptedDomain.roarr = {
           context: {
-            ...getParentDomainContext() || {},
+            ...getParentDomainContext(),
             ...context,
           },
         };

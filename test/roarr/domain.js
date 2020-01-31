@@ -5,6 +5,9 @@
 import domain from 'domain';
 import createGlobalThis from 'globalthis';
 import shim from 'domain-parent/shim';
+import {
+  createOutputInterceptor
+} from 'output-interceptor';
 import test, {
   beforeEach,
 } from 'ava';
@@ -126,4 +129,29 @@ test('inherits context from domain (deep)', async (t) => {
       version,
     },
   ]);
+});
+
+test('can get logger context when in an alien domain', async (t) => {
+  const log = createLoggerWithHistory();
+
+  await log.adopt(
+    async () => {
+      t.deepEqual(log.getContext(), {
+        bar: 'bar 0',
+      });
+
+      log('foo 0');
+
+      const d0 = domain.create();
+
+      d0.run(async () => {
+        t.deepEqual(log.getContext(), {
+          bar: 'bar 0',
+        });
+      });
+    },
+    {
+      bar: 'bar 0',
+    },
+  );
 });
