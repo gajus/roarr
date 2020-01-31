@@ -5,47 +5,47 @@
     "url": "http://gajus.com"
   },
   "ava": {
+    "babel": {
+      "compileAsTests": [
+        "test/helpers/**/*"
+      ]
+    },
     "files": [
-      "test/**/*"
-    ],
-    "helpers": [
-      "test/helpers/**/*"
+      "test/roarr/**/*"
     ],
     "require": [
       "@babel/register"
-    ],
-    "sources": [
-      "src/**/*"
     ]
   },
   "dependencies": {
     "boolean": "^3.0.0",
     "detect-node": "^2.0.4",
-    "globalthis": "^1.0.0",
+    "globalthis": "^1.0.1",
     "json-stringify-safe": "^5.0.1",
     "semver-compare": "^1.0.0",
     "sprintf-js": "^1.1.2"
   },
   "description": "JSON logger for Node.js and browser.",
   "devDependencies": {
-    "@babel/cli": "^7.7.0",
-    "@babel/core": "^7.7.2",
-    "@babel/node": "^7.7.0",
-    "@babel/plugin-transform-flow-strip-types": "^7.6.3",
-    "@babel/preset-env": "^7.7.1",
-    "@babel/register": "^7.7.0",
-    "ava": "^2.4.0",
-    "babel-plugin-istanbul": "^5.2.0",
+    "@ava/babel": "^1.0.0",
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.4",
+    "@babel/node": "^7.8.4",
+    "@babel/plugin-transform-flow-strip-types": "^7.8.3",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/register": "^7.8.3",
+    "ava": "^3.1.0",
+    "babel-plugin-istanbul": "^6.0.0",
     "babel-plugin-transform-export-default-name": "^2.0.4",
-    "coveralls": "^3.0.8",
-    "eslint": "^6.6.0",
+    "coveralls": "^3.0.9",
+    "eslint": "^6.8.0",
     "eslint-config-canonical": "^18.1.0",
-    "flow-bin": "^0.112.0",
+    "flow-bin": "^0.117.0",
     "flow-copy-source": "^2.0.9",
     "gitdown": "^3.1.2",
-    "husky": "^3.1.0",
-    "nyc": "^14.1.1",
-    "semantic-release": "^15.13.31"
+    "husky": "^4.2.1",
+    "nyc": "^15.0.0",
+    "semantic-release": "^17.0.1"
   },
   "engines": {
     "node": ">=8.0"
