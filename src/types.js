@@ -16,7 +16,7 @@ export type WriterType = {|
 export type RoarrGlobalStateType = {|
   sequence: number,
   versions: $ReadOnlyArray<string>,
-  ...WriterType
+  ...WriterType,
 |};
 
 export type SprintfArgumentType = string | number | boolean | null;
