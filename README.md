@@ -235,7 +235,7 @@ To put it into words:
 * First parameter can be either a string (message) or an object.
   * If first parameter is an object (context), the second parameter must be a string (message).
 * Arguments after the message parameter are used to enable [printf message formatting](https://en.wikipedia.org/wiki/Printf_format_string).
-  * Printf arguments must be of a primitive type (`string | number | boolean | null`).
+  * Printf arguments must be of a primitive type (`string | number | boolean | object | null`).
   * There can be up to 9 printf arguments (or 8 if the first parameter is the context object).
 
 Refer to the [Usage documentation](#usage) for common usage examples.
