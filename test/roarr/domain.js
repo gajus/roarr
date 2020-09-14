@@ -3,11 +3,11 @@
 /* eslint-disable ava/test-title, flowtype/no-weak-types, fp/no-delete */
 
 import domain from 'domain';
-import createGlobalThis from 'globalthis';
-import shim from 'domain-parent/shim';
 import test, {
   beforeEach,
 } from 'ava';
+import shim from 'domain-parent/shim';
+import createGlobalThis from 'globalthis';
 import createLogger from '../../src/factories/createLogger';
 import createRoarrInititialGlobalState from '../../src/factories/createRoarrInititialGlobalState';
 

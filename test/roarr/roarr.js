@@ -2,10 +2,10 @@
 
 /* eslint-disable ava/test-title, flowtype/no-weak-types */
 
-import createGlobalThis from 'globalthis';
 import test, {
   beforeEach,
 } from 'ava';
+import createGlobalThis from 'globalthis';
 import createLogger from '../../src/factories/createLogger';
 import createRoarrInititialGlobalState from '../../src/factories/createRoarrInititialGlobalState';
 
@@ -320,12 +320,12 @@ test('avoid `[sprintf] unexpected placeholder` when a simple message ha some %',
   t.deepEqual(log.messages, [
     {
       context: {
-        logLevel: 10
+        logLevel: 10,
       },
       message: 'http://commons.wikimedia.org/wiki/Special:FilePath/Cucumis%20anguria.JPG',
       sequence: 0,
       time,
-      version
-    }
+      version,
+    },
   ]);
 });
