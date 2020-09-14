@@ -1,14 +1,14 @@
 // @flow
 
+import {
+  logLevels,
+} from '../constants';
 import type {
   LoggerType,
   MessageContextType,
   MessageEventHandlerType,
   TranslateMessageFunctionType,
 } from '../types';
-import {
-  logLevels,
-} from '../constants';
 
 const createMockLogger = (onMessage: MessageEventHandlerType, parentContext?: MessageContextType): LoggerType => {
   // eslint-disable-next-line id-length, unicorn/prevent-abbreviations, no-unused-vars

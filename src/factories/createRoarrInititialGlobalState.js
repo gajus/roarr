@@ -1,7 +1,7 @@
 // @flow
 
-import cmp from 'semver-compare';
 import environmentIsNode from 'detect-node';
+import cmp from 'semver-compare';
 import {
   version,
 } from '../../package.json';

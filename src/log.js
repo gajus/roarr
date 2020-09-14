@@ -3,8 +3,8 @@
 import {
   boolean,
 } from 'boolean';
-import createGlobalThis from 'globalthis';
 import environmentIsNode from 'detect-node';
+import createGlobalThis from 'globalthis';
 import {
   createLogger,
   createMockLogger,
