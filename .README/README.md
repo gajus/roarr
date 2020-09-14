@@ -532,6 +532,12 @@ send((error, result) => {
 
 Without using serialisation, your errors will be logged without the error name and stack trace.
 
+## Integrations
+
+### Using with Sentry
+
+https://github.com/gajus/roarr-sentry
+
 ### Using with Elasticsearch
 
 If you are using [Elasticsearch](https://www.elastic.co/products/elasticsearch), you will want to create an [index template](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html).
@@ -607,16 +613,16 @@ If you are using [Scalyr](https://www.scalyr.com/), you will want to create a cu
 
 and configure the individual programs to use `RoarrLogger`. In case of Kubernetes, this means adding a `log.config.scalyr.com/attributes.parser: RoarrLogger` annotation to the associated deployment, pod or container.
 
-### Documenting use of Roarr
+## Documenting use of Roarr
 
 If your package is using Roarr, include instructions in `README.md` describing how to enable logging, e.g.
 
 ```md
 ## Logging
 
-This package is using [`roarr`](https://www.npmjs.com/package/roarr) logger to log the program's state.
+This project uses [`roarr`](https://www.npmjs.com/package/roarr) logger to log the program's state.
 
-Export `ROARR_LOG=true` environment variable to enable log printing to stdout.
+Export `ROARR_LOG=true` environment variable to enable log printing to `stdout`.
 
 Use [`roarr-cli`](https://github.com/gajus/roarr-cli) program to pretty-print the logs.
 

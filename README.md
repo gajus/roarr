@@ -36,9 +36,11 @@ JSON logger for Node.js and browser.
         * [Using Roarr in an application](#roarr-conventions-using-roarr-in-an-application)
     * [Recipes](#roarr-recipes)
         * [Logging errors](#roarr-recipes-logging-errors)
-        * [Using with Elasticsearch](#roarr-recipes-using-with-elasticsearch)
-        * [Using with Scalyr](#roarr-recipes-using-with-scalyr)
-        * [Documenting use of Roarr](#roarr-recipes-documenting-use-of-roarr)
+    * [Integrations](#roarr-integrations)
+        * [Using with Sentry](#roarr-integrations-using-with-sentry)
+        * [Using with Elasticsearch](#roarr-integrations-using-with-elasticsearch)
+        * [Using with Scalyr](#roarr-integrations-using-with-scalyr)
+    * [Documenting use of Roarr](#roarr-documenting-use-of-roarr)
 
 
 <a name="roarr-motivation"></a>
@@ -595,7 +597,15 @@ send((error, result) => {
 
 Without using serialisation, your errors will be logged without the error name and stack trace.
 
-<a name="roarr-recipes-using-with-elasticsearch"></a>
+<a name="roarr-integrations"></a>
+## Integrations
+
+<a name="roarr-integrations-using-with-sentry"></a>
+### Using with Sentry
+
+https://github.com/gajus/roarr-sentry
+
+<a name="roarr-integrations-using-with-elasticsearch"></a>
 ### Using with Elasticsearch
 
 If you are using [Elasticsearch](https://www.elastic.co/products/elasticsearch), you will want to create an [index template](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html).
@@ -649,7 +659,7 @@ The following serves as the ground work for the index template. It includes the 
 
 ```
 
-<a name="roarr-recipes-using-with-scalyr"></a>
+<a name="roarr-integrations-using-with-scalyr"></a>
 ### Using with Scalyr
 
 If you are using [Scalyr](https://www.scalyr.com/), you will want to create a custom parser `RoarrLogger`:
@@ -672,17 +682,17 @@ If you are using [Scalyr](https://www.scalyr.com/), you will want to create a cu
 
 and configure the individual programs to use `RoarrLogger`. In case of Kubernetes, this means adding a `log.config.scalyr.com/attributes.parser: RoarrLogger` annotation to the associated deployment, pod or container.
 
-<a name="roarr-recipes-documenting-use-of-roarr"></a>
-### Documenting use of Roarr
+<a name="roarr-documenting-use-of-roarr"></a>
+## Documenting use of Roarr
 
 If your package is using Roarr, include instructions in `README.md` describing how to enable logging, e.g.
 
 ```md
 ## Logging
 
-This package is using [`roarr`](https://www.npmjs.com/package/roarr) logger to log the program's state.
+This project uses [`roarr`](https://www.npmjs.com/package/roarr) logger to log the program's state.
 
-Export `ROARR_LOG=true` environment variable to enable log printing to stdout.
+Export `ROARR_LOG=true` environment variable to enable log printing to `stdout`.
 
 Use [`roarr-cli`](https://github.com/gajus/roarr-cli) program to pretty-print the logs.
 
