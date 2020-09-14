@@ -13,7 +13,7 @@ import {
 
 const globalThis = createGlobalThis();
 
-globalThis.ROARR = createRoarrInititialGlobalState(globalThis.ROARR || {});
+const ROARR = globalThis.ROARR = createRoarrInititialGlobalState(globalThis.ROARR || {});
 
 let logFactory = createLogger;
 
@@ -32,12 +32,16 @@ export type {
   TranslateMessageFunctionType,
 } from './types';
 
+export {
+  ROARR,
+};
+
 export default logFactory((message) => {
-  if (globalThis.ROARR.write) {
+  if (ROARR.write) {
     // Stringify message as soon as it is received to prevent
     // properties of the context from being modified by reference.
     const body = JSON.stringify(message);
 
-    globalThis.ROARR.write(body);
+    ROARR.write(body);
   }
 });
