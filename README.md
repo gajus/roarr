@@ -108,10 +108,14 @@ All logs will be written to stdout.
 <a name="roarr-usage-consuming-logs-browser"></a>
 #### Browser
 
-In a browser, you must implement `globalThis.ROARR.write` method to read logs, e.g.
+In a browser, you must implement `ROARR.write` method to read logs, e.g.
 
 ```js
-globalThis.ROARR.write = () => {};
+import {
+  ROARR,
+} from 'roarr';
+
+ROARR.write = () => {};
 
 ```
 
@@ -125,14 +129,29 @@ The API of the `ROARR.write` is:
 Example implementation:
 
 ```js
-// Ensure that `globalThis.ROARR` is configured.
-globalThis.ROARR = globalThis.ROARR || {};
+import {
+  ROARR,
+} from 'roarr';
 
-globalThis.ROARR.write = (message) => {
+ROARR.write = (message) => {
   console.log(JSON.parse(message));
 };
 
 ```
+
+or if you are initializing `ROARR.write` _before_ `roarr` is loaded:
+
+```js
+// Ensure that `globalThis.ROARR` is configured.
+const ROARR = globalThis.ROARR = globalThis.ROARR || {};
+
+ROARR.write = (message) => {
+  console.log(JSON.parse(message));
+};
+
+```
+
+If your platform does not support [`globalThis`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis), use [`globalthis` polyfill](https://www.npmjs.com/package/globalthis).
 
 <a name="roarr-usage-filtering-logs"></a>
 ### Filtering logs
