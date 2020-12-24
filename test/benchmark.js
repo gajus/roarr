@@ -9,7 +9,9 @@ import createGlobalThis from 'globalthis';
 import roarr from '../src/log';
 
 // eslint-disable-next-line node/no-process-env
-process.env.ROARR_LOG = 'true';
+if (process.env.ROARR_LOG !== 'true') {
+  throw new Error('Must run benchmark with ROARR_LOG=true.');
+}
 
 const globalThis = createGlobalThis();
 
