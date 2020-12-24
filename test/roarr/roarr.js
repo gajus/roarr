@@ -314,7 +314,7 @@ test('convenience methods trace, debug, info, warn, error and fatal prepend a lo
   ]);
 });
 
-test('avoid `[sprintf] unexpected placeholder` when a simple message ha some %', (t) => {
+test('does not produce an error when message contains % without an associated parameter', (t) => {
   const log = createLoggerWithHistory();
   log.trace('http://commons.wikimedia.org/wiki/Special:FilePath/Cucumis%20anguria.JPG');
   t.deepEqual(log.messages, [
