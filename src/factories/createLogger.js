@@ -88,6 +88,8 @@ const getFirstParentDomainContext = () => {
   return {};
 };
 
+const defaultContext = {};
+
 const createLogger = (onMessage: MessageEventHandlerType, parentContext?: MessageContextType): LoggerType => {
   // eslint-disable-next-line id-length, unicorn/prevent-abbreviations
   const log = (a, b, c, d, e, f, g, h, i, k) => {
@@ -99,7 +101,7 @@ const createLogger = (onMessage: MessageEventHandlerType, parentContext?: Messag
 
     if (typeof a === 'string') {
       if (!domain || process.domain === null) {
-        context = parentContext;
+        context = parentContext || defaultContext;
       } else {
         context = {
           ...getFirstParentDomainContext(),
