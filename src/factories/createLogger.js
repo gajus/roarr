@@ -2,6 +2,7 @@
 
 import environmentIsNode from 'detect-node';
 import createGlobalThis from 'globalthis';
+import isCircular from 'is-circular';
 import stringify from 'json-stringify-safe';
 import {
   sprintf,
@@ -97,17 +98,23 @@ const createLogger = (onMessage: MessageEventHandlerType, parentContext?: Messag
     let message;
 
     if (typeof a === 'string') {
-      context = {
-        ...getFirstParentDomainContext(),
-        ...parentContext,
-      };
+      if (!domain && process.domain === null) {
+        context = parentContext;
+      } else {
+        context = {
+          ...getFirstParentDomainContext(),
+          ...parentContext,
+        };
+      }
     } else {
       context = {
         ...getFirstParentDomainContext(),
         ...parentContext,
         ...a,
       };
+    }
 
+    if (isCircular(context)) {
       context = JSON.parse(stringify(context));
     }
 

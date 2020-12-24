@@ -21,6 +21,7 @@
     "boolean": "^3.0.1",
     "detect-node": "^2.0.4",
     "globalthis": "^1.0.1",
+    "is-circular": "^1.0.2",
     "json-stringify-safe": "^5.0.1",
     "semver-compare": "^1.0.0",
     "sprintfit": "^1.0.1"
