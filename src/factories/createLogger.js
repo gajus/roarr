@@ -161,7 +161,7 @@ const createLogger = (onMessage: MessageEventHandlerType, parentContext?: Messag
   log.getContext = (): MessageContextType => {
     return {
       ...getFirstParentDomainContext(),
-      ...parentContext || {},
+      ...parentContext || defaultContext,
     };
   };
 
