@@ -35,5 +35,69 @@ const globalThis = createGlobalThis();
     },
   );
 
+  suite.add(
+    'message with context',
+    () => {
+      roarr.info({
+        foo: 'bar',
+      }, 'foo');
+    },
+    {
+      setup: () => {
+        globalThis.ROARR.write = () => {};
+      },
+    },
+  );
+
+  let largeContext;
+
+  suite.add(
+    'message with large context',
+    () => {
+      roarr.info(largeContext, 'foo');
+    },
+    {
+      setup: () => {
+        globalThis.ROARR.write = () => {};
+
+        largeContext = {};
+
+        let size = 10000;
+
+        while (size--) {
+          largeContext[Math.random()] = Math.random();
+        }
+      },
+    },
+  );
+
+  let largeContextWithCircularReference;
+
+  suite.add(
+    'message with large context',
+    () => {
+      roarr.info(largeContextWithCircularReference, 'foo');
+    },
+    {
+      setup: () => {
+        globalThis.ROARR.write = () => {};
+
+        largeContextWithCircularReference = {};
+
+        let size = 10000;
+
+        while (size--) {
+          largeContextWithCircularReference[Math.random()] = Math.random();
+        }
+
+        const foo = {};
+
+        foo.foo = foo;
+
+        largeContextWithCircularReference.foo = foo;
+      },
+    },
+  );
+
   suite.run();
 })();
