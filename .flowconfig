@@ -1,3 +1,6 @@
 [ignore]
 .*/node_modules/.*/test/.*
 <PROJECT_ROOT>/dist/.*
+
+[options]
+types_first=false
