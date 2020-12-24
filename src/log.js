@@ -4,12 +4,35 @@ import {
   boolean,
 } from 'boolean';
 import environmentIsNode from 'detect-node';
+import fastJson from 'fast-json-stringify';
 import createGlobalThis from 'globalthis';
 import {
   createLogger,
   createMockLogger,
   createRoarrInititialGlobalState,
 } from './factories';
+
+const stringify = fastJson({
+  properties: {
+    context: {
+      additionalProperties: true,
+      type: 'object',
+    },
+    message: {
+      type: 'string',
+    },
+    sequence: {
+      type: 'integer',
+    },
+    time: {
+      type: 'integer',
+    },
+    version: {
+      type: 'string',
+    },
+  },
+  type: 'object',
+});
 
 const globalThis = createGlobalThis();
 
@@ -40,7 +63,7 @@ export default logFactory((message) => {
   if (ROARR.write) {
     // Stringify message as soon as it is received to prevent
     // properties of the context from being modified by reference.
-    const body = JSON.stringify(message);
+    const body = stringify(message);
 
     ROARR.write(body);
   }

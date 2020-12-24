@@ -20,6 +20,7 @@
   "dependencies": {
     "boolean": "^3.0.2",
     "detect-node": "^2.0.4",
+    "fast-json-stringify": "^2.3.0",
     "globalthis": "^1.0.1",
     "is-circular": "^1.0.2",
     "json-stringify-safe": "^5.0.1",
