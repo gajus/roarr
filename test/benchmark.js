@@ -64,7 +64,7 @@ const globalThis = createGlobalThis();
 
         largeContext = {};
 
-        let size = 10000;
+        let size = 10_000;
 
         while (size--) {
           largeContext[Math.random()] = Math.random();
@@ -86,7 +86,7 @@ const globalThis = createGlobalThis();
 
         largeContextWithCircularReference = {};
 
-        let size = 10000;
+        let size = 10_000;
 
         while (size--) {
           largeContextWithCircularReference[Math.random()] = Math.random();
