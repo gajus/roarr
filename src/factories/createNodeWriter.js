@@ -13,7 +13,7 @@ const createBlockingWriter = (stream: stream$Writable): WriterType => {
 };
 
 export default (): WriterType => {
-  // eslint-disable-next-line no-process-env
+  // eslint-disable-next-line node/no-process-env
   const targetStream = (process.env.ROARR_STREAM || 'STDOUT').toUpperCase();
 
   const stream = targetStream.toUpperCase() === 'STDOUT' ? process.stdout : process.stderr;

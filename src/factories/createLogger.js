@@ -21,7 +21,7 @@ const globalThis = createGlobalThis();
 let domain;
 
 if (environmentIsNode) {
-  // eslint-disable-next-line global-require
+  // eslint-disable-next-line node/global-require
   domain = require('domain');
 }
 

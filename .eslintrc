@@ -1,7 +1,11 @@
 {
   "extends": [
     "canonical",
+    "canonical/node",
     "canonical/flowtype"
   ],
-  "root": true
+  "root": true,
+  "rules": {
+    "node/no-deprecated-api": 0
+  }
 }

@@ -18,7 +18,7 @@ const ROARR = globalThis.ROARR = createRoarrInititialGlobalState(globalThis.ROAR
 let logFactory = createLogger;
 
 if (environmentIsNode) {
-  // eslint-disable-next-line no-process-env
+  // eslint-disable-next-line node/no-process-env
   const enabled = boolean(process.env.ROARR_LOG || '');
 
   if (!enabled) {
