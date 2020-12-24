@@ -5,7 +5,7 @@ import createGlobalThis from 'globalthis';
 import stringify from 'json-stringify-safe';
 import {
   sprintf,
-} from 'sprintf-js';
+} from 'sprintfit';
 import {
   logLevels,
 } from '../constants';
@@ -96,22 +96,20 @@ const createLogger = (onMessage: MessageEventHandlerType, parentContext?: Messag
     let context;
     let message;
 
-    if (typeof a === 'string') {
+    if (typeof a === 'string' && b === undefined) {
       context = {
         ...getFirstParentDomainContext(),
         ...parentContext || {},
       };
-      // eslint-disable-next-line id-length, object-property-newline
-      const {...args} = {a, b, c, d, e, f, g, h, i, k};
-      const values = Object.keys(args).map((key) => {
-        return args[key];
-      });
-      // eslint-disable-next-line unicorn/no-reduce
-      const hasOnlyOneParameterValued = 1 === values.reduce((accumulator, value) => {
-        // eslint-disable-next-line no-return-assign, no-param-reassign
-        return accumulator += typeof value === 'undefined' ? 0 : 1;
-      }, 0);
-      message = hasOnlyOneParameterValued ? sprintf('%s', a) : sprintf(a, b, c, d, e, f, g, h, i, k);
+
+      message = a;
+    } else if (typeof a === 'string') {
+      context = {
+        ...getFirstParentDomainContext(),
+        ...parentContext || {},
+      };
+
+      message = sprintf(a, b, c, d, e, f, g, h, i, k);
     } else {
       if (typeof b !== 'string') {
         throw new TypeError('Message must be a string.');
