@@ -98,7 +98,7 @@ const createLogger = (onMessage: MessageEventHandlerType, parentContext?: Messag
     let message;
 
     if (typeof a === 'string') {
-      if (!domain && process.domain === null) {
+      if (!domain || process.domain === null) {
         context = parentContext;
       } else {
         context = {
