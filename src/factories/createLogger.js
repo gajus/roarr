@@ -116,7 +116,7 @@ const createLogger = (onMessage: MessageEventHandlerType, parentContext?: Messag
       };
     }
 
-    if (isCircular(context)) {
+    if (context !== defaultContext && isCircular(context)) {
       context = JSON.parse(stringify(context));
     }
 
