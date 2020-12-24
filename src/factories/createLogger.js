@@ -96,30 +96,29 @@ const createLogger = (onMessage: MessageEventHandlerType, parentContext?: Messag
     let context;
     let message;
 
-    if (typeof a === 'string' && b === undefined) {
+    if (typeof a === 'string') {
       context = {
         ...getFirstParentDomainContext(),
-        ...parentContext || {},
+        ...parentContext,
+      };
+    } else {
+      context = {
+        ...getFirstParentDomainContext(),
+        ...parentContext,
+        ...a,
       };
 
+      context = JSON.parse(stringify(context));
+    }
+
+    if (typeof a === 'string' && b === undefined) {
       message = a;
     } else if (typeof a === 'string') {
-      context = {
-        ...getFirstParentDomainContext(),
-        ...parentContext || {},
-      };
-
       message = sprintf(a, b, c, d, e, f, g, h, i, k);
     } else {
       if (typeof b !== 'string') {
         throw new TypeError('Message must be a string.');
       }
-
-      context = JSON.parse(stringify({
-        ...getFirstParentDomainContext(),
-        ...parentContext || {},
-        ...a,
-      }));
 
       message = sprintf(b, c, d, e, f, g, h, i, k);
     }
