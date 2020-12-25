@@ -1,14 +1,11 @@
-// @flow
-
 /* eslint-disable fp/no-delete */
 
 import test from 'ava';
-import createRoarrInititialGlobalState from '../../src/factories/createRoarrInititialGlobalState';
+import createRoarrInitialGlobalState from '../../src/factories/createRoarrInitialGlobalState';
 
 test('creates new state', (t) => {
-  const state = createRoarrInititialGlobalState({});
+  const state = createRoarrInitialGlobalState({});
 
-  // $FlowFixMe
   delete state.write;
 
   t.deepEqual(state, {
@@ -20,11 +17,10 @@ test('creates new state', (t) => {
 });
 
 test('respects existing sequence', (t) => {
-  const state = createRoarrInititialGlobalState({
+  const state = createRoarrInitialGlobalState({
     sequence: 1,
   });
 
-  // $FlowFixMe
   delete state.write;
 
   t.deepEqual(state, {
@@ -36,13 +32,12 @@ test('respects existing sequence', (t) => {
 });
 
 test('appends the latest version', (t) => {
-  const state = createRoarrInititialGlobalState({
+  const state = createRoarrInitialGlobalState({
     versions: [
       '0.0.1',
     ],
   });
 
-  // $FlowFixMe
   delete state.write;
 
   t.deepEqual(state, {
@@ -55,13 +50,13 @@ test('appends the latest version', (t) => {
 });
 
 test('sets "write" method if current is the first version', (t) => {
-  const state = createRoarrInititialGlobalState({});
+  const state = createRoarrInitialGlobalState({});
 
   t.true(typeof state.write === 'function');
 });
 
 test('overrides "write" method if current is the latest version', (t) => {
-  const state = createRoarrInititialGlobalState({
+  const state = createRoarrInitialGlobalState({
     versions: [
       '0.0.1',
     ],
@@ -72,7 +67,7 @@ test('overrides "write" method if current is the latest version', (t) => {
 });
 
 test('does not override "write" method if current is not the latest version', (t) => {
-  const state = createRoarrInititialGlobalState({
+  const state = createRoarrInitialGlobalState({
     versions: [
       '2.0.0',
     ],

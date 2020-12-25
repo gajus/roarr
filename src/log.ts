@@ -1,5 +1,3 @@
-// @flow
-
 import {
   boolean,
 } from 'boolean';
@@ -9,8 +7,11 @@ import createGlobalThis from 'globalthis';
 import {
   createLogger,
   createMockLogger,
-  createRoarrInititialGlobalState,
+  createRoarrInitialGlobalState,
 } from './factories';
+import type {
+  RoarrGlobalStateType,
+} from './types';
 
 const stringify = fastJson({
   properties: {
@@ -36,7 +37,7 @@ const stringify = fastJson({
 
 const globalThis = createGlobalThis();
 
-const ROARR = globalThis.ROARR = createRoarrInititialGlobalState(globalThis.ROARR || {});
+const ROARR = globalThis.ROARR = createRoarrInitialGlobalState(globalThis.ROARR as RoarrGlobalStateType || {});
 
 let logFactory = createLogger;
 
@@ -50,7 +51,7 @@ if (environmentIsNode) {
 }
 
 export type {
-  LoggerType,
+  Logger,
   MessageType,
   TranslateMessageFunctionType,
 } from './types';

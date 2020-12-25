@@ -2,10 +2,15 @@
   "extends": [
     "canonical",
     "canonical/node",
-    "canonical/flowtype"
+    "canonical/typescript"
   ],
   "root": true,
   "rules": {
-    "node/no-deprecated-api": 0
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/no-unused-vars": 0,
+    "id-length": 0,
+    "node/no-deprecated-api": 0,
+    "node/no-missing-import": 0,
+    "unicorn/prevent-abbreviations": 0
   }
 }

@@ -1,5 +1,3 @@
-// @flow
-
 /* eslint-disable no-console */
 
 import {
@@ -32,7 +30,9 @@ const globalThis = createGlobalThis();
     },
     {
       setup: () => {
-        globalThis.ROARR.write = () => {};
+        globalThis.ROARR.write = () => {
+          return undefined;
+        };
       },
     },
   );
@@ -46,7 +46,9 @@ const globalThis = createGlobalThis();
     },
     {
       setup: () => {
-        globalThis.ROARR.write = () => {};
+        globalThis.ROARR.write = () => {
+          return undefined;
+        };
       },
     },
   );
@@ -60,7 +62,9 @@ const globalThis = createGlobalThis();
     },
     {
       setup: () => {
-        globalThis.ROARR.write = () => {};
+        globalThis.ROARR.write = () => {
+          return undefined;
+        };
 
         largeContext = {};
 
@@ -82,7 +86,9 @@ const globalThis = createGlobalThis();
     },
     {
       setup: () => {
-        globalThis.ROARR.write = () => {};
+        globalThis.ROARR.write = () => {
+          return undefined;
+        };
 
         largeContextWithCircularReference = {};
 

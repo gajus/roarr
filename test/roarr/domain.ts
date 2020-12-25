@@ -1,6 +1,4 @@
-// @flow
-
-/* eslint-disable ava/test-title, flowtype/no-weak-types, fp/no-delete */
+/* eslint-disable ava/test-title, fp/no-delete */
 
 import domain from 'domain';
 import test, {
@@ -9,7 +7,7 @@ import test, {
 import shim from 'domain-parent/shim';
 import createGlobalThis from 'globalthis';
 import createLogger from '../../src/factories/createLogger';
-import createRoarrInititialGlobalState from '../../src/factories/createRoarrInititialGlobalState';
+import createRoarrInitialGlobalState from '../../src/factories/createRoarrInitialGlobalState';
 
 const originalCreate = domain.create;
 
@@ -20,12 +18,10 @@ const version = '1.0.0';
 beforeEach(() => {
   const globalThis = createGlobalThis();
 
-  globalThis.ROARR = createRoarrInititialGlobalState({});
+  globalThis.ROARR = createRoarrInitialGlobalState({});
 
-  // $FlowFixMe
   domain.create = originalCreate;
 
-  // $FlowFixMe
   delete domain.parentDomain;
 
   shim();

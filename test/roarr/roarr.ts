@@ -1,13 +1,11 @@
-// @flow
-
-/* eslint-disable ava/test-title, flowtype/no-weak-types */
+/* eslint-disable ava/test-title */
 
 import test, {
   beforeEach,
 } from 'ava';
 import createGlobalThis from 'globalthis';
 import createLogger from '../../src/factories/createLogger';
-import createRoarrInititialGlobalState from '../../src/factories/createRoarrInititialGlobalState';
+import createRoarrInitialGlobalState from '../../src/factories/createRoarrInitialGlobalState';
 
 const sequence = 0;
 const time = -1;
@@ -16,7 +14,7 @@ const version = '1.0.0';
 beforeEach(() => {
   const globalThis = createGlobalThis();
 
-  globalThis.ROARR = createRoarrInititialGlobalState({});
+  globalThis.ROARR = createRoarrInitialGlobalState({});
 });
 
 const createLoggerWithHistory = () => {

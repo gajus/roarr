@@ -1,10 +1,8 @@
-// @flow
-
 import type {
   WriterType,
 } from '../types';
 
-const createBlockingWriter = (stream: stream$Writable): WriterType => {
+const createBlockingWriter = (stream: NodeJS.WritableStream): WriterType => {
   return {
     write: (message: string) => {
       stream.write(message + '\n');

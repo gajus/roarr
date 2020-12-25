@@ -1,5 +1,3 @@
-// @flow
-
 import environmentIsNode from 'detect-node';
 import createGlobalThis from 'globalthis';
 import isCircular from 'is-circular';
@@ -11,7 +9,7 @@ import {
   logLevels,
 } from '../constants';
 import type {
-  LoggerType,
+  Logger,
   MessageContextType,
   MessageEventHandlerType,
   TranslateMessageFunctionType,
@@ -19,7 +17,7 @@ import type {
 
 const globalThis = createGlobalThis();
 
-let domain;
+let domain: any;
 
 if (environmentIsNode) {
   // eslint-disable-next-line node/global-require
@@ -31,17 +29,16 @@ const getParentDomainContext = () => {
     return {};
   }
 
-  const parentRoarrContexts = [];
+  const parentRoarrContexts: MessageContextType[] = [];
 
-  let currentDomain = process.domain;
+  let currentDomain: any = process.domain;
 
-  // $FlowFixMe
-  if (!currentDomain || !currentDomain.parentDomain) {
+  if (!currentDomain?.parentDomain) {
     return {};
   }
 
-  while (currentDomain && currentDomain.parentDomain) {
-    currentDomain = currentDomain.parentDomain;
+  while (currentDomain?.parentDomain) {
+    currentDomain = currentDomain?.parentDomain;
 
     if (currentDomain.roarr && currentDomain.roarr.context) {
       parentRoarrContexts.push(currentDomain.roarr.context);
@@ -65,14 +62,12 @@ const getFirstParentDomainContext = () => {
     return {};
   }
 
-  let currentDomain = process.domain;
+  let currentDomain: any = process.domain;
 
-  // $FlowFixMe
   if (currentDomain && currentDomain.roarr && currentDomain.roarr.context) {
     return currentDomain.roarr.context;
   }
 
-  // $FlowFixMe
   if (!currentDomain || !currentDomain.parentDomain) {
     return {};
   }
@@ -90,9 +85,19 @@ const getFirstParentDomainContext = () => {
 
 const defaultContext = {};
 
-const createLogger = (onMessage: MessageEventHandlerType, parentContext?: MessageContextType): LoggerType => {
-  // eslint-disable-next-line id-length, unicorn/prevent-abbreviations
-  const log = (a, b, c, d, e, f, g, h, i, k) => {
+const createLogger = (onMessage: MessageEventHandlerType, parentContext?: MessageContextType): Logger => {
+  const log = (
+    a: any,
+    b: any,
+    c: any,
+    d: any,
+    e: any,
+    f: any,
+    g: any,
+    h: any,
+    i: any,
+    j: any,
+  ) => {
     const time = Date.now();
     const sequence = globalThis.ROARR.sequence++;
 
@@ -123,13 +128,34 @@ const createLogger = (onMessage: MessageEventHandlerType, parentContext?: Messag
     if (typeof a === 'string' && b === undefined) {
       message = a;
     } else if (typeof a === 'string') {
-      message = sprintf(a, b, c, d, e, f, g, h, i, k);
+      message = sprintf(
+        a,
+        b,
+        c,
+        d,
+        e,
+        f,
+        g,
+        h,
+        i,
+        j,
+      );
     } else {
       if (typeof b !== 'string') {
         throw new TypeError('Message must be a string.');
       }
 
-      message = sprintf(b, c, d, e, f, g, h, i, k);
+      message = sprintf(
+        b,
+        c,
+        d,
+        e,
+        f,
+        g,
+        h,
+        i,
+        j,
+      );
     }
 
     onMessage({
@@ -141,7 +167,7 @@ const createLogger = (onMessage: MessageEventHandlerType, parentContext?: Messag
     });
   };
 
-  log.child = (context: TranslateMessageFunctionType | MessageContextType): LoggerType => {
+  log.child = (context: TranslateMessageFunctionType | MessageContextType): Logger => {
     if (typeof context === 'function') {
       return createLogger((message) => {
         if (typeof context !== 'function') {
@@ -174,7 +200,6 @@ const createLogger = (onMessage: MessageEventHandlerType, parentContext?: Messag
 
     return adoptedDomain
       .run(() => {
-        // $FlowFixMe
         adoptedDomain.roarr = {
           context: {
             ...getParentDomainContext(),
@@ -186,17 +211,42 @@ const createLogger = (onMessage: MessageEventHandlerType, parentContext?: Messag
       });
   };
 
-  for (const logLevel of Object.keys(logLevels)) {
-    // eslint-disable-next-line id-length, unicorn/prevent-abbreviations
-    log[logLevel] = (a, b, c, d, e, f, g, h, i, k) => {
-      return log.child({
-        logLevel: logLevels[logLevel],
-      })(a, b, c, d, e, f, g, h, i, k);
-    };
-  }
+  log.trace = (a, b, c, d, e, f, g, h, i, j) => {
+    return log.child({
+      logLevel: logLevels.trace,
+    })(a, b, c, d, e, f, g, h, i, j);
+  };
 
-  // @see https://github.com/facebook/flow/issues/6705
-  // $FlowFixMe
+  log.debug = (a, b, c, d, e, f, g, h, i, j) => {
+    return log.child({
+      logLevel: logLevels.debug,
+    })(a, b, c, d, e, f, g, h, i, j);
+  };
+
+  log.info = (a, b, c, d, e, f, g, h, i, j) => {
+    return log.child({
+      logLevel: logLevels.info,
+    })(a, b, c, d, e, f, g, h, i, j);
+  };
+
+  log.warn = (a, b, c, d, e, f, g, h, i, j) => {
+    return log.child({
+      logLevel: logLevels.warn,
+    })(a, b, c, d, e, f, g, h, i, j);
+  };
+
+  log.error = (a, b, c, d, e, f, g, h, i, j) => {
+    return log.child({
+      logLevel: logLevels.error,
+    })(a, b, c, d, e, f, g, h, i, j);
+  };
+
+  log.fatal = (a, b, c, d, e, f, g, h, i, j) => {
+    return log.child({
+      logLevel: logLevels.fatal,
+    })(a, b, c, d, e, f, g, h, i, j);
+  };
+
   return log;
 };
 

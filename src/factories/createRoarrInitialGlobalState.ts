@@ -1,17 +1,15 @@
-// @flow
-
+import fs from 'fs';
+import path from 'path';
 import environmentIsNode from 'detect-node';
 import cmp from 'semver-compare';
-import {
-  version,
-} from '../../package.json';
 import type {
   RoarrGlobalStateType,
 } from '../types';
 import createNodeWriter from './createNodeWriter';
 
-// eslint-disable-next-line flowtype/no-weak-types
-export default (currentState: Object): RoarrGlobalStateType => {
+const version = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../package.json'), 'utf8')).version;
+
+export default (currentState: any): RoarrGlobalStateType => {
   const versions = (currentState.versions || []).concat();
 
   versions.sort(cmp);

@@ -1,5 +1,3 @@
-// @flow
-
 export const logLevels = {
   debug: 20,
   error: 50,
