@@ -1,3 +1,6 @@
+import {
+  approximateTime,
+} from 'approximate-now';
 import environmentIsNode from 'detect-node';
 import createGlobalThis from 'globalthis';
 import isCircular from 'is-circular';
@@ -101,7 +104,7 @@ const createLogger = (
     i: any,
     j: any,
   ) => {
-    const time = Date.now();
+    const time = approximateTime.now;
     const sequence = globalThis.ROARR.sequence++;
 
     let context;
