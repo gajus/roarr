@@ -52,7 +52,7 @@ export type LogMethod = {
 
 export interface Logger extends LogMethod {
   adopt: <T>(routine: () => Promise<T>, context: MessageContextType) => Promise<T>,
-  child: (context: TranslateMessageFunctionType | MessageContextType) => LogMethod,
+  child: (context: TranslateMessageFunctionType | MessageContextType) => Logger,
   debug: LogMethod,
   error: LogMethod,
   fatal: LogMethod,

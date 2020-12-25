@@ -167,7 +167,7 @@ const createLogger = (onMessage: MessageEventHandlerType, parentContext?: Messag
     });
   };
 
-  log.child = (context: TranslateMessageFunctionType | MessageContextType): Logger => {
+  log.child = (context: TranslateMessageFunctionType | MessageContextType) => {
     if (typeof context === 'function') {
       return createLogger((message) => {
         if (typeof context !== 'function') {
