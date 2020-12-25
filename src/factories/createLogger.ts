@@ -33,12 +33,12 @@ const getParentDomainContext = () => {
 
   let currentDomain: any = process.domain;
 
-  if (!currentDomain?.parentDomain) {
+  if (!currentDomain || !currentDomain.parentDomain) {
     return {};
   }
 
-  while (currentDomain?.parentDomain) {
-    currentDomain = currentDomain?.parentDomain;
+  while (currentDomain && currentDomain.parentDomain) {
+    currentDomain = currentDomain.parentDomain;
 
     if (currentDomain.roarr && currentDomain.roarr.context) {
       parentRoarrContexts.push(currentDomain.roarr.context);
