@@ -5,11 +5,6 @@
     "url": "http://gajus.com"
   },
   "ava": {
-    "babel": {
-      "compileAsTests": [
-        "test/helpers/**/*"
-      ]
-    },
     "extensions": [
       "ts"
     ],
