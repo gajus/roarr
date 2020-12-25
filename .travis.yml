@@ -7,7 +7,7 @@ script:
   - npm run test
   - nyc --silent npm run test
   - nyc report --reporter=text-lcov | coveralls
-  - nyc check-coverage --lines 60
+  - nyc check-coverage --lines 30
 after_success:
   - NODE_ENV=production npm run build
   - semantic-release
