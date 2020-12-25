@@ -244,6 +244,19 @@ test('translates child message', (t) => {
   ]);
 });
 
+test('throws an error if child does not return an object', (t) => {
+  const log = createLoggerWithHistory();
+
+  t.throws(() => {
+    log
+      .child((message) => {
+        return '';
+      })('foo');
+  }, {
+    message: 'Child middleware function must return a message object.',
+  });
+});
+
 test('convenience methods trace, debug, info, warn, error and fatal prepend a logLevel property', (t) => {
   const log = createLoggerWithHistory();
 

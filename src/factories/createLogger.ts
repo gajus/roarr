@@ -173,7 +173,14 @@ const createLogger = (onMessage: MessageEventHandlerType, parentContext?: Messag
         if (typeof context !== 'function') {
           throw new TypeError('Unexpected state.');
         }
-        onMessage(context(message));
+
+        const nextMessage = context(message);
+
+        if (typeof nextMessage !== 'object' || nextMessage === null) {
+          throw new Error('Child middleware function must return a message object.');
+        }
+
+        onMessage(nextMessage);
       }, parentContext);
     }
 
