@@ -1,5 +1,3 @@
-/* eslint-disable import/exports-last */
-
 export interface WriterType {
   write: (message: string) => void;
 }

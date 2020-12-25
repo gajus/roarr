@@ -85,7 +85,10 @@ const getFirstParentDomainContext = () => {
 
 const defaultContext = {};
 
-const createLogger = (onMessage: MessageEventHandlerType, parentContext?: MessageContextType): Logger => {
+const createLogger = (
+  onMessage: MessageEventHandlerType,
+  parentContext?: MessageContextType,
+): Logger => {
   const log = (
     a: any,
     b: any,
@@ -169,19 +172,18 @@ const createLogger = (onMessage: MessageEventHandlerType, parentContext?: Messag
 
   log.child = (context: TranslateMessageFunctionType | MessageContextType) => {
     if (typeof context === 'function') {
-      return createLogger((message) => {
-        if (typeof context !== 'function') {
-          throw new TypeError('Unexpected state.');
-        }
+      return createLogger(
+        (message) => {
+          const nextMessage = context(message);
 
-        const nextMessage = context(message);
+          if (typeof nextMessage !== 'object' || nextMessage === null) {
+            throw new Error('Child middleware function must return a message object.');
+          }
 
-        if (typeof nextMessage !== 'object' || nextMessage === null) {
-          throw new Error('Child middleware function must return a message object.');
-        }
-
-        onMessage(nextMessage);
-      }, parentContext);
+          onMessage(nextMessage);
+        },
+        parentContext,
+      );
     }
 
     return createLogger(onMessage, {
@@ -191,7 +193,7 @@ const createLogger = (onMessage: MessageEventHandlerType, parentContext?: Messag
     });
   };
 
-  log.getContext = (): MessageContextType => {
+  log.getContext = () => {
     return {
       ...getFirstParentDomainContext(),
       ...parentContext || defaultContext,

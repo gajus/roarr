@@ -69,10 +69,10 @@
     "url": "git@github.com:gajus/roarr.git"
   },
   "scripts": {
-    "benchmark": "ROARR_LOG=true babel-node test/benchmark.js",
+    "benchmark": "ROARR_LOG=true ts-node --transpile-only test/benchmark.ts",
     "build": "del-cli ./dist && tsc",
     "create-readme": "gitdown ./.README/README.md --output-file ./README.md",
-    "dev": "NODE_ENV=production babel ./src --out-dir ./dist --copy-files --source-maps --watch",
+    "dev": "tsc --watch",
     "lint": "eslint ./src ./test && tsc --noEmit",
     "test": "NODE_ENV=test ava --serial --verbose"
   },
