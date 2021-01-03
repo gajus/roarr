@@ -2,12 +2,12 @@ import {
   approximateTime,
 } from 'approximate-now';
 import environmentIsNode from 'detect-node';
+import {
+  printf,
+} from 'fast-printf';
 import createGlobalThis from 'globalthis';
 import isCircular from 'is-circular';
 import stringify from 'json-stringify-safe';
-import {
-  sprintf,
-} from 'sprintfit';
 import {
   logLevels,
 } from '../constants';
@@ -134,7 +134,7 @@ const createLogger = (
     if (typeof a === 'string' && b === undefined) {
       message = a;
     } else if (typeof a === 'string') {
-      message = sprintf(
+      message = printf(
         a,
         b,
         c,
@@ -151,7 +151,7 @@ const createLogger = (
         throw new TypeError('Message must be a string.');
       }
 
-      message = sprintf(
+      message = printf(
         b,
         c,
         d,

@@ -90,6 +90,38 @@ test('formats message using sprintf', (t) => {
   ]);
 });
 
+test('formats message using sprintf (multiple variables)', (t) => {
+  const log = createLoggerWithHistory();
+
+  log('foo %s %s %s', 'bar', 'baz', 'qux');
+
+  t.deepEqual(log.messages, [
+    {
+      context: {},
+      message: 'foo bar baz qux',
+      sequence,
+      time,
+      version,
+    },
+  ]);
+});
+
+test('formats message using sprintf (digit variables)', (t) => {
+  const log = createLoggerWithHistory();
+
+  log('foo %d %d %d', '1', '2', '3');
+
+  t.deepEqual(log.messages, [
+    {
+      context: {},
+      message: 'foo 1 2 3',
+      sequence,
+      time,
+      version,
+    },
+  ]);
+});
+
 test('creates message with a context', (t) => {
   const log = createLoggerWithHistory();
 
