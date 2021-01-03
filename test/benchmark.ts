@@ -38,6 +38,20 @@ const globalThis = createGlobalThis();
   );
 
   suite.add(
+    'message with printf',
+    () => {
+      roarr.info('foo %s %s %s', 'bar', 'baz', 'qux');
+    },
+    {
+      setup: () => {
+        globalThis.ROARR.write = () => {
+          return undefined;
+        };
+      },
+    },
+  );
+
+  suite.add(
     'message with context',
     () => {
       roarr.info({
