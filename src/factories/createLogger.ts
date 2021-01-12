@@ -13,9 +13,9 @@ import {
 } from '../constants';
 import type {
   Logger,
-  MessageContextType,
-  MessageEventHandlerType,
-  TranslateMessageFunctionType,
+  MessageContext,
+  MessageEventHandler,
+  TranslateMessageFunction,
 } from '../types';
 
 const globalThis = createGlobalThis();
@@ -32,7 +32,7 @@ const getParentDomainContext = () => {
     return {};
   }
 
-  const parentRoarrContexts: MessageContextType[] = [];
+  const parentRoarrContexts: MessageContext[] = [];
 
   let currentDomain: any = process.domain;
 
@@ -89,8 +89,8 @@ const getFirstParentDomainContext = () => {
 const defaultContext = {};
 
 const createLogger = (
-  onMessage: MessageEventHandlerType,
-  parentContext?: MessageContextType,
+  onMessage: MessageEventHandler,
+  parentContext?: MessageContext,
 ): Logger => {
   const log = (
     a: any,
@@ -173,7 +173,7 @@ const createLogger = (
     });
   };
 
-  log.child = (context: TranslateMessageFunctionType | MessageContextType) => {
+  log.child = (context: TranslateMessageFunction | MessageContext) => {
     if (typeof context === 'function') {
       return createLogger(
         (message) => {

@@ -1,63 +1,63 @@
-export interface WriterType {
+export interface Writer {
   write: (message: string) => void;
 }
 
-export interface RoarrGlobalStateType extends WriterType {
+export interface RoarrGlobalState extends Writer {
   sequence: number;
   versions: ReadonlyArray<string>;
 }
 
-export type SprintfArgumentType = string | number | boolean | null;
+export type SprintfArgument = string | number | boolean | null;
 
-export type MessageContextType = any;
+export type MessageContext = any;
 
-export type MessageType = {
-  readonly context: MessageContextType,
+export type Message = {
+  readonly context: MessageContext,
   readonly message: string,
   readonly sequence: number,
   readonly time: number,
   readonly version: string,
 };
 
-export type TranslateMessageFunctionType = (message: MessageType) => MessageType;
+export type TranslateMessageFunction = (message: Message) => Message;
 
 export type LogMethod = {
   (
-    context: MessageContextType,
+    context: MessageContext,
     message: string,
-    c?: SprintfArgumentType,
-    d?: SprintfArgumentType,
-    e?: SprintfArgumentType,
-    f?: SprintfArgumentType,
-    g?: SprintfArgumentType,
-    h?: SprintfArgumentType,
-    i?: SprintfArgumentType,
-    j?: SprintfArgumentType
+    c?: SprintfArgument,
+    d?: SprintfArgument,
+    e?: SprintfArgument,
+    f?: SprintfArgument,
+    g?: SprintfArgument,
+    h?: SprintfArgument,
+    i?: SprintfArgument,
+    j?: SprintfArgument
   ): void;
   (
     message: string,
-    b?: SprintfArgumentType,
-    c?: SprintfArgumentType,
-    d?: SprintfArgumentType,
-    e?: SprintfArgumentType,
-    f?: SprintfArgumentType,
-    g?: SprintfArgumentType,
-    h?: SprintfArgumentType,
-    i?: SprintfArgumentType,
-    j?: SprintfArgumentType,
+    b?: SprintfArgument,
+    c?: SprintfArgument,
+    d?: SprintfArgument,
+    e?: SprintfArgument,
+    f?: SprintfArgument,
+    g?: SprintfArgument,
+    h?: SprintfArgument,
+    i?: SprintfArgument,
+    j?: SprintfArgument,
   ): void;
 }
 
 export interface Logger extends LogMethod {
-  adopt: <T>(routine: () => Promise<T>, context: MessageContextType) => Promise<T>,
-  child: (context: TranslateMessageFunctionType | MessageContextType) => Logger,
+  adopt: <T>(routine: () => Promise<T>, context: MessageContext) => Promise<T>,
+  child: (context: TranslateMessageFunction | MessageContext) => Logger,
   debug: LogMethod,
   error: LogMethod,
   fatal: LogMethod,
-  getContext: () => MessageContextType,
+  getContext: () => MessageContext,
   info: LogMethod,
   trace: LogMethod,
   warn: LogMethod,
 }
 
-export type MessageEventHandlerType = (message: MessageType) => void;
+export type MessageEventHandler = (message: Message) => void;

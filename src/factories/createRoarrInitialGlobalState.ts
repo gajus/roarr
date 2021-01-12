@@ -4,11 +4,11 @@ import {
   version,
 } from '../../package.json';
 import type {
-  RoarrGlobalStateType,
+  RoarrGlobalState,
 } from '../types';
 import createNodeWriter from './createNodeWriter';
 
-export default (currentState: any): RoarrGlobalStateType => {
+export default (currentState: any): RoarrGlobalState => {
   const versions = (currentState.versions || []).concat();
 
   versions.sort(cmp);

@@ -10,7 +10,7 @@ import {
   createRoarrInitialGlobalState,
 } from './factories';
 import type {
-  RoarrGlobalStateType,
+  RoarrGlobalState,
 } from './types';
 
 const stringify = fastJson({
@@ -37,7 +37,7 @@ const stringify = fastJson({
 
 const globalThis = createGlobalThis();
 
-const ROARR = globalThis.ROARR = createRoarrInitialGlobalState(globalThis.ROARR as RoarrGlobalStateType || {});
+const ROARR = globalThis.ROARR = createRoarrInitialGlobalState(globalThis.ROARR as RoarrGlobalState || {});
 
 let logFactory = createLogger;
 
@@ -52,8 +52,9 @@ if (environmentIsNode) {
 
 export type {
   Logger,
-  MessageType,
-  TranslateMessageFunctionType,
+  Message,
+  TranslateMessageFunction,
+  MessageEventHandler,
 } from './types';
 
 export {

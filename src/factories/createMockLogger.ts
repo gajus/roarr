@@ -3,14 +3,14 @@ import {
 } from '../constants';
 import type {
   Logger,
-  MessageContextType,
-  MessageEventHandlerType,
-  TranslateMessageFunctionType,
+  MessageContext,
+  MessageEventHandler,
+  TranslateMessageFunction,
 } from '../types';
 
 const createMockLogger = (
-  onMessage: MessageEventHandlerType,
-  parentContext?: MessageContextType,
+  onMessage: MessageEventHandler,
+  parentContext?: MessageContext,
 ): Logger => {
   const log: Logger = () => {
     return undefined;
@@ -20,7 +20,7 @@ const createMockLogger = (
     return routine();
   };
 
-  log.child = (context: TranslateMessageFunctionType | MessageContextType): Logger => {
+  log.child = (context: TranslateMessageFunction | MessageContext): Logger => {
     return createMockLogger(onMessage, parentContext);
   };
 

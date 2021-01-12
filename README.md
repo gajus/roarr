@@ -222,30 +222,30 @@ Example:
 `roarr` package exports a function with the following API:
 
 ```js
-export type LoggerType =
+export type Logger =
   (
-    context: MessageContextType,
+    context: MessageContext,
     message: string,
-    c?: SprintfArgumentType,
-    d?: SprintfArgumentType,
-    e?: SprintfArgumentType,
-    f?: SprintfArgumentType,
-    g?: SprintfArgumentType,
-    h?: SprintfArgumentType,
-    i?: SprintfArgumentType,
-    k?: SprintfArgumentType
+    c?: SprintfArgument,
+    d?: SprintfArgument,
+    e?: SprintfArgument,
+    f?: SprintfArgument,
+    g?: SprintfArgument,
+    h?: SprintfArgument,
+    i?: SprintfArgument,
+    k?: SprintfArgument
   ) => void |
   (
     message: string,
-    b?: SprintfArgumentType,
-    c?: SprintfArgumentType,
-    d?: SprintfArgumentType,
-    e?: SprintfArgumentType,
-    f?: SprintfArgumentType,
-    g?: SprintfArgumentType,
-    h?: SprintfArgumentType,
-    i?: SprintfArgumentType,
-    k?: SprintfArgumentType
+    b?: SprintfArgument,
+    c?: SprintfArgument,
+    d?: SprintfArgument,
+    e?: SprintfArgument,
+    f?: SprintfArgument,
+    g?: SprintfArgument,
+    h?: SprintfArgument,
+    i?: SprintfArgument,
+    k?: SprintfArgument
   ) => void;
 
 ```
@@ -264,7 +264,7 @@ Refer to the [Usage documentation](#usage) for common usage examples.
 ### <code>adopt</code>
 
 ```js
-<T>(routine: () => Promise<T>, context: MessageContextType) => Promise<T>,
+<T>(routine: () => Promise<T>, context: MessageContext) => Promise<T>,
 
 ```
 
@@ -306,7 +306,7 @@ await log.adopt(
 ### <code>child</code>
 
 ```js
-(context: TranslateMessageFunctionType | MessageContextType) => LoggerType,
+(context: TranslateMessageFunction | MessageContext) => Logger,
 
 ```
 
@@ -319,7 +319,7 @@ The `child` function has two signatures:
 #### Object parameter
 
 ```js
-(context: MessageContextType) => LoggerType;
+(context: MessageContext) => Logger;
 
 ```
 
@@ -348,7 +348,7 @@ Refer to [middlewares](#middlewares) documentation for use case examples.
 #### Function parameter
 
 ```js
-(translateMessage: TranslateMessageFunctionType) => LoggerType;
+(translateMessage: TranslateMessageFunction) => Logger;
 
 ```
 
@@ -498,7 +498,7 @@ Depending on your configuration, consider one of the following log transports:
 
 Use environment variables to control `roarr` behaviour.
 
-|Name|Type|Function|Default|
+|Name||Function|Default|
 |---|---|---|---|
 |`ROARR_LOG`|Boolean|Enables/ disables logging.|`false`|
 |`ROARR_STREAM`|`STDOUT`, `STDERR`|Name of the stream where the logs will be written.|`STDOUT`|
