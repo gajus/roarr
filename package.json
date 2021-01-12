@@ -16,7 +16,6 @@
     ]
   },
   "dependencies": {
-    "approximate-now": "^1.0.0",
     "boolean": "^3.0.2",
     "detect-node": "^2.0.4",
     "fast-json-stringify": "^2.3.0",

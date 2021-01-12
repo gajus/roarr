@@ -1,6 +1,3 @@
-import {
-  approximateTime,
-} from 'approximate-now';
 import environmentIsNode from 'detect-node';
 import {
   printf,
@@ -104,7 +101,7 @@ const createLogger = (
     i: any,
     j: any,
   ) => {
-    const time = approximateTime.now;
+    const time = Date.now();
     const sequence = globalThis.ROARR.sequence++;
 
     let context;
