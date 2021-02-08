@@ -19,7 +19,7 @@
     "boolean": "^3.0.2",
     "detect-node": "^2.0.4",
     "fast-json-stringify": "^2.4.1",
-    "fast-printf": "^1.5.0",
+    "fast-printf": "^1.5.3",
     "globalthis": "^1.0.1",
     "is-circular": "^1.0.2",
     "json-stringify-safe": "^5.0.1",
@@ -41,7 +41,7 @@
     "eslint": "^7.19.0",
     "eslint-config-canonical": "^25.8.15",
     "gitdown": "^3.1.3",
-    "husky": "^5.0.9",
+    "husky": "^4",
     "nyc": "^15.1.0",
     "semantic-release": "^17.3.8",
     "ts-node": "^9.1.1",
@@ -49,6 +49,12 @@
   },
   "engines": {
     "node": ">=10.0"
+  },
+  "husky": {
+    "scripts": {
+      "pre-commit": "npm run lint && npm run test && npm run build",
+      "pre-push": "gitdown ./.README/README.md --output-file ./README.md --check"
+    }
   },
   "keywords": [
     "log",
@@ -68,7 +74,6 @@
     "create-readme": "gitdown ./.README/README.md --output-file ./README.md",
     "dev": "tsc --watch",
     "lint": "eslint ./src ./test && tsc --noEmit",
-    "postinstall": "husky install",
     "test": "NODE_ENV=test ava --serial --verbose"
   },
   "typings": "./dist/log.d.ts",

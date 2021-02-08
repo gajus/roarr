@@ -1,6 +1,6 @@
-src
-test
-coverage
-benchmark
+/src
+/test
+/coverage
+/benchmark
 .*
 *.log
