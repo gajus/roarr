@@ -112,7 +112,7 @@ const globalThis = createGlobalThis();
           largeContextWithCircularReference[Math.random()] = Math.random();
         }
 
-        const foo = {};
+        const foo: any = {};
 
         foo.foo = foo;
 

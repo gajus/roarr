@@ -22,13 +22,14 @@ beforeEach(() => {
 
   domain.create = originalCreate;
 
+  // @ts-expect-error Intentional clean up.
   delete domain.parentDomain;
 
   shim();
 });
 
 const createLoggerWithHistory = () => {
-  const messages = [];
+  const messages: any = [];
 
   const log: any = createLogger((message) => {
     messages.push({

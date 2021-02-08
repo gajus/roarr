@@ -16,7 +16,7 @@ beforeEach(() => {
 });
 
 const createLoggerWithHistory = () => {
-  const messages = [];
+  const messages: any = [];
 
   const log: any = createLogger((message) => {
     messages.push({
@@ -49,7 +49,7 @@ test('creates a simple message', (t) => {
 test('replaces circular references with [Circular]', (t) => {
   const log = createLoggerWithHistory();
 
-  const bar = {};
+  const bar: any = {};
 
   bar.bar = bar;
 
