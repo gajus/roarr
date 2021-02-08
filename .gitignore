@@ -9,6 +9,7 @@ node_modules
 !.flowconfig
 !.github
 !.gitignore
+!.husky
 !.npmignore
 !.nycrc
 !.README

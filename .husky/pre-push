@@ -1,0 +1,1 @@
+gitdown ./.README/README.md --output-file ./README.md --check
