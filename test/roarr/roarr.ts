@@ -1,5 +1,3 @@
-/* eslint-disable ava/test-title */
-
 import test, {
   beforeEach,
 } from 'ava';

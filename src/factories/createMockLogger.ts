@@ -20,7 +20,7 @@ const createMockLogger = (
     return routine();
   };
 
-  log.child = (context: TranslateMessageFunction | MessageContext): Logger => {
+  log.child = (context: MessageContext | TranslateMessageFunction): Logger => {
     return createMockLogger(onMessage, parentContext);
   };
 
@@ -29,37 +29,37 @@ const createMockLogger = (
   };
 
   log.trace = (a, b, c, d, e, f, g, h, i, j) => {
-    return log.child({
+    log.child({
       logLevel: logLevels.trace,
     })(a, b, c, d, e, f, g, h, i, j);
   };
 
   log.debug = (a, b, c, d, e, f, g, h, i, j) => {
-    return log.child({
+    log.child({
       logLevel: logLevels.debug,
     })(a, b, c, d, e, f, g, h, i, j);
   };
 
   log.info = (a, b, c, d, e, f, g, h, i, j) => {
-    return log.child({
+    log.child({
       logLevel: logLevels.info,
     })(a, b, c, d, e, f, g, h, i, j);
   };
 
   log.warn = (a, b, c, d, e, f, g, h, i, j) => {
-    return log.child({
+    log.child({
       logLevel: logLevels.warn,
     })(a, b, c, d, e, f, g, h, i, j);
   };
 
   log.error = (a, b, c, d, e, f, g, h, i, j) => {
-    return log.child({
+    log.child({
       logLevel: logLevels.error,
     })(a, b, c, d, e, f, g, h, i, j);
   };
 
   log.fatal = (a, b, c, d, e, f, g, h, i, j) => {
-    return log.child({
+    log.child({
       logLevel: logLevels.fatal,
     })(a, b, c, d, e, f, g, h, i, j);
   };

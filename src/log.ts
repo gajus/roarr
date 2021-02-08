@@ -43,7 +43,7 @@ let logFactory = createLogger;
 
 if (environmentIsNode) {
   // eslint-disable-next-line node/no-process-env
-  const enabled = boolean(process.env.ROARR_LOG || '');
+  const enabled = boolean(process.env.ROARR_LOG ?? '');
 
   if (!enabled) {
     logFactory = createMockLogger;

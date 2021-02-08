@@ -20,7 +20,7 @@ const globalThis = createGlobalThis();
 let domain: any;
 
 if (environmentIsNode) {
-  // eslint-disable-next-line node/global-require
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   domain = require('domain');
 }
 
@@ -37,10 +37,10 @@ const getParentDomainContext = () => {
     return {};
   }
 
-  while (currentDomain && currentDomain.parentDomain) {
+  while (currentDomain?.parentDomain) {
     currentDomain = currentDomain.parentDomain;
 
-    if (currentDomain.roarr && currentDomain.roarr.context) {
+    if (currentDomain?.roarr?.context) {
       parentRoarrContexts.push(currentDomain.roarr.context);
     }
   }
@@ -64,7 +64,7 @@ const getFirstParentDomainContext = () => {
 
   let currentDomain: any = process.domain;
 
-  if (currentDomain && currentDomain.roarr && currentDomain.roarr.context) {
+  if (currentDomain?.roarr?.context) {
     return currentDomain.roarr.context;
   }
 
@@ -72,10 +72,10 @@ const getFirstParentDomainContext = () => {
     return {};
   }
 
-  while (currentDomain && currentDomain.parentDomain) {
+  while (currentDomain?.parentDomain) {
     currentDomain = currentDomain.parentDomain;
 
-    if (currentDomain.roarr && currentDomain.roarr.context) {
+    if (currentDomain?.roarr?.context) {
       return currentDomain.roarr.context;
     }
   }
@@ -170,7 +170,7 @@ const createLogger = (
     });
   };
 
-  log.child = (context: TranslateMessageFunction | MessageContext) => {
+  log.child = (context: MessageContext | TranslateMessageFunction) => {
     if (typeof context === 'function') {
       return createLogger(
         (message) => {
@@ -221,37 +221,37 @@ const createLogger = (
   };
 
   log.trace = (a, b, c, d, e, f, g, h, i, j) => {
-    return log.child({
+    log.child({
       logLevel: logLevels.trace,
     })(a, b, c, d, e, f, g, h, i, j);
   };
 
   log.debug = (a, b, c, d, e, f, g, h, i, j) => {
-    return log.child({
+    log.child({
       logLevel: logLevels.debug,
     })(a, b, c, d, e, f, g, h, i, j);
   };
 
   log.info = (a, b, c, d, e, f, g, h, i, j) => {
-    return log.child({
+    log.child({
       logLevel: logLevels.info,
     })(a, b, c, d, e, f, g, h, i, j);
   };
 
   log.warn = (a, b, c, d, e, f, g, h, i, j) => {
-    return log.child({
+    log.child({
       logLevel: logLevels.warn,
     })(a, b, c, d, e, f, g, h, i, j);
   };
 
   log.error = (a, b, c, d, e, f, g, h, i, j) => {
-    return log.child({
+    log.child({
       logLevel: logLevels.error,
     })(a, b, c, d, e, f, g, h, i, j);
   };
 
   log.fatal = (a, b, c, d, e, f, g, h, i, j) => {
-    return log.child({
+    log.child({
       logLevel: logLevels.fatal,
     })(a, b, c, d, e, f, g, h, i, j);
   };

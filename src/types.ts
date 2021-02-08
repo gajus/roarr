@@ -1,13 +1,13 @@
-export interface Writer {
-  write: (message: string) => void;
-}
+export type Writer = {
+  write: (message: string) => void,
+};
 
-export interface RoarrGlobalState extends Writer {
-  sequence: number;
-  versions: ReadonlyArray<string>;
-}
+export type RoarrGlobalState = Writer & {
+  sequence: number,
+  versions: readonly string[],
+};
 
-export type SprintfArgument = string | number | boolean | null;
+export type SprintfArgument = boolean | number | string | null;
 
 export type MessageContext = any;
 
@@ -33,7 +33,7 @@ export type LogMethod = {
     h?: SprintfArgument,
     i?: SprintfArgument,
     j?: SprintfArgument
-  ): void;
+  ): void,
   (
     message: string,
     b?: SprintfArgument,
@@ -45,12 +45,12 @@ export type LogMethod = {
     h?: SprintfArgument,
     i?: SprintfArgument,
     j?: SprintfArgument,
-  ): void;
-}
+  ): void,
+};
 
-export interface Logger extends LogMethod {
+export type Logger = LogMethod & {
   adopt: <T>(routine: () => Promise<T>, context: MessageContext) => Promise<T>,
-  child: (context: TranslateMessageFunction | MessageContext) => Logger,
+  child: (context: MessageContext | TranslateMessageFunction) => Logger,
   debug: LogMethod,
   error: LogMethod,
   fatal: LogMethod,
@@ -58,6 +58,6 @@ export interface Logger extends LogMethod {
   info: LogMethod,
   trace: LogMethod,
   warn: LogMethod,
-}
+};
 
 export type MessageEventHandler = (message: Message) => void;

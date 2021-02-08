@@ -1,4 +1,4 @@
-/* eslint-disable ava/test-title, fp/no-delete */
+/* eslint-disable fp/no-delete */
 
 import domain from 'domain';
 import test, {
