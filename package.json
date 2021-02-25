@@ -19,7 +19,7 @@
     "boolean": "^3.0.2",
     "detect-node": "^2.0.4",
     "fast-json-stringify": "^2.4.2",
-    "fast-printf": "^1.5.11",
+    "fast-printf": "^1.6.0",
     "globalthis": "^1.0.2",
     "is-circular": "^1.0.2",
     "json-stringify-safe": "^5.0.1",
@@ -62,7 +62,8 @@
     "json"
   ],
   "license": "BSD-3-Clause",
-  "main": "./dist/src/log.js",
+  "main": "./dist/cjs/src/log.js",
+  "module": "./dist/esm/src/log.js",
   "name": "roarr",
   "repository": {
     "type": "git",
@@ -70,12 +71,12 @@
   },
   "scripts": {
     "benchmark": "ROARR_LOG=true ts-node --transpile-only test/benchmark.ts",
-    "build": "del-cli ./dist && tsc",
+    "build": "del-cli ./dist && tsc && tsc -p tsconfig-esm.json",
     "create-readme": "gitdown ./.README/README.md --output-file ./README.md",
     "dev": "tsc --watch",
     "lint": "eslint ./src ./test && tsc --noEmit",
     "test": "NODE_ENV=test ava --serial --verbose"
   },
-  "typings": "./dist/src/log.d.ts",
+  "typings": "./dist/esm/src/log.d.ts",
   "version": "1.0.0"
 }
