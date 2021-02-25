@@ -8,7 +8,6 @@ import type {
 } from '../types';
 import createNodeWriter from './createNodeWriter';
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default (currentState: any): RoarrGlobalState => {
   const versions = (currentState.versions || []).concat();
 
