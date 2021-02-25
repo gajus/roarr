@@ -19,7 +19,7 @@
     "boolean": "^3.0.2",
     "detect-node": "^2.0.4",
     "fast-json-stringify": "^2.4.2",
-    "fast-printf": "^1.6.1",
+    "fast-printf": "^1.6.2",
     "globalthis": "^1.0.2",
     "is-circular": "^1.0.2",
     "json-stringify-safe": "^5.0.1",
@@ -52,7 +52,7 @@
   },
   "exports": {
     ".": {
-      "default": "./dist/esm/src/log.js",
+      "import": "./dist/esm/src/log.js",
       "require": "./dist/cjs/src/log.js"
     }
   },
@@ -76,7 +76,7 @@
   },
   "scripts": {
     "benchmark": "ROARR_LOG=true ts-node --transpile-only test/benchmark.ts",
-    "build": "del-cli ./dist && tsc && tsc -p tsconfig-esm.json",
+    "build": "del-cli ./dist && tsc && tsc -p tsconfig-esm.json && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json && echo '{\"type\": \"module\"}' > dist/esm/package.json",
     "create-readme": "gitdown ./.README/README.md --output-file ./README.md",
     "dev": "tsc --watch",
     "lint": "eslint ./src ./test && tsc --noEmit",
