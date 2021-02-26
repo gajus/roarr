@@ -9,7 +9,9 @@ import createNodeWriter from './createNodeWriter';
 export default (currentState: any): RoarrGlobalState => {
   const versions = (currentState.versions || []).concat();
 
-  if (versions.length > 1) versions.sort(cmp);
+  if (versions.length > 1) {
+      versions.sort(cmp);
+    }
 
   const currentIsLatestVersion = !versions.length || cmp(pkg.version, versions[versions.length - 1]) === 1;
 
