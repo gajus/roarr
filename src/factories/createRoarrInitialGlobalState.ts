@@ -1,6 +1,6 @@
 import environmentIsNode from 'detect-node';
-import cmp from 'semver-compare';
 import pkg from '../../package.json';
+import compareSemver from 'semver-compare';
 import type {
   RoarrGlobalState,
 } from '../types';
@@ -10,16 +10,16 @@ export default (currentState: any): RoarrGlobalState => {
   const versions = (currentState.versions || []).concat();
 
   if (versions.length > 1) {
-    versions.sort(cmp);
+    versions.sort(compareSemver);
   }
 
-  const currentIsLatestVersion = !versions.length || cmp(pkg.version, versions[versions.length - 1]) === 1;
+  const currentIsLatestVersion = !versions.length || compareSemver(pkg.version, versions[versions.length - 1]) === 1;
 
   if (!versions.includes(pkg.version)) {
     versions.push(pkg.version);
   }
 
-  versions.sort(cmp);
+  versions.sort(compareSemver);
 
   let newState = {
     sequence: 0,
