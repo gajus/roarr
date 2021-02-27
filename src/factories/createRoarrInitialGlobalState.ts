@@ -13,13 +13,15 @@ export default (currentState: any): RoarrGlobalState => {
     versions.sort(cmp);
   }
 
-  const currentIsLatestVersion = !versions.length || cmp(pkg.version, versions[versions.length - 1]) === 1;
+  const currentIsLatestVersion = versions.length === 1 || cmp(pkg.version, versions[versions.length - 1]) === 1;
 
-  if (!versions.includes(pkg.version)) {
+  if (pkg.version && !versions.includes(pkg.version)) {
     versions.push(pkg.version);
+    
+    if (versions.length > 1) {
+      versions.sort(cmp);
+    }
   }
-
-  versions.sort(cmp);
 
   let newState = {
     sequence: 0,
