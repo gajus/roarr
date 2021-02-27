@@ -1,10 +1,13 @@
 import environmentIsNode from 'detect-node';
-import pkg from '../../package.json';
 import compareSemver from 'semver-compare';
 import type {
   RoarrGlobalState,
 } from '../types';
 import createNodeWriter from './createNodeWriter';
+
+// This needs to be updated manually because there is no way
+// to know the package version at the build time.
+const ROARR_VERSION = '4.1.4';
 
 export default (currentState: any): RoarrGlobalState => {
   const versions = (currentState.versions || []).concat();
@@ -13,10 +16,10 @@ export default (currentState: any): RoarrGlobalState => {
     versions.sort(compareSemver);
   }
 
-  const currentIsLatestVersion = !versions.length || compareSemver(pkg.version, versions[versions.length - 1]) === 1;
+  const currentIsLatestVersion = !versions.length || compareSemver(ROARR_VERSION, versions[versions.length - 1]) === 1;
 
-  if (!versions.includes(pkg.version)) {
-    versions.push(pkg.version);
+  if (!versions.includes(ROARR_VERSION)) {
+    versions.push(ROARR_VERSION);
   }
 
   versions.sort(compareSemver);

@@ -40,6 +40,7 @@ JSON logger for Node.js and browser.
         * [Using with Elasticsearch](#roarr-integrations-using-with-elasticsearch)
         * [Using with Scalyr](#roarr-integrations-using-with-scalyr)
     * [Documenting use of Roarr](#roarr-documenting-use-of-roarr)
+    * [Developing](#roarr-developing)
 
 
 <a name="roarr-motivation"></a>
@@ -696,3 +697,10 @@ Export `ROARR_LOG=true` environment variable to enable log printing to `stdout`.
 Use [`roarr-cli`](https://github.com/gajus/roarr-cli) program to pretty-print the logs.
 
 ```
+
+<a name="roarr-developing"></a>
+## Developing
+
+Every time a change is made to the logger, one must update `ROARR_VERSION` value in `./src/factories/createRoarrInitialGlobalState.js`.
+
+Unfortunately, this process cannot be automated because the version number is not known before `semantic-version` is called.
