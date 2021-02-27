@@ -17,7 +17,7 @@ export default (currentState: any): RoarrGlobalState => {
 
   if (pkg.version && !versions.includes(pkg.version)) {
     versions.push(pkg.version);
-    
+
     if (versions.length > 1) {
       versions.sort(cmp);
     }
