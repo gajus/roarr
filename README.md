@@ -701,6 +701,6 @@ Use [`roarr-cli`](https://github.com/gajus/roarr-cli) program to pretty-print th
 <a name="roarr-developing"></a>
 ## Developing
 
-Every time a change is made to the logger, one must update `ROARR_VERSION` value in `./src/factories/createRoarrInitialGlobalState.js`.
+Every time a change is made to the logger, one must update `ROARR_VERSION` value in [`./src/config.ts`](./src/config.ts).
 
 Unfortunately, this process cannot be automated because the version number is not known before `semantic-version` is called.
