@@ -1,7 +1,6 @@
 import {
   boolean,
 } from 'boolean';
-import environmentIsNode from 'detect-node';
 import fastJson from 'fast-json-stringify';
 import createGlobalThis from 'globalthis';
 import {
@@ -41,13 +40,11 @@ const ROARR = globalThis.ROARR = createRoarrInitialGlobalState(globalThis.ROARR 
 
 let logFactory = createLogger;
 
-if (environmentIsNode) {
-  // eslint-disable-next-line node/no-process-env
-  const enabled = boolean(process.env.ROARR_LOG ?? '');
+// eslint-disable-next-line node/no-process-env
+const enabled = boolean(process.env.ROARR_LOG ?? '');
 
-  if (!enabled) {
-    logFactory = createMockLogger;
-  }
+if (!enabled) {
+  logFactory = createMockLogger;
 }
 
 export type {

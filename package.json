@@ -15,9 +15,9 @@
       "ts-node/register/transpile-only"
     ]
   },
+  "browser": "./dist/src/browser.js",
   "dependencies": {
     "boolean": "^3.0.2",
-    "detect-node": "^2.0.5",
     "fast-json-stringify": "^2.5.2",
     "fast-printf": "^1.6.4",
     "globalthis": "^1.0.2",
@@ -28,7 +28,6 @@
   "description": "JSON logger for Node.js and browser.",
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
-    "@types/detect-node": "^2.0.0",
     "@types/globalthis": "^1.0.1",
     "@types/json-stringify-safe": "^5.0.0",
     "@types/node": "^14.14.35",
