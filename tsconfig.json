@@ -10,7 +10,7 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
-    "outDir": "dist/cjs",
+    "outDir": "dist",
     "skipLibCheck": true,
     "strict": true,
     "target": "es2018"
