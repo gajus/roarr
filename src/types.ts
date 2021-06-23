@@ -7,7 +7,7 @@ export type Writer = {
 };
 
 export type RoarrGlobalState = Writer & {
-  asyncLocalStorage?: AsyncLocalStorage,
+  asyncLocalStorage?: AsyncLocalStorage<any>,
   sequence: number,
   versions: readonly string[],
 };

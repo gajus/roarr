@@ -1,4 +1,3 @@
-import environmentIsNode from 'detect-node';
 import {
   printf,
 } from 'fast-printf';

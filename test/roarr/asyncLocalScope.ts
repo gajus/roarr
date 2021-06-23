@@ -8,7 +8,6 @@ import createGlobalThis from 'globalthis';
 import createLogger from '../../src/factories/createLogger';
 import createRoarrInitialGlobalState from '../../src/factories/createRoarrInitialGlobalState';
 
-const sequence = 0;
 const time = -1;
 const version = '1.0.0';
 
