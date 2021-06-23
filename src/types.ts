@@ -1,8 +1,13 @@
+import type {
+  AsyncLocalStorage,
+} from 'async_hooks';
+
 export type Writer = {
   write: (message: string) => void,
 };
 
 export type RoarrGlobalState = Writer & {
+  asyncLocalStorage?: AsyncLocalStorage,
   sequence: number,
   versions: readonly string[],
 };

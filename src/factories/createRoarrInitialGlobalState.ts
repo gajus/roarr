@@ -30,9 +30,15 @@ export default (currentState: any): RoarrGlobalState => {
   };
 
   if (environmentIsNode && (currentIsLatestVersion || !newState.write)) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+    const AsyncLocalStorage = require('async_hooks').AsyncLocalStorage;
+
+    const asyncLocalStorage = new AsyncLocalStorage();
+
     newState = {
       ...newState,
       ...createNodeWriter(),
+      asyncLocalStorage,
     };
   }
 

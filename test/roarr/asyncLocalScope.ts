@@ -1,15 +1,12 @@
-/* eslint-disable fp/no-delete */
+/* eslint-disable ava/use-test */
 
-import domain from 'domain';
-import test, {
+import {
+  serial,
   beforeEach,
 } from 'ava';
-import shim from 'domain-parent/shim';
 import createGlobalThis from 'globalthis';
 import createLogger from '../../src/factories/createLogger';
 import createRoarrInitialGlobalState from '../../src/factories/createRoarrInitialGlobalState';
-
-const originalCreate = domain.create;
 
 const sequence = 0;
 const time = -1;
@@ -18,14 +15,9 @@ const version = '1.0.0';
 beforeEach(() => {
   const globalThis = createGlobalThis();
 
+  globalThis.ROARR = null;
+
   globalThis.ROARR = createRoarrInitialGlobalState({});
-
-  domain.create = originalCreate;
-
-  // @ts-expect-error Intentional clean up.
-  delete domain.parentDomain;
-
-  shim();
 });
 
 const createLoggerWithHistory = () => {
@@ -43,7 +35,7 @@ const createLoggerWithHistory = () => {
   return log;
 };
 
-test('inherits context from domain', async (t) => {
+serial('inherits context from async local scope', async (t) => {
   const log = createLoggerWithHistory();
 
   await log.adopt(
@@ -72,14 +64,14 @@ test('inherits context from domain', async (t) => {
   ]);
 });
 
-test('inherits context from domain (deep)', async (t) => {
+serial('inherits context from parent async local scope', async (t) => {
   const log = createLoggerWithHistory();
 
   await log.adopt(
     async () => {
       t.deepEqual(log.getContext(), {
         bar: 'bar 0',
-      });
+      }, 'first-level');
 
       log('foo 0');
 
@@ -88,7 +80,7 @@ test('inherits context from domain (deep)', async (t) => {
           t.deepEqual(log.getContext(), {
             bar: 'bar 0',
             baz: 'baz 1',
-          });
+          }, 'second-level');
 
           log('foo 1');
         },
@@ -123,29 +115,4 @@ test('inherits context from domain (deep)', async (t) => {
       version,
     },
   ]);
-});
-
-test('can get logger context when in an alien domain', async (t) => {
-  const log = createLoggerWithHistory();
-
-  await log.adopt(
-    async () => {
-      t.deepEqual(log.getContext(), {
-        bar: 'bar 0',
-      });
-
-      log('foo 0');
-
-      const d0 = domain.create();
-
-      d0.run(async () => {
-        t.deepEqual(log.getContext(), {
-          bar: 'bar 0',
-        });
-      });
-    },
-    {
-      bar: 'bar 0',
-    },
-  );
 });

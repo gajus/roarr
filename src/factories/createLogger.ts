@@ -17,70 +17,14 @@ import type {
 
 const globalThis = createGlobalThis();
 
-let domain: any;
+const getAsyncLocalContext = () => {
+  const asyncLocalStorage = globalThis.ROARR.asyncLocalStorage;
 
-if (environmentIsNode) {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  domain = require('domain');
-}
-
-const getParentDomainContext = () => {
-  if (!domain) {
+  if (!asyncLocalStorage) {
     return {};
   }
 
-  const parentRoarrContexts: MessageContext[] = [];
-
-  let currentDomain: any = process.domain;
-
-  if (!currentDomain || !currentDomain.parentDomain) {
-    return {};
-  }
-
-  while (currentDomain?.parentDomain) {
-    currentDomain = currentDomain.parentDomain;
-
-    if (currentDomain?.roarr?.context) {
-      parentRoarrContexts.push(currentDomain.roarr.context);
-    }
-  }
-
-  let domainContext = {};
-
-  for (const parentRoarrContext of parentRoarrContexts) {
-    domainContext = {
-      ...domainContext,
-      ...parentRoarrContext,
-    };
-  }
-
-  return domainContext;
-};
-
-const getFirstParentDomainContext = () => {
-  if (!domain) {
-    return {};
-  }
-
-  let currentDomain: any = process.domain;
-
-  if (currentDomain?.roarr?.context) {
-    return currentDomain.roarr.context;
-  }
-
-  if (!currentDomain || !currentDomain.parentDomain) {
-    return {};
-  }
-
-  while (currentDomain?.parentDomain) {
-    currentDomain = currentDomain.parentDomain;
-
-    if (currentDomain?.roarr?.context) {
-      return currentDomain.roarr.context;
-    }
-  }
-
-  return {};
+  return asyncLocalStorage.getStore()?.context || {};
 };
 
 const defaultContext = {};
@@ -103,22 +47,23 @@ const createLogger = (
   ) => {
     const time = Date.now();
     const sequence = globalThis.ROARR.sequence++;
+    const asyncLocalStorage = globalThis.ROARR.asyncLocalStorage;
 
     let context;
     let message;
 
     if (typeof a === 'string') {
-      if (!domain || process.domain === null) {
-        context = parentContext || defaultContext;
-      } else {
+      if (asyncLocalStorage) {
         context = {
-          ...getFirstParentDomainContext(),
+          ...getAsyncLocalContext(),
           ...parentContext,
         };
+      } else {
+        context = parentContext || defaultContext;
       }
     } else {
       context = {
-        ...getFirstParentDomainContext(),
+        ...getAsyncLocalContext(),
         ...parentContext,
         ...a,
       };
@@ -187,7 +132,7 @@ const createLogger = (
     }
 
     return createLogger(onMessage, {
-      ...getFirstParentDomainContext(),
+      ...getAsyncLocalContext(),
       ...parentContext,
       ...context,
     });
@@ -195,29 +140,29 @@ const createLogger = (
 
   log.getContext = () => {
     return {
-      ...getFirstParentDomainContext(),
+      ...getAsyncLocalContext(),
       ...parentContext || defaultContext,
     };
   };
 
   log.adopt = async (routine, context) => {
-    if (!domain) {
+    const asyncLocalStorage = globalThis.ROARR.asyncLocalStorage;
+
+    if (!asyncLocalStorage) {
       return routine();
     }
 
-    const adoptedDomain = domain.create();
-
-    return adoptedDomain
-      .run(() => {
-        adoptedDomain.roarr = {
-          context: {
-            ...getParentDomainContext(),
-            ...context,
-          },
-        };
-
+    asyncLocalStorage.run(
+      {
+        context: {
+          ...asyncLocalStorage.getStore()?.context,
+          ...context,
+        },
+      },
+      () => {
         return routine();
-      });
+      },
+    );
   };
 
   log.trace = (a, b, c, d, e, f, g, h, i, j) => {

@@ -224,7 +224,7 @@ Refer to the [Usage documentation](#usage) for common usage examples.
 
 ```
 
-`adopt` function uses Node.js [`domain`](https://nodejs.org/api/domain.html) to pass-down context properties.
+`adopt` function uses Node.js [`async_context`](https://nodejs.org/api/async_context.html) to pass-down context properties.
 
 When using `adopt`, context properties will be added to all _all_ Roarr messages within the same asynchronous context, e.g.
 
@@ -255,7 +255,6 @@ await log.adopt(
 #### Requirements
 
 * `adopt` method only works in Node.js.
-* You must shim Node.js using [`domain-parent`](https://github.com/gajus/domain-parent).
 
 ### `child`
 
