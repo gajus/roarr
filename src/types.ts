@@ -6,15 +6,15 @@ export type Writer = {
   write: (message: string) => void,
 };
 
+export type MessageContext = any;
+
 export type RoarrGlobalState = Writer & {
-  asyncLocalStorage?: AsyncLocalStorage<any>,
+  asyncLocalStorage?: AsyncLocalStorage<MessageContext>,
   sequence: number,
   versions: readonly string[],
 };
 
 export type SprintfArgument = boolean | number | string | null;
-
-export type MessageContext = any;
 
 export type Message = {
   readonly context: MessageContext,
