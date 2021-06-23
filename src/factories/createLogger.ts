@@ -155,7 +155,7 @@ const createLogger = (
       return routine();
     }
 
-    asyncLocalStorage.run(
+    return asyncLocalStorage.run(
       {
         context: {
           ...asyncLocalStorage.getStore()?.context,
