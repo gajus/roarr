@@ -19,7 +19,7 @@ export type SprintfArgument = boolean | number | string | null;
 export type Message = {
   readonly context: MessageContext,
   readonly message: string,
-  readonly sequence: number,
+  readonly sequence: string,
   readonly time: number,
   readonly version: string,
 };

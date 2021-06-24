@@ -2,4 +2,4 @@
 // to know the package version at the build time.
 export const ROARR_VERSION = '5.0.0';
 
-export const ROARR_LOG_FORMAT_VERSION = '1.0.0';
+export const ROARR_LOG_FORMAT_VERSION = '2.0.0';

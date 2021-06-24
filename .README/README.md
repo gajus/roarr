@@ -143,7 +143,6 @@ globalThis.ROARR.write = (message) => {
     console.log(payload);
   }
 };
-
 ```
 
 ## Log message format
@@ -152,13 +151,13 @@ globalThis.ROARR.write = (message) => {
 |---|---|
 |`context`|Arbitrary, user-provided structured data. See [context property names](#context-property-names).|
 |`message`|User-provided message formatted using [printf](https://en.wikipedia.org/wiki/Printf_format_string).|
-|`sequence`|An incremental ID.|
+|`sequence`|Incremental sequence ID (see [`adopt`](#adopt) for description of the format and its meaning).|
 |`time`|Unix timestamp in milliseconds.|
 |`version`|Roarr log message format version.|
 
 Example:
 
-```js
+```json
 {
   "context": {
     "application": "task-runner",
@@ -167,11 +166,10 @@ Example:
     "taskId": 1
   },
   "message": "starting task ID 1",
-  "sequence": 0,
+  "sequence": "0",
   "time": 1506776210000,
   "version": "1.0.0"
 }
-
 ```
 
 ## API
@@ -246,10 +244,43 @@ await log.adopt(
     bar: 'bar 0',
   },
 );
+```
 
-// {"context":{"bar":"bar 0"},"message":"foo 0","sequence":0,"time":1531914656076,"version":"1.0.0"}
-// {"context":{"bar":"bar 0","baz":"baz 1"},"message":"foo 1","sequence":1,"time":1531914656077,"version":"1.0.0"}]
+```json
+{"context":{"bar":"bar 0"},"message":"foo 0","sequence":"0","time":1506776210000,"version":"2.0.0"}
+{"context":{"bar":"bar 0","baz": "baz 1"},"message":"foo 1","sequence":"0.0","time":1506776210000,"version":"2.0.0"}
+```
 
+#### `sequence` value
+
+`sequence` represents async context hierarchy in [`ltree`](https://www.postgresql.org/docs/current/ltree.html) format, i.e.
+
+```
+<top-level sequential invocation ID>[.<async operation sequential invocation ID>]
+```
+
+Members of sequence value represent log index relative to the async execution context. This information can be used to establish the origin of the log invocation in an asynchronous context, e.g.
+
+```js
+log.adopt(() => {
+  log('foo 0');
+  log.adopt(() => {
+    log('bar 0');
+    log.adopt(() => {
+      log('baz 0');
+      log('baz 1');
+    });
+    log('bar 1');
+  });
+});
+```
+
+```json
+{"context":{},"message":"foo 0","sequence":"0.0","time":1506776210000,"version":"2.0.0"}
+{"context":{},"message":"bar 0","sequence":"0.1.0","time":1506776210000,"version":"2.0.0"}
+{"context":{},"message":"baz 0","sequence":"0.1.1.0","time":1506776210000,"version":"2.0.0"}
+{"context":{},"message":"bar 1","sequence":"0.1.2","time":1506776210000,"version":"2.0.0"}
+{"context":{},"message":"baz 1","sequence":"0.1.1.1","time":1506776210000,"version":"2.0.0"}
 ```
 
 #### Requirements
@@ -288,10 +319,11 @@ const childLog = log.child({
 
 log.debug('foo 1');
 childLog.debug('foo 2');
+```
 
-// {"context":{"logLevel":20},"message":"foo 1","sequence":0,"time":1531914529921,"version":"1.0.0"}
-// {"context":{"foo":"bar","logLevel":20},"message":"foo 2","sequence":1,"time":1531914529922,"version":"1.0.0"}
-
+```json
+{"context":{"logLevel":20},"message":"foo 1","sequence":"0","time":1506776210000,"version":"2.0.0"}
+{"context":{"foo":"bar","logLevel":20},"message":"foo 2","sequence":"1","time":1506776210000,"version":"2.0.0"}
 ```
 
 Refer to [middlewares](#middlewares) documentation for use case examples.
@@ -319,10 +351,11 @@ const childLog = log.child((message) => {
 
 log.debug('foo 1');
 childLog.debug('foo 2');
+```
 
-// {"context":{"logLevel":20},"message":"foo 1","sequence":0,"time":1531914656076,"version":"1.0.0"}
-// {"context":{"logLevel":20},"message":"bar 2","sequence":1,"time":1531914656077,"version":"1.0.0"}
-
+```json
+{"context":{"logLevel":20},"message":"foo 1","sequence":"0","time":1506776210000,"version":"2.0.0"}
+{"context":{"logLevel":20},"message":"bar 2","sequence":"1","time":1506776210000,"version":"2.0.0"}
 ```
 
 ### `getContext`
@@ -368,12 +401,12 @@ log.fatal('foo');
 Produces output:
 
 ```
-{"context":{"logLevel":10},"message":"foo","sequence":0,"time":1506776210000,"version":"1.0.0"}
-{"context":{"logLevel":20},"message":"foo","sequence":1,"time":1506776210000,"version":"1.0.0"}
-{"context":{"logLevel":30},"message":"foo","sequence":2,"time":1506776210000,"version":"1.0.0"}
-{"context":{"logLevel":40},"message":"foo","sequence":3,"time":1506776210000,"version":"1.0.0"}
-{"context":{"logLevel":50},"message":"foo","sequence":4,"time":1506776210000,"version":"1.0.0"}
-{"context":{"logLevel":60},"message":"foo","sequence":5,"time":1506776210000,"version":"1.0.0"}
+{"context":{"logLevel":10},"message":"foo","sequence":"0","time":1506776210000,"version":"2.0.0"}
+{"context":{"logLevel":20},"message":"foo","sequence":"1","time":1506776210000,"version":"2.0.0"}
+{"context":{"logLevel":30},"message":"foo","sequence":"2","time":1506776210000,"version":"2.0.0"}
+{"context":{"logLevel":40},"message":"foo","sequence":"3","time":1506776210000,"version":"2.0.0"}
+{"context":{"logLevel":50},"message":"foo","sequence":"4","time":1506776210000,"version":"2.0.0"}
+{"context":{"logLevel":60},"message":"foo","sequence":"5","time":1506776210000,"version":"2.0.0"}
 
 ```
 
@@ -391,10 +424,11 @@ const error = new Error('foo');
 
 log.debug({error}, 'bar');
 childLog.debug({error}, 'bar');
+```
 
-// {"context":{"logLevel":20,"error":{}},"message":"bar","sequence":0,"time":1531918373676,"version":"1.0.0"}
-// {"context":{"logLevel":20,"error":{"name":"Error","message":"foo","stack":"[REDACTED]"}},"message":"bar","sequence":1,"time":1531918373678,"version":"1.0.0"}
-
+```json
+{"context":{"logLevel":20,"error":{}},"message":"bar","sequence":"0","time":1506776210000,"version":"2.0.0"}
+{"context":{"logLevel":20,"error":{"name":"Error","message":"foo","stack":"[REDACTED]"}},"message":"bar","sequence":"1","time":1506776210000,"version":"2.0.0"}
 ```
 
 Roarr middlwares enable translation of every bit of information that is used to construct a log message.

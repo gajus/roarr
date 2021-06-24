@@ -29,6 +29,22 @@ const getAsyncLocalContext = () => {
   return asyncLocalStorage.getStore()?.context || {};
 };
 
+const getSequence = () => {
+  const asyncLocalStorage = globalThis.ROARR.asyncLocalStorage;
+
+  if (!asyncLocalStorage) {
+    return String(globalThis.ROARR.sequence++);
+  }
+
+  const store = asyncLocalStorage.getStore();
+
+  if (store?.sequenceRoot !== undefined && store?.sequence !== undefined) {
+    return String(store.sequenceRoot) + '.' + String(store.sequence++);
+  }
+
+  return String(globalThis.ROARR.sequence++);
+};
+
 const defaultContext = {};
 
 const createLogger = (
@@ -48,7 +64,7 @@ const createLogger = (
     j: any,
   ) => {
     const time = Date.now();
-    const sequence = globalThis.ROARR.sequence++;
+    const sequence = getSequence();
     const asyncLocalStorage = globalThis.ROARR.asyncLocalStorage;
 
     let context;
@@ -154,12 +170,24 @@ const createLogger = (
       return routine();
     }
 
+    const store = asyncLocalStorage.getStore();
+
+    let sequenceRoot;
+
+    if (store?.sequenceRoot !== undefined && store?.sequence !== undefined) {
+      sequenceRoot = String(store.sequenceRoot) + '.' + String(store.sequence++);
+    } else {
+      sequenceRoot = String(globalThis.ROARR.sequence++);
+    }
+
     return asyncLocalStorage.run(
       {
         context: {
-          ...asyncLocalStorage.getStore()?.context,
+          ...store?.context,
           ...context,
         },
+        sequence: 0,
+        sequenceRoot,
       },
       () => {
         return routine();
