@@ -47,18 +47,7 @@ if (!enabled) {
   logFactory = createMockLogger;
 }
 
-export type {
-  Logger,
-  Message,
-  TranslateMessageFunction,
-  MessageEventHandler,
-} from './types';
-
-export {
-  ROARR,
-};
-
-export default logFactory((message) => {
+const Roarr = logFactory((message) => {
   if (ROARR.write) {
     // Stringify message as soon as it is received to prevent
     // properties of the context from being modified by reference.
@@ -67,3 +56,15 @@ export default logFactory((message) => {
     ROARR.write(body);
   }
 });
+
+export type {
+  Logger,
+  Message,
+  TranslateMessageFunction,
+  MessageEventHandler,
+} from './types';
+
+export {
+  Roarr,
+  ROARR,
+};

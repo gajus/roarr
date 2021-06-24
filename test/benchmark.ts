@@ -4,7 +4,9 @@ import {
   Suite,
 } from 'benchmark';
 import createGlobalThis from 'globalthis';
-import roarr from '../src/log';
+import {
+  Roarr,
+} from '../src/Roarr';
 
 // eslint-disable-next-line node/no-process-env
 if (process.env.ROARR_LOG !== 'true') {
@@ -26,7 +28,7 @@ const globalThis = createGlobalThis();
   suite.add(
     'simple message',
     () => {
-      roarr.info('foo');
+      Roarr.info('foo');
     },
     {
       setup: () => {
@@ -40,7 +42,7 @@ const globalThis = createGlobalThis();
   suite.add(
     'message with printf',
     () => {
-      roarr.info('foo %s %s %s', 'bar', 'baz', 'qux');
+      Roarr.info('foo %s %s %s', 'bar', 'baz', 'qux');
     },
     {
       setup: () => {
@@ -54,7 +56,7 @@ const globalThis = createGlobalThis();
   suite.add(
     'message with context',
     () => {
-      roarr.info({
+      Roarr.info({
         foo: 'bar',
       }, 'foo');
     },
@@ -72,7 +74,7 @@ const globalThis = createGlobalThis();
   suite.add(
     'message with large context',
     () => {
-      roarr.info(largeContext, 'foo');
+      Roarr.info(largeContext, 'foo');
     },
     {
       setup: () => {
@@ -96,7 +98,7 @@ const globalThis = createGlobalThis();
   suite.add(
     'message with large context',
     () => {
-      roarr.info(largeContextWithCircularReference, 'foo');
+      Roarr.info(largeContextWithCircularReference, 'foo');
     },
     {
       setup: () => {

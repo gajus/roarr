@@ -63,7 +63,7 @@
     "json"
   ],
   "license": "BSD-3-Clause",
-  "main": "./dist/src/log.js",
+  "main": "./dist/src/Roarr.js",
   "name": "roarr",
   "repository": {
     "type": "git",

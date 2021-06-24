@@ -48,7 +48,9 @@ Roarr logger API for producing logs is the same in Node.js and browser.
 Example:
 
 ```js
-import log from 'roarr';
+import {
+  Roarr as log,
+} from 'roarr';
 
 log('foo');
 
@@ -315,7 +317,9 @@ Creates a child logger appending the provided `context` object to the previous l
 Example:
 
 ```js
-import log from 'roarr';
+import {
+  Roarr as log,
+} from 'roarr';
 
 const childLog = log.child({
   foo: 'bar'
@@ -344,7 +348,9 @@ Creates a child logger where every message is intercepted.
 Example:
 
 ```js
-import log from 'roarr';
+import {
+  Roarr as log,
+} from 'roarr';
 
 const childLog = log.child((message) => {
   return {
@@ -369,7 +375,9 @@ Returns the current context.
 Example:
 
 ```js
-import log from 'roarr';
+import {
+  Roarr as log,
+} from 'roarr';
 
 const childLogger = log.child({
   foo: 'bar'
@@ -391,7 +399,9 @@ childLogger.getContext();
 Convenience methods for logging a message with `logLevel` context property value set to a numeric value representing the [log level](#log-levels), e.g.
 
 ```js
-import log from 'roarr';
+import {
+  Roarr as log,
+} from 'roarr';
 
 log.trace('foo');
 log.debug('foo');
@@ -419,7 +429,9 @@ Produces output:
 Roarr logger supports middlewares implemented as [`child`](#child) message translate functions, e.g.
 
 ```js
-import log from 'roarr';
+import {
+  Roarr as log,
+} from 'roarr';
 import createSerializeErrorMiddleware from '@roarr/middleware-serialize-error';
 
 const childLog = log.child(createSerializeErrorMiddleware());
@@ -522,7 +534,9 @@ I recommend to create a file `Logger.js` in the project directory. Inside this f
  * @file Example contents of a Logger.js file.
  */
 
-import log from 'roarr';
+import {
+  Roarr as log,
+} from 'roarr';
 
 const Logger = log.child({
   // .foo property is going to appear only in the logs that are created using
@@ -547,7 +561,9 @@ If you want to include an instance of [`Error`](https://developer.mozilla.org/en
 The least-error prone way to do this is to use an existing library, e.g. [`serialize-error`](https://www.npmjs.com/package/serialize-error).
 
 ```js
-import log from 'roarr';
+import {
+  Roarr as log,
+} from 'roarr';
 import serializeError from 'serialize-error';
 
 // [..]
