@@ -268,7 +268,9 @@ log.adopt(() => {
     log('bar 0');
     log.adopt(() => {
       log('baz 0');
-      log('baz 1');
+      setTimeout(() => {
+        log('baz 1');
+      }, 10);
     });
     log('bar 1');
   });
@@ -280,8 +282,10 @@ log.adopt(() => {
 {"context":{},"message":"bar 0","sequence":"0.1.0","time":1506776210000,"version":"2.0.0"}
 {"context":{},"message":"baz 0","sequence":"0.1.1.0","time":1506776210000,"version":"2.0.0"}
 {"context":{},"message":"bar 1","sequence":"0.1.2","time":1506776210000,"version":"2.0.0"}
-{"context":{},"message":"baz 1","sequence":"0.1.1.1","time":1506776210000,"version":"2.0.0"}
+{"context":{},"message":"baz 1","sequence":"0.1.1.1","time":1506776210010,"version":"2.0.0"}
 ```
+
+Notice that even though logs `baz 0` and `baz 1` were produced at different times, you can tell that one was produced after another by looking at their sequence values `0.1.1.0` and `0.1.1.1`.
 
 #### Requirements
 
