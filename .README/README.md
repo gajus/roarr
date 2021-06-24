@@ -227,11 +227,11 @@ Refer to the [Usage documentation](#usage) for common usage examples.
 When using `adopt`, context properties will be added to all _all_ Roarr messages within the same asynchronous context, e.g.
 
 ```js
-await log.adopt(
-  async () => {
+log.adopt(
+  () => {
     log('foo 0');
 
-    await log.adopt(
+    log.adopt(
       () => {
         log('foo 1');
       },
@@ -248,7 +248,7 @@ await log.adopt(
 
 ```json
 {"context":{"bar":"bar 0"},"message":"foo 0","sequence":"0","time":1506776210000,"version":"2.0.0"}
-{"context":{"bar":"bar 0","baz": "baz 1"},"message":"foo 1","sequence":"0.0","time":1506776210000,"version":"2.0.0"}
+{"context":{"bar":"bar 0","baz":"baz 1"},"message":"foo 1","sequence":"0.0","time":1506776210000,"version":"2.0.0"}
 ```
 
 #### `sequence` value
