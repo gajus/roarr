@@ -30,16 +30,21 @@ export default (currentState: any): RoarrGlobalState => {
   };
 
   if (environmentIsNode && (currentIsLatestVersion || !newState.write)) {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
-    const AsyncLocalStorage = require('async_hooks').AsyncLocalStorage;
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+      const AsyncLocalStorage = require('async_hooks').AsyncLocalStorage;
 
-    const asyncLocalStorage = new AsyncLocalStorage();
+      const asyncLocalStorage = new AsyncLocalStorage();
 
-    newState = {
-      ...newState,
-      ...createNodeWriter(),
-      asyncLocalStorage,
-    };
+      newState = {
+        ...newState,
+        ...createNodeWriter(),
+        asyncLocalStorage,
+      };
+    } catch {
+      // eslint-disable-next-line no-console
+      console.warn('async_hooks are unavailable; Roarr.child will not function as expected');
+    }
   }
 
   return newState;
