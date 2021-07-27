@@ -35,6 +35,41 @@ const createLoggerWithHistory = () => {
   return log;
 };
 
+serial('warns if async_hooks are unavailable', async (t) => {
+  const firstLog = createLoggerWithHistory();
+
+  const log = firstLog.child({
+    // Ensure that we are not adding context to the internal warning.
+    foo: 'bar',
+  });
+
+  globalThis.ROARR.asyncLocalStorage = null;
+
+  await log.adopt(
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    () => {},
+  );
+
+  // Ensure that we log only once.
+  await log.adopt(
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    () => {},
+  );
+
+  t.deepEqual(firstLog.messages, [
+    {
+      context: {
+        logLevel: 40,
+        package: 'roarr',
+      },
+      message: 'async_hooks are unavailable; Roarr.child will not function as expected',
+      sequence: '0',
+      time,
+      version,
+    },
+  ]);
+});
+
 serial('inherits context from async local scope', async (t) => {
   const log = createLoggerWithHistory();
 

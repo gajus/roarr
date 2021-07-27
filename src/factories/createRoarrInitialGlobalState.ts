@@ -41,10 +41,8 @@ export default (currentState: any): RoarrGlobalState => {
         ...createNodeWriter(),
         asyncLocalStorage,
       };
-    } catch {
-      // eslint-disable-next-line no-console
-      console.warn('async_hooks are unavailable; Roarr.child will not function as expected');
-    }
+    // eslint-disable-next-line no-empty
+    } catch {}
   }
 
   return newState;

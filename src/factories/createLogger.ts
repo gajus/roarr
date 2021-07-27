@@ -17,6 +17,8 @@ import type {
   TranslateMessageFunction,
 } from '../types';
 
+let loggedWarning = false;
+
 const globalThis = createGlobalThis();
 
 const getAsyncLocalContext = () => {
@@ -167,6 +169,21 @@ const createLogger = (
     const asyncLocalStorage = globalThis.ROARR.asyncLocalStorage;
 
     if (!asyncLocalStorage) {
+      if (loggedWarning === false) {
+        loggedWarning = true;
+
+        onMessage({
+          context: {
+            logLevel: logLevels.warn,
+            package: 'roarr',
+          },
+          message: 'async_hooks are unavailable; Roarr.child will not function as expected',
+          sequence: getSequence(),
+          time: Date.now(),
+          version: ROARR_LOG_FORMAT_VERSION,
+        });
+      }
+
       return routine();
     }
 
