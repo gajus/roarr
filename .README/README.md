@@ -424,6 +424,18 @@ Produces output:
 
 ```
 
+### `onMessage`
+
+Optionally, replace the global message handler:
+
+```ts
+import { Roarr } from 'roarr';
+
+Roarr.onMessage = (message) => {
+  console.log(JSON.stringify(message, null, 2));
+}
+```
+
 ## Middlewares
 
 Roarr logger supports middlewares implemented as [`child`](#child) message translate functions, e.g.

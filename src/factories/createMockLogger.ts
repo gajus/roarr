@@ -16,6 +16,7 @@ const createMockLogger = (
     return undefined;
   };
 
+  log.onMessage = onMessage;
   log.adopt = async (routine) => {
     return routine();
   };

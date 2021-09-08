@@ -126,7 +126,7 @@ const createLogger = (
       );
     }
 
-    onMessage({
+    log.onMessage({
       context,
       message,
       sequence,
@@ -134,6 +134,8 @@ const createLogger = (
       version: ROARR_LOG_FORMAT_VERSION,
     });
   };
+
+  log.onMessage = onMessage;
 
   log.child = (context: MessageContext | TranslateMessageFunction) => {
     if (typeof context === 'function') {
@@ -145,13 +147,13 @@ const createLogger = (
             throw new Error('Child middleware function must return a message object.');
           }
 
-          onMessage(nextMessage);
+          log.onMessage(nextMessage);
         },
         parentContext,
       );
     }
 
-    return createLogger(onMessage, {
+    return createLogger(log.onMessage, {
       ...getAsyncLocalContext(),
       ...parentContext,
       ...context,
@@ -172,7 +174,7 @@ const createLogger = (
       if (loggedWarning === false) {
         loggedWarning = true;
 
-        onMessage({
+        log.onMessage({
           context: {
             logLevel: logLevels.warn,
             package: 'roarr',

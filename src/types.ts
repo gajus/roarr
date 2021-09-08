@@ -63,6 +63,7 @@ export type Logger = LogMethod & {
   info: LogMethod,
   trace: LogMethod,
   warn: LogMethod,
+  onMessage: MessageEventHandler,
 };
 
 export type MessageEventHandler = (message: Message) => void;

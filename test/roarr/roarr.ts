@@ -139,6 +139,33 @@ test('creates message with a context', (t) => {
   ]);
 });
 
+test('can change message handler', (t) => {
+  const log = createLoggerWithHistory();
+
+  let msg: any = undefined;
+  const newHandler = (arg) => msg = { ...arg, time };
+
+  t.assert(typeof log.onMessage === 'function');
+  t.assert(log.onMessage !== newHandler);
+  log.onMessage = newHandler;
+
+  log({
+    foo: 'bar'
+  }, 'msg');
+
+  t.deepEqual(msg, {
+    context: {
+      foo: 'bar',
+    },
+    message: 'msg',
+    sequence: '0',
+    time,
+    version,
+  });
+
+  t.assert(log.messages.length === 0);
+});
+
 test('formats message using sprintf (with context)', (t) => {
   const log = createLoggerWithHistory();
 

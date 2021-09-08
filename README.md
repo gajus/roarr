@@ -26,6 +26,7 @@ JSON logger for Node.js and browser.
         * [`warn`](#roarr-api-warn)
         * [`error`](#roarr-api-error)
         * [`fatal`](#roarr-api-fatal)
+        * [`onMessage`](#roarr-api-onmessage)
     * [Middlewares](#roarr-middlewares)
     * [CLI program](#roarr-cli-program)
     * [Transports](#roarr-transports)
@@ -479,6 +480,19 @@ Produces output:
 {"context":{"logLevel":50},"message":"foo","sequence":"4","time":1506776210000,"version":"2.0.0"}
 {"context":{"logLevel":60},"message":"foo","sequence":"5","time":1506776210000,"version":"2.0.0"}
 
+```
+
+<a name="roarr-api-onmessage"></a>
+### <code>onMessage</code>
+
+Optionally, replace the global message handler:
+
+```ts
+import { Roarr } from 'roarr';
+
+Roarr.onMessage = (message) => {
+  console.log(JSON.stringify(message, null, 2));
+}
 ```
 
 <a name="roarr-middlewares"></a>
