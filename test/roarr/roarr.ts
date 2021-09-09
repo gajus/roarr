@@ -142,15 +142,20 @@ test('creates message with a context', (t) => {
 test('can change message handler', (t) => {
   const log = createLoggerWithHistory();
 
-  let msg: any = undefined;
-  const newHandler = (arg) => msg = { ...arg, time };
+  let msg: any;
+  const newHandler = (arg) => {
+    msg = {
+      ...arg,
+      time,
+    };
+  };
 
   t.assert(typeof log.onMessage === 'function');
   t.assert(log.onMessage !== newHandler);
   log.onMessage = newHandler;
 
   log({
-    foo: 'bar'
+    foo: 'bar',
   }, 'msg');
 
   t.deepEqual(msg, {
