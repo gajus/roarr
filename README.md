@@ -35,12 +35,12 @@ JSON logger for Node.js and browser.
         * [Using Roarr in an application](#roarr-conventions-using-roarr-in-an-application)
     * [Recipes](#roarr-recipes)
         * [Logging errors](#roarr-recipes-logging-errors)
-    * [Integrations](#roarr-integrations)
     * [Anti-patterns](#roarr-anti-patterns)
         * [Overriding `globalThis.ROARR.write` in Node.js](#roarr-anti-patterns-overriding-globalthis-roarr-write-in-node-js)
-        * [Using with Sentry](#roarr-anti-patterns-using-with-sentry)
-        * [Using with Elasticsearch](#roarr-anti-patterns-using-with-elasticsearch)
-        * [Using with Scalyr](#roarr-anti-patterns-using-with-scalyr)
+    * [Integrations](#roarr-integrations)
+        * [Using with Sentry](#roarr-integrations-using-with-sentry)
+        * [Using with Elasticsearch](#roarr-integrations-using-with-elasticsearch)
+        * [Using with Scalyr](#roarr-integrations-using-with-scalyr)
     * [Documenting use of Roarr](#roarr-documenting-use-of-roarr)
     * [Developing](#roarr-developing)
 
@@ -653,9 +653,6 @@ send((error, result) => {
 
 Without using serialisation, your errors will be logged without the error name and stack trace.
 
-<a name="roarr-integrations"></a>
-## Integrations
-
 <a name="roarr-anti-patterns"></a>
 ## Anti-patterns
 
@@ -666,12 +663,15 @@ Overriding `globalThis.ROARR.write` in Node.js works the same way as it down in 
 
 If you have a use case that asks for overriding `ROARR.write` in Node.js, then [raise an issue](https://github.com/gajus/roarr/issues) to discuss your requirements.
 
-<a name="roarr-anti-patterns-using-with-sentry"></a>
+<a name="roarr-integrations"></a>
+## Integrations
+
+<a name="roarr-integrations-using-with-sentry"></a>
 ### Using with Sentry
 
 https://github.com/gajus/roarr-sentry
 
-<a name="roarr-anti-patterns-using-with-elasticsearch"></a>
+<a name="roarr-integrations-using-with-elasticsearch"></a>
 ### Using with Elasticsearch
 
 If you are using [Elasticsearch](https://www.elastic.co/products/elasticsearch), you will want to create an [index template](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html).
@@ -725,7 +725,7 @@ The following serves as the ground work for the index template. It includes the 
 
 ```
 
-<a name="roarr-anti-patterns-using-with-scalyr"></a>
+<a name="roarr-integrations-using-with-scalyr"></a>
 ### Using with Scalyr
 
 If you are using [Scalyr](https://www.scalyr.com/), you will want to create a custom parser `RoarrLogger`:
