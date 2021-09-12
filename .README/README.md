@@ -586,6 +586,14 @@ Without using serialisation, your errors will be logged without the error name a
 
 ## Integrations
 
+## Anti-patterns
+
+### Overriding `globalThis.ROARR.write` in Node.js
+
+Overriding `globalThis.ROARR.write` in Node.js works the same way as it down in [browser](#browser). However, overriding `ROARR.write` in Node.js is considered an anti-pattern because it defeats some of the major benefits outlined in [Motivation](https://github.com/gajus/roarr#motivation) section of the documentation. Namely, by overriding `ROARR.write` in Node.js you are adding blocking events to the event cycle and coupling application logic with log handling logic.
+
+If you have a use case that asks for overriding `ROARR.write` in Node.js, then [raise an issue](https://github.com/gajus/roarr/issues) to discuss your requirements.
+
 ### Using with Sentry
 
 https://github.com/gajus/roarr-sentry
