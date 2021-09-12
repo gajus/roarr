@@ -1,6 +1,4 @@
-import test, {
-  beforeEach,
-} from 'ava';
+import test from 'ava';
 import sinon from 'sinon';
 import {
   Roarr,
@@ -8,8 +6,6 @@ import {
 } from '../../src/Roarr';
 
 test('ROARR.write overrides message handler', (t) => {
-  const messages = [];
-
   const stub = sinon.stub(ROARR, 'write');
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
