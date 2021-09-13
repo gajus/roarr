@@ -11,6 +11,7 @@ node_modules
 !.gitignore
 !.husky
 !.ncurc.js
+!.npmrc
 !.npmignore
 !.nycrc
 !.README
