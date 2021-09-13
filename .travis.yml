@@ -6,7 +6,6 @@ env:
 node_js:
   - 12
 script:
-  - npm ls --depth=2
   - npm run lint
   - nyc --silent npm run test
   - nyc report --reporter=text-lcov | coveralls
