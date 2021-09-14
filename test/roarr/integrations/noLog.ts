@@ -1,13 +1,20 @@
 /* eslint-disable node/no-process-env */
+/* eslint-disable ava/use-test */
 
-import test, {
-  afterEach,
-  beforeEach,
+import type {
+  TestInterface,
 } from 'ava';
+import anyTest from 'ava';
 import * as sinon from 'sinon';
 
-beforeEach(async (t) => {
-  process.env.ROARR_LOG = 0;
+const test = anyTest as TestInterface<{
+  ROARR: any,
+  Roarr: any,
+  write: sinon.SinonStubbedMember<(message: string) => void>,
+}>;
+
+test.beforeEach(async (t) => {
+  process.env.ROARR_LOG = '0';
 
   const {
     Roarr,
