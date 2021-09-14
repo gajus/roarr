@@ -5,6 +5,14 @@ env:
   - HUSKY_SKIP_INSTALL=true
 node_js:
   - 12
+jobs:
+  include:
+    - name: 'ROARR_LOG=0'
+      env:
+        - ROARR_LOG=0
+    - name: 'ROARR_LOG=1'
+      env:
+        - ROARR_LOG=1
 script:
   - npm run lint
   - nyc --silent npm run test
