@@ -6,9 +6,11 @@ import {
 import type {
   RoarrGlobalState,
 } from '../types';
-import createNodeWriter from './createNodeWriter';
+import {
+  createNodeWriter,
+} from './createNodeWriter';
 
-export default (currentState: any): RoarrGlobalState => {
+export const createRoarrInitialGlobalState = (currentState: any): RoarrGlobalState => {
   const versions = (currentState.versions || []).concat();
 
   if (versions.length > 1) {
@@ -41,7 +43,7 @@ export default (currentState: any): RoarrGlobalState => {
         ...createNodeWriter(),
         asyncLocalStorage,
       };
-    // eslint-disable-next-line no-empty
+      // eslint-disable-next-line no-empty
     } catch {}
   }
 

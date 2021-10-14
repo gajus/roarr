@@ -10,7 +10,7 @@ const createBlockingWriter = (stream: NodeJS.WritableStream): Writer => {
   };
 };
 
-export default (): Writer => {
+export const createNodeWriter = (): Writer => {
   // eslint-disable-next-line node/no-process-env
   const targetStream = (process.env.ROARR_STREAM ?? 'STDOUT').toUpperCase();
 

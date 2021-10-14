@@ -1,9 +1,9 @@
 export {
-  default as createLogger,
+  createLogger,
 } from './createLogger';
 export {
-  default as createMockLogger,
+  createMockLogger,
 } from './createMockLogger';
 export {
-  default as createRoarrInitialGlobalState,
+  createRoarrInitialGlobalState,
 } from './createRoarrInitialGlobalState';

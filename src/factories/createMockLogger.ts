@@ -8,7 +8,7 @@ import type {
   TranslateMessageFunction,
 } from '../types';
 
-const createMockLogger = (
+export const createMockLogger = (
   onMessage: MessageEventHandler,
   parentContext?: MessageContext,
 ): Logger => {
@@ -66,5 +66,3 @@ const createMockLogger = (
 
   return log;
 };
-
-export default createMockLogger;

@@ -2,8 +2,12 @@ import test, {
   beforeEach,
 } from 'ava';
 import createGlobalThis from 'globalthis';
-import createLogger from '../../src/factories/createLogger';
-import createRoarrInitialGlobalState from '../../src/factories/createRoarrInitialGlobalState';
+import {
+  createLogger,
+} from '../../src/factories/createLogger';
+import {
+  createRoarrInitialGlobalState,
+} from '../../src/factories/createRoarrInitialGlobalState';
 
 const time = -1;
 const version = '2.0.0';

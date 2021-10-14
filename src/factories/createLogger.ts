@@ -49,7 +49,7 @@ const getSequence = () => {
 
 const defaultContext = {};
 
-const createLogger = (
+export const createLogger = (
   onMessage: MessageEventHandler,
   parentContext?: MessageContext,
 ): Logger => {
@@ -250,5 +250,3 @@ const createLogger = (
 
   return log;
 };
-
-export default createLogger;

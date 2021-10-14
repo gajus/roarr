@@ -2,7 +2,9 @@ import test from 'ava';
 import {
   ROARR_VERSION,
 } from '../../src/config';
-import createRoarrInitialGlobalState from '../../src/factories/createRoarrInitialGlobalState';
+import {
+  createRoarrInitialGlobalState,
+} from '../../src/factories/createRoarrInitialGlobalState';
 
 test('creates new state', (t) => {
   const state = createRoarrInitialGlobalState({});
