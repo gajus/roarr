@@ -1,4 +1,3 @@
-import environmentIsNode from 'detect-node';
 import compareSemver from 'semver-compare';
 import {
   ROARR_VERSION,
@@ -31,7 +30,7 @@ export const createRoarrInitialGlobalState = (currentState: any): RoarrGlobalSta
     versions,
   };
 
-  if (environmentIsNode && (currentIsLatestVersion || !newState.write)) {
+  if (currentIsLatestVersion || !newState.write) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
       const AsyncLocalStorage = require('async_hooks').AsyncLocalStorage;

@@ -5,9 +5,13 @@ import fastJson from 'fast-json-stringify';
 import createGlobalThis from 'globalthis';
 import {
   createLogger,
+} from './factories/createLogger';
+import {
   createMockLogger,
+} from './factories/createMockLogger';
+import {
   createRoarrInitialGlobalState,
-} from './factories';
+} from './factories/createRoarrInitialGlobalState';
 import type {
   RoarrGlobalState,
 } from './types';

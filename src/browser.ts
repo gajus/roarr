@@ -1,19 +1,19 @@
 import createGlobalThis from 'globalthis';
 import {
   createLogger,
-  createRoarrInitialGlobalState,
-} from './factories';
+} from './factories/createLogger';
+import {
+  createRoarrInitialGlobalStateBrowser,
+} from './factories/createRoarrInitialGlobalStateBrowser';
 import type {
   RoarrGlobalState,
 } from './types';
 
 const globalThis = createGlobalThis();
 
-const ROARR = globalThis.ROARR = createRoarrInitialGlobalState(globalThis.ROARR as RoarrGlobalState || {});
+const ROARR = globalThis.ROARR = createRoarrInitialGlobalStateBrowser(globalThis.ROARR as RoarrGlobalState || {});
 
-const logFactory = createLogger;
-
-const Roarr = logFactory((message) => {
+const Roarr = createLogger((message) => {
   if (ROARR.write) {
     // Stringify message as soon as it is received to prevent
     // properties of the context from being modified by reference.
