@@ -64,8 +64,9 @@ const Roarr = logFactory((message) => {
 export type {
   Logger,
   Message,
-  TranslateMessageFunction,
   MessageEventHandler,
+  RoarrGlobalState,
+  TranslateMessageFunction,
 } from './types';
 
 export {
