@@ -1,8 +1,8 @@
 import type {
-  Writer,
+  LogWriter,
 } from '../types';
 
-const createBlockingWriter = (stream: NodeJS.WritableStream): Writer => {
+const createBlockingWriter = (stream: NodeJS.WritableStream): LogWriter => {
   return {
     write: (message: string) => {
       stream.write(message + '\n');
@@ -10,7 +10,7 @@ const createBlockingWriter = (stream: NodeJS.WritableStream): Writer => {
   };
 };
 
-export const createNodeWriter = (): Writer => {
+export const createNodeWriter = (): LogWriter => {
   // eslint-disable-next-line node/no-process-env
   const targetStream = (process.env.ROARR_STREAM ?? 'STDOUT').toUpperCase();
 
