@@ -66,6 +66,7 @@ const Roarr = logFactory((message) => {
 
 export type {
   Logger,
+  LogWriter,
   Message,
   MessageEventHandler,
   RoarrGlobalState,
