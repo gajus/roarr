@@ -1,5 +1,8 @@
 import createGlobalThis from 'globalthis';
 import {
+  logLevels,
+} from './constants';
+import {
   createLogger,
 } from './factories/createLogger';
 import {
@@ -32,6 +35,7 @@ export type {
 } from './types';
 
 export {
+  logLevels,
   Roarr,
   ROARR,
 };
