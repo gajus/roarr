@@ -2,16 +2,15 @@ import type {
   AsyncLocalStorage,
 } from 'async_hooks';
 
-export type LogWriter = {
-  write: (message: string) => void,
-};
+export type LogWriter = (message: string) => void;
 
 export type MessageContext = any;
 
-export type RoarrGlobalState = LogWriter & {
+export type RoarrGlobalState = {
   asyncLocalStorage?: AsyncLocalStorage<MessageContext>,
   sequence: number,
   versions: readonly string[],
+  write: LogWriter,
 };
 
 export type SprintfArgument = boolean | number | string | null;

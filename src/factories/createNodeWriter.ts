@@ -3,10 +3,8 @@ import type {
 } from '../types';
 
 const createBlockingWriter = (stream: NodeJS.WritableStream): LogWriter => {
-  return {
-    write: (message: string) => {
-      stream.write(message + '\n');
-    },
+  return (message: string) => {
+    stream.write(message + '\n');
   };
 };
 

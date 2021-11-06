@@ -39,7 +39,9 @@ export const createRoarrInitialGlobalState = (currentState: any): RoarrGlobalSta
 
       newState = {
         ...newState,
-        ...createNodeWriter(),
+        ...{
+          write: createNodeWriter(),
+        },
         asyncLocalStorage,
       };
       // eslint-disable-next-line no-empty
