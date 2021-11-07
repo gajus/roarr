@@ -118,6 +118,8 @@ ROARR.write = (message) => {
 
 If your platform does not support [`globalThis`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis), use [`globalthis` polyfill](https://www.npmjs.com/package/globalthis).
 
+You may also use [`@roarr/browser-log-writer`](https://github.com/gajus/roarr-browser-log-writer) that implements and opinionated browser logger with [Liqe](https://github.com/gajus/liqe) query support for filtering logs.
+
 ### Filtering logs
 
 #### Node.js
