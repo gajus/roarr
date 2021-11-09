@@ -29,7 +29,7 @@ const stringify = fastJson({
       type: 'string',
     },
     sequence: {
-      type: 'integer',
+      type: 'string',
     },
     time: {
       type: 'integer',
