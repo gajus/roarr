@@ -53,7 +53,7 @@ export type LogMethod = {
 };
 
 export type Logger = LogMethod & {
-  adopt: <T>(routine: () => Promise<T>, context: MessageContext) => Promise<T>,
+  adopt: <T>(routine: () => T, context?: MessageContext) => Promise<T>,
   child: (context: MessageContext | TranslateMessageFunction) => Logger,
   debug: LogMethod,
   error: LogMethod,
