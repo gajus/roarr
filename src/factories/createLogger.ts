@@ -79,7 +79,7 @@ export const createLogger = (
           ...parentContext,
         };
       } else {
-        context = parentContext || defaultContext;
+        context = parentContext ?? defaultContext;
       }
     } else {
       context = {
@@ -161,7 +161,7 @@ export const createLogger = (
   log.getContext = () => {
     return {
       ...getAsyncLocalContext(),
-      ...parentContext || defaultContext,
+      ...parentContext ?? defaultContext,
     };
   };
 

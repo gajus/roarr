@@ -2,9 +2,13 @@ import type {
   AsyncLocalStorage,
 } from 'async_hooks';
 
+export type JsonObject = { [key: string]: JsonValue, };
+
+export type JsonValue = JsonObject | JsonValue[] | boolean | number | string | null;
+
 export type LogWriter = (message: string) => void;
 
-export type MessageContext = any;
+export type MessageContext = JsonObject;
 
 export type RoarrGlobalState = {
   asyncLocalStorage?: AsyncLocalStorage<MessageContext>,
