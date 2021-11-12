@@ -2,7 +2,7 @@ import type {
   AsyncLocalStorage,
 } from 'async_hooks';
 
-export type JsonObject = { [key: string]: JsonValue, };
+export type JsonObject = { [Key in string]?: JsonValue };
 
 export type JsonValue = JsonObject | JsonValue[] | boolean | number | string | null;
 
