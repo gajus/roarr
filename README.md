@@ -26,6 +26,8 @@ JSON logger for Node.js and browser.
         * [`warn`](#roarr-api-warn)
         * [`error`](#roarr-api-error)
         * [`fatal`](#roarr-api-fatal)
+    * [Utilities](#roarr-utilities)
+        * [`getLogLevelName`](#roarr-utilities-getloglevelname)
     * [Middlewares](#roarr-middlewares)
     * [CLI program](#roarr-cli-program)
     * [Transports](#roarr-transports)
@@ -485,6 +487,28 @@ Produces output:
 
 ```
 
+<a name="roarr-utilities"></a>
+## Utilities
+
+<a name="roarr-utilities-getloglevelname"></a>
+### <code>getLogLevelName</code>
+
+Provides log level name (trace, debug, ...) for a numeric log level (10, 20, ...).
+
+If numeric log level is between two ranges, then resolves to the one with greater severity (e.g. 5 => trace).
+
+If numeric log level is greater than the maximum supported, then falls back to the greatest severity (fatal).
+
+```js
+import {
+  getLogLevelName,
+} from 'roarr';
+import type {
+  LogLevelName,
+} from 'roarr';
+
+getLogLevelName(numericLogLevel: number): LogLevelName;
+```
 <a name="roarr-middlewares"></a>
 ## Middlewares
 

@@ -8,6 +8,9 @@ import {
 import {
   createRoarrInitialGlobalStateBrowser,
 } from './factories/createRoarrInitialGlobalStateBrowser';
+import {
+  getLogLevelName,
+} from './getLogLevelName';
 import type {
   RoarrGlobalState,
 } from './types';
@@ -28,6 +31,7 @@ const Roarr = createLogger((message) => {
 
 export type {
   Logger,
+  LogLevelName,
   Message,
   MessageEventHandler,
   RoarrGlobalState,
@@ -35,6 +39,7 @@ export type {
 } from './types';
 
 export {
+  getLogLevelName,
   logLevels,
   Roarr,
   ROARR,

@@ -15,6 +15,9 @@ import {
 import {
   createRoarrInitialGlobalState,
 } from './factories/createRoarrInitialGlobalState';
+import {
+  getLogLevelName,
+} from './getLogLevelName';
 import type {
   RoarrGlobalState,
 } from './types';
@@ -66,6 +69,7 @@ const Roarr = logFactory((message) => {
 
 export type {
   Logger,
+  LogLevelName,
   LogWriter,
   Message,
   MessageEventHandler,
@@ -74,6 +78,7 @@ export type {
 } from './types';
 
 export {
+  getLogLevelName,
   logLevels,
   Roarr,
   ROARR,

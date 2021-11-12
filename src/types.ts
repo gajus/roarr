@@ -69,3 +69,6 @@ export type Logger = LogMethod & {
 };
 
 export type MessageEventHandler = (message: Message) => void;
+
+// eslint-disable-next-line @typescript-eslint/sort-type-union-intersection-members
+export type LogLevelName = 'trace' | 'debug' | 'info' | 'error' | 'fatal' | 'warn';
