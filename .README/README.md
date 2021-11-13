@@ -21,7 +21,7 @@ Then there is [pino](https://github.com/pinojs/pino). pino is fast JSON logger, 
 I needed a logger that:
 
 * Does not block the event cycle (=fast).
-* Does not require initialisation.
+* Does not require initialization.
 * Produces structured data.
 * [Decouples transports](#transports).
 * Has a [CLI program](#cli-program).
@@ -452,7 +452,7 @@ childLog.debug({error}, 'bar');
 {"context":{"logLevel":20,"error":{"name":"Error","message":"foo","stack":"[REDACTED]"}},"message":"bar","sequence":"1","time":1506776210000,"version":"2.0.0"}
 ```
 
-Roarr middlwares enable translation of every bit of information that is used to construct a log message.
+Roarr middlewares enable translation of every bit of information that is used to construct a log message.
 
 The following are the official middlewares:
 
@@ -476,7 +476,7 @@ Explore all CLI commands and options using `roarr --help` or refer to [`@roarr/c
 
 ## Transports
 
-A transport in most logging libraries is something that runs in-process to perform some operation with the finalised log line. For example, a transport might send the log line to a standard syslog server after processing the log line and reformatting it.
+A transport in most logging libraries is something that runs in-process to perform some operation with the finalized log line. For example, a transport might send the log line to a standard syslog server after processing the log line and reformatting it.
 
 Roarr does not support in-process transports.
 
@@ -582,7 +582,7 @@ send((error, result) => {
 });
 ```
 
-Without using serialisation, your errors will be logged without the error name and stack trace.
+Without using serialization, your errors will be logged without the error name and stack trace.
 
 ## Anti-patterns
 
@@ -604,7 +604,7 @@ If you are using [Elasticsearch](https://www.elastic.co/products/elasticsearch),
 
 The following serves as the ground work for the index template. It includes the main Roarr log message properties (context, message, time) and the context properties suggested in the [conventions](#conventions).
 
-```tson
+```json
 {
   "mappings": {
     "log_message": {
