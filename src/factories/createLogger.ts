@@ -14,7 +14,6 @@ import type {
   Logger,
   MessageContext,
   MessageEventHandler,
-  TranslateMessageFunction,
 } from '../types';
 
 let loggedWarning = false;
@@ -135,7 +134,7 @@ export const createLogger = (
     });
   };
 
-  log.child = (context: MessageContext | TranslateMessageFunction) => {
+  log.child = (context) => {
     if (typeof context === 'function') {
       return createLogger(
         (message) => {

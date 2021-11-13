@@ -5,7 +5,6 @@ import type {
   Logger,
   MessageContext,
   MessageEventHandler,
-  TranslateMessageFunction,
 } from '../types';
 
 export const createMockLogger = (
@@ -20,7 +19,7 @@ export const createMockLogger = (
     return routine();
   };
 
-  log.child = (context: MessageContext | TranslateMessageFunction): Logger => {
+  log.child = (context) => {
     return createMockLogger(onMessage, parentContext);
   };
 

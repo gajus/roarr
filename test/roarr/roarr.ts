@@ -8,6 +8,10 @@ import {
 import {
   createRoarrInitialGlobalState,
 } from '../../src/factories/createRoarrInitialGlobalState';
+import type {
+  Message,
+  Logger,
+} from '../../src/types';
 
 const time = -1;
 const version = '2.0.0';
@@ -18,7 +22,7 @@ beforeEach(() => {
   globalThis.ROARR = createRoarrInitialGlobalState({});
 });
 
-const createLoggerWithHistory = () => {
+const createLoggerWithHistory = (): Logger & {messages: Message[], } => {
   const messages: any = [];
 
   const log: any = createLogger((message) => {
@@ -200,7 +204,7 @@ test('prepends context to the message context', (t) => {
   ]);
 });
 
-test('prepends context to the message context (is overriden)', (t) => {
+test('prepends context to the message context (is overridden)', (t) => {
   const log = createLoggerWithHistory();
 
   log.child({foo: 'bar 0'})({foo: 'bar 1'}, 'quux');
@@ -277,12 +281,101 @@ test('translates child message', (t) => {
   ]);
 });
 
+test('serializes context using a transformer', (t) => {
+  const log = createLoggerWithHistory();
+
+  const log1 = log.child<{error1: Error, }>((message) => {
+    if (!message.context.error1) {
+      return message;
+    }
+
+    return {
+      ...message,
+      context: {
+        ...message.context,
+        error1: 'log1 error',
+      },
+    };
+  });
+
+  log1.error({
+    error1: new Error('foo'),
+  }, 'log1');
+
+  // @ts-expect-error error2 is not allowed
+  log1.error({
+    error2: new Error('foo'),
+  }, 'log1');
+
+  const log2 = log1.child<{error2: Error, }>((message) => {
+    return {
+      ...message,
+      context: {
+        ...message.context,
+        error2: 'log2 error',
+      },
+    };
+  });
+
+  log2.error({
+    error1: new Error('foo'),
+    error2: new Error('foo'),
+  }, 'log2');
+
+  // @ts-expect-error error2 is not allowed
+  log2.error({
+    error3: new Error('foo'),
+  }, 'log2');
+
+  t.like(log.messages[0], {
+    context: {
+      error1: 'log1 error',
+    },
+    message: 'log1',
+  });
+
+  t.like(log.messages[1], {
+    context: {
+      error2: new Error('foo'),
+    },
+    message: 'log1',
+  });
+
+  t.like(log.messages[2], {
+    context: {
+      error1: 'log1 error',
+      error2: 'log2 error',
+    },
+    message: 'log2',
+  });
+
+  t.like(log.messages[3], {
+    context: {
+      error3: new Error('foo'),
+    },
+    message: 'log2',
+  });
+});
+
+test('does not allow to extend context without a transformer', (t) => {
+  const log = createLoggerWithHistory();
+
+  // @ts-expect-error cannot type child without a translator
+  log.child<{foo: string, }>({});
+
+  log.child({});
+
+  t.true(true);
+});
+
 test('throws an error if child does not return an object', (t) => {
   const log = createLoggerWithHistory();
 
   t.throws(() => {
     log
-      .child((message) => {
+
+      // @ts-expect-error result must be an object
+      .child(() => {
         return '';
       })('foo');
   }, {
