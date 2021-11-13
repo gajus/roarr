@@ -286,10 +286,6 @@ Notice that even though logs `baz 0` and `baz 1` were produced at different time
 
 ### `child`
 
-```ts
-(context: TranslateMessageFunction | MessageContext) => Logger,
-```
-
 The `child` function has two signatures:
 
 1. Accepts an object.
@@ -298,10 +294,10 @@ The `child` function has two signatures:
 #### Object parameter
 
 ```ts
-(context: MessageContext) => Logger;
+(context: MessageContext): Logger,
 ```
 
-Creates a child logger appending the provided `context` object to the previous logger context.
+Creates a child logger that appends child `context` to every subsequent message.
 
 Example:
 
@@ -310,12 +306,13 @@ import {
   Roarr as log,
 } from 'roarr';
 
-const childLog = log.child({
+const barLog = log.child({
   foo: 'bar'
 });
 
 log.debug('foo 1');
-childLog.debug('foo 2');
+
+barLog.debug('foo 2');
 ```
 
 ```json
@@ -323,15 +320,13 @@ childLog.debug('foo 2');
 {"context":{"foo":"bar","logLevel":20},"message":"foo 2","sequence":"1","time":1506776210000,"version":"2.0.0"}
 ```
 
-Refer to [middlewares](#middlewares) documentation for use case examples.
-
 #### Function parameter
 
 ```ts
-(translateMessage: TranslateMessageFunction) => Logger;
+<T>(context: TranslateMessageFunction<MessageContext<T>>): Logger<T>
 ```
 
-Creates a child logger where every message is intercepted.
+Creates a child logger that translates every subsequent message.
 
 Example:
 
@@ -340,21 +335,33 @@ import {
   Roarr as log,
 } from 'roarr';
 
-const childLog = log.child((message) => {
+const barLog = log.child<{error: Error}>((message) => {
   return {
     ...message,
-    message: message.message.replace('foo', 'bar'),
-  }
+    context: {
+      ...message.context,
+      ...message.context.error && {
+        error: {
+          message: message.context.error.message,
+        },
+      },
+    },
+  };
 });
 
 log.debug('foo 1');
-childLog.debug('foo 2');
+
+barLog.debug({
+  error: new Error('bar'),
+}, 'foo 2');
 ```
 
 ```json
 {"context":{"logLevel":20},"message":"foo 1","sequence":"0","time":1506776210000,"version":"2.0.0"}
-{"context":{"logLevel":20},"message":"bar 2","sequence":"1","time":1506776210000,"version":"2.0.0"}
+{"context":{"logLevel":20,"error":{"message":"bar"}},"message":"bar 2","sequence":"1","time":1506776210000,"version":"2.0.0"}
 ```
+
+A typical use case for this pattern is serialization (e.g. of HTTP request, response or error object) and redaction of sensitive data from logs.
 
 ### `getContext`
 

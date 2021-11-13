@@ -59,7 +59,7 @@ Then there is [pino](https://github.com/pinojs/pino). pino is fast JSON logger, 
 I needed a logger that:
 
 * Does not block the event cycle (=fast).
-* Does not require initialisation.
+* Does not require initialization.
 * Produces structured data.
 * [Decouples transports](#transports).
 * Has a [CLI program](#cli-program).
@@ -87,13 +87,12 @@ Roarr logger API for producing logs is the same in Node.js and browser.
 
 Example:
 
-```js
+```ts
 import {
   Roarr as log,
 } from 'roarr';
 
 log('foo');
-
 ```
 
 <a name="roarr-usage-consuming-logs"></a>
@@ -108,7 +107,6 @@ In Node.js, Roarr logging is disabled by default. To enable logging, you must st
 
 ```bash
 ROARR_LOG=true node ./index.js
-
 ```
 
 All logs will be written to stdout.
@@ -118,25 +116,23 @@ All logs will be written to stdout.
 
 In a browser, you must implement `ROARR.write` method to read logs, e.g.
 
-```js
+```ts
 import {
   ROARR,
 } from 'roarr';
 
 ROARR.write = () => {};
-
 ```
 
 The API of the `ROARR.write` is:
 
-```js
+```ts
 (message: string) => void;
-
 ```
 
 Example implementation:
 
-```js
+```ts
 import {
   ROARR,
 } from 'roarr';
@@ -144,19 +140,17 @@ import {
 ROARR.write = (message) => {
   console.log(JSON.parse(message));
 };
-
 ```
 
 or if you are initializing `ROARR.write` _before_ `roarr` is loaded:
 
-```js
+```ts
 // Ensure that `globalThis.ROARR` is configured.
 const ROARR = globalThis.ROARR = globalThis.ROARR || {};
 
 ROARR.write = (message) => {
   console.log(JSON.parse(message));
 };
-
 ```
 
 If your platform does not support [`globalThis`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis), use [`globalthis` polyfill](https://www.npmjs.com/package/globalthis).
@@ -171,21 +165,18 @@ You may also use [`@roarr/browser-log-writer`](https://github.com/gajus/roarr-br
 
 In Node.js, Roarr prints all or none logs (refer to the [`ROARR_LOG` environment variable](#environment-variables) documentation).
 
-Use [`roarr filter` CLI program](#filter-program) to filter the logs that are written to stdout by the program, e.g.
+Use [`@roarr/cli` program](https://github.com/gajus/roarr-cli#filtering-logs) to filter logs, e.g.
 
 ```bash
-ROARR_LOG=true node ./index.js | roarr filter '{"context.logLevel":{gt:30}}'
-
+ROARR_LOG=true node ./index.js | roarr --filter 'context.logLevel:>30'
 ```
-
-Alternatively, use a JSON processor such as [jq](https://stedolan.github.io/jq/)
 
 <a name="roarr-usage-filtering-logs-browser-1"></a>
 #### Browser
 
 In a browser, Roarr calls `globalThis.ROARR.write` for every log message. Implement your own custom logic to filter logs, e.g.
 
-```js
+```ts
 globalThis.ROARR.write = (message) => {
   const payload = JSON.parse(message);
 
@@ -228,7 +219,7 @@ Example:
 
 `roarr` package exports a function with the following API:
 
-```js
+```ts
 export type Logger =
   (
     context: MessageContext,
@@ -254,7 +245,6 @@ export type Logger =
     i?: SprintfArgument,
     k?: SprintfArgument
   ) => void;
-
 ```
 
 To put it into words:
@@ -270,16 +260,15 @@ Refer to the [Usage documentation](#usage) for common usage examples.
 <a name="roarr-api-adopt"></a>
 ### <code>adopt</code>
 
-```js
+```ts
 <T>(routine: () => Promise<T>, context: MessageContext) => Promise<T>,
-
 ```
 
 `adopt` function uses Node.js [`async_context`](https://nodejs.org/api/async_context.html) to pass-down context properties.
 
 When using `adopt`, context properties will be added to all _all_ Roarr messages within the same asynchronous context, e.g.
 
-```js
+```ts
 log.adopt(
   () => {
     log('foo 0');
@@ -309,13 +298,13 @@ log.adopt(
 
 `sequence` represents async context hierarchy in [`ltree`](https://www.postgresql.org/docs/current/ltree.html) format, i.e.
 
-```
+```xml
 <top-level sequential invocation ID>[.<async operation sequential invocation ID>]
 ```
 
 Members of sequence value represent log index relative to the async execution context. This information can be used to establish the origin of the log invocation in an asynchronous context, e.g.
 
-```js
+```ts
 log.adopt(() => {
   log('foo 0');
   log.adopt(() => {
@@ -349,11 +338,6 @@ Notice that even though logs `baz 0` and `baz 1` were produced at different time
 <a name="roarr-api-child"></a>
 ### <code>child</code>
 
-```js
-(context: TranslateMessageFunction | MessageContext) => Logger,
-
-```
-
 The `child` function has two signatures:
 
 1. Accepts an object.
@@ -362,26 +346,26 @@ The `child` function has two signatures:
 <a name="roarr-api-child-object-parameter"></a>
 #### Object parameter
 
-```js
-(context: MessageContext) => Logger;
-
+```ts
+(context: MessageContext): Logger,
 ```
 
-Creates a child logger appending the provided `context` object to the previous logger context.
+Creates a child logger that appends child `context` to every subsequent message.
 
 Example:
 
-```js
+```ts
 import {
   Roarr as log,
 } from 'roarr';
 
-const childLog = log.child({
+const barLog = log.child({
   foo: 'bar'
 });
 
 log.debug('foo 1');
-childLog.debug('foo 2');
+
+barLog.debug('foo 2');
 ```
 
 ```json
@@ -389,40 +373,49 @@ childLog.debug('foo 2');
 {"context":{"foo":"bar","logLevel":20},"message":"foo 2","sequence":"1","time":1506776210000,"version":"2.0.0"}
 ```
 
-Refer to [middlewares](#middlewares) documentation for use case examples.
-
 <a name="roarr-api-child-function-parameter"></a>
 #### Function parameter
 
-```js
-(translateMessage: TranslateMessageFunction) => Logger;
-
+```ts
+<T>(context: TranslateMessageFunction<MessageContext<T>>): Logger<T>
 ```
 
-Creates a child logger where every message is intercepted.
+Creates a child logger that translates every subsequent message.
 
 Example:
 
-```js
+```ts
 import {
   Roarr as log,
 } from 'roarr';
 
-const childLog = log.child((message) => {
+const barLog = log.child<{error: Error}>((message) => {
   return {
     ...message,
-    message: message.message.replace('foo', 'bar'),
-  }
+    context: {
+      ...message.context,
+      ...message.context.error && {
+        error: {
+          message: message.context.error.message,
+        },
+      },
+    },
+  };
 });
 
 log.debug('foo 1');
-childLog.debug('foo 2');
+
+barLog.debug({
+  error: new Error('bar'),
+}, 'foo 2');
 ```
 
 ```json
 {"context":{"logLevel":20},"message":"foo 1","sequence":"0","time":1506776210000,"version":"2.0.0"}
-{"context":{"logLevel":20},"message":"bar 2","sequence":"1","time":1506776210000,"version":"2.0.0"}
+{"context":{"logLevel":20,"error":{"message":"bar"}},"message":"bar 2","sequence":"1","time":1506776210000,"version":"2.0.0"}
 ```
+
+A typical use case for this pattern is serialization (e.g. of HTTP request, response or error object) and redaction of sensitive data from logs.
 
 <a name="roarr-api-getcontext"></a>
 ### <code>getContext</code>
@@ -431,7 +424,7 @@ Returns the current context.
 
 Example:
 
-```js
+```ts
 import {
   Roarr as log,
 } from 'roarr';
@@ -443,7 +436,6 @@ const childLogger = log.child({
 childLogger.getContext();
 
 // {foo: 'bar'}
-
 ```
 
 <a name="roarr-api-trace"></a>
@@ -461,7 +453,7 @@ childLogger.getContext();
 
 Convenience methods for logging a message with `logLevel` context property value set to a numeric value representing the [log level](#log-levels), e.g.
 
-```js
+```ts
 import {
   Roarr as log,
 } from 'roarr';
@@ -472,19 +464,17 @@ log.info('foo');
 log.warn('foo');
 log.error('foo');
 log.fatal('foo');
-
 ```
 
 Produces output:
 
-```
+```json
 {"context":{"logLevel":10},"message":"foo","sequence":"0","time":1506776210000,"version":"2.0.0"}
 {"context":{"logLevel":20},"message":"foo","sequence":"1","time":1506776210000,"version":"2.0.0"}
 {"context":{"logLevel":30},"message":"foo","sequence":"2","time":1506776210000,"version":"2.0.0"}
 {"context":{"logLevel":40},"message":"foo","sequence":"3","time":1506776210000,"version":"2.0.0"}
 {"context":{"logLevel":50},"message":"foo","sequence":"4","time":1506776210000,"version":"2.0.0"}
 {"context":{"logLevel":60},"message":"foo","sequence":"5","time":1506776210000,"version":"2.0.0"}
-
 ```
 
 <a name="roarr-utilities"></a>
@@ -499,7 +489,7 @@ If numeric log level is between two ranges, then resolves to the one with greate
 
 If numeric log level is greater than the maximum supported, then falls back to the greatest severity (fatal).
 
-```js
+```ts
 import {
   getLogLevelName,
 } from 'roarr';
@@ -514,7 +504,7 @@ getLogLevelName(numericLogLevel: number): LogLevelName;
 
 Roarr logger supports middlewares implemented as [`child`](#child) message translate functions, e.g.
 
-```js
+```ts
 import {
   Roarr as log,
 } from 'roarr';
@@ -533,7 +523,7 @@ childLog.debug({error}, 'bar');
 {"context":{"logLevel":20,"error":{"name":"Error","message":"foo","stack":"[REDACTED]"}},"message":"bar","sequence":"1","time":1506776210000,"version":"2.0.0"}
 ```
 
-Roarr middlwares enable translation of every bit of information that is used to construct a log message.
+Roarr middlewares enable translation of every bit of information that is used to construct a log message.
 
 The following are the official middlewares:
 
@@ -552,7 +542,6 @@ CLI program has been moved to a separate package [`@roarr/cli`](https://github.c
 
 ```bash
 npm install @roarr/cli -g
-
 ```
 
 Explore all CLI commands and options using `roarr --help` or refer to [`@roarr/cli`](https://github.com/gajus/roarr-cli) documentation.
@@ -560,7 +549,7 @@ Explore all CLI commands and options using `roarr --help` or refer to [`@roarr/c
 <a name="roarr-transports"></a>
 ## Transports
 
-A transport in most logging libraries is something that runs in-process to perform some operation with the finalised log line. For example, a transport might send the log line to a standard syslog server after processing the log line and reformatting it.
+A transport in most logging libraries is something that runs in-process to perform some operation with the finalized log line. For example, a transport might send the log line to a standard syslog server after processing the log line and reformatting it.
 
 Roarr does not support in-process transports.
 
@@ -622,23 +611,20 @@ To avoid code duplication, you can use a singleton pattern to export a logger in
 
 I recommend to create a file `Logger.js` in the project directory. Inside this file create and export a child instance of Roarr with context parameters describing the project and the script instance, e.g.
 
-```js
+```ts
 /**
  * @file Example contents of a Logger.js file.
  */
 
 import {
-  Roarr as log,
+  Roarr,
 } from 'roarr';
 
-const Logger = log.child({
+export const Logger = Roarr.child({
   // .foo property is going to appear only in the logs that are created using
   // the current instance of a Roarr logger.
   foo: 'bar'
 });
-
-export default Logger;
-
 ```
 
 Roarr does not have reserved context property names. However, I encourage use of the [conventions](#conventions).
@@ -655,7 +641,7 @@ If you want to include an instance of [`Error`](https://developer.mozilla.org/en
 
 The least-error prone way to do this is to use an existing library, e.g. [`serialize-error`](https://www.npmjs.com/package/serialize-error).
 
-```js
+```ts
 import {
   Roarr as log,
 } from 'roarr';
@@ -674,10 +660,9 @@ send((error, result) => {
 
   // [..]
 });
-
 ```
 
-Without using serialisation, your errors will be logged without the error name and stack trace.
+Without using serialization, your errors will be logged without the error name and stack trace.
 
 <a name="roarr-anti-patterns"></a>
 ## Anti-patterns
@@ -748,7 +733,6 @@ The following serves as the ground work for the index template. It includes the 
   },
   "template": "logstash-*"
 }
-
 ```
 
 <a name="roarr-integrations-using-with-scalyr"></a>
@@ -756,7 +740,7 @@ The following serves as the ground work for the index template. It includes the 
 
 If you are using [Scalyr](https://www.scalyr.com/), you will want to create a custom parser `RoarrLogger`:
 
-```js
+```ts
 {
   patterns: {
     tsPattern: "\\w{3},\\s\\d{2}\\s\\w{3}\\s\\d{4}\\s[\\d:]+",
@@ -769,7 +753,6 @@ If you are using [Scalyr](https://www.scalyr.com/), you will want to create a cu
     {format: "$timestamp=tsPattern_8601$ $detail$"}
   ]
 }
-
 ```
 
 and configure the individual programs to use `RoarrLogger`. In case of Kubernetes, this means adding a `log.config.scalyr.com/attributes.parser: RoarrLogger` annotation to the associated deployment, pod or container.
@@ -787,7 +770,6 @@ This project uses [`roarr`](https://www.npmjs.com/package/roarr) logger to log t
 Export `ROARR_LOG=true` environment variable to enable log printing to `stdout`.
 
 Use [`roarr-cli`](https://github.com/gajus/roarr-cli) program to pretty-print the logs.
-
 ```
 
 <a name="roarr-developing"></a>
