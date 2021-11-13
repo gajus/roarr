@@ -126,14 +126,11 @@ You may also use [`@roarr/browser-log-writer`](https://github.com/gajus/roarr-br
 
 In Node.js, Roarr prints all or none logs (refer to the [`ROARR_LOG` environment variable](#environment-variables) documentation).
 
-Use [`roarr filter` CLI program](#filter-program) to filter the logs that are written to stdout by the program, e.g.
+Use [`@roarr/cli` program](https://github.com/gajus/roarr-cli#filtering-logs) to filter logs, e.g.
 
 ```bash
-ROARR_LOG=true node ./index.js | roarr filter '{"context.logLevel":{gt:30}}'
-
+ROARR_LOG=true node ./index.js | roarr --filter 'context.logLevel:>30'
 ```
-
-Alternatively, use a JSON processor such as [jq](https://stedolan.github.io/jq/)
 
 #### Browser
 
