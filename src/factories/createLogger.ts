@@ -109,7 +109,7 @@ export const createLogger = (
       );
     } else {
       if (typeof b !== 'string') {
-        throw new TypeError('Message must be a string.');
+        throw new TypeError('Message must be a string. Received ' + typeof b + '.');
       }
 
       message = printf(
