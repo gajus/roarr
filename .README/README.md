@@ -605,6 +605,10 @@ If you have a use case that asks for overriding `ROARR.write` in Node.js, then [
 
 https://github.com/gajus/roarr-sentry
 
+### Using with Fastify
+
+https://github.com/gajus/roarr-fastify
+
 ### Using with Elasticsearch
 
 If you are using [Elasticsearch](https://www.elastic.co/products/elasticsearch), you will want to create an [index template](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html).

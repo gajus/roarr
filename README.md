@@ -41,6 +41,7 @@ JSON logger for Node.js and browser.
         * [Overriding `globalThis.ROARR.write` in Node.js](#roarr-anti-patterns-overriding-globalthis-roarr-write-in-node-js)
     * [Integrations](#roarr-integrations)
         * [Using with Sentry](#roarr-integrations-using-with-sentry)
+        * [Using with Fastify](#roarr-integrations-using-with-fastify)
         * [Using with Elasticsearch](#roarr-integrations-using-with-elasticsearch)
         * [Using with Scalyr](#roarr-integrations-using-with-scalyr)
     * [Documenting use of Roarr](#roarr-documenting-use-of-roarr)
@@ -681,6 +682,11 @@ If you have a use case that asks for overriding `ROARR.write` in Node.js, then [
 ### Using with Sentry
 
 https://github.com/gajus/roarr-sentry
+
+<a name="roarr-integrations-using-with-fastify"></a>
+### Using with Fastify
+
+https://github.com/gajus/roarr-fastify
 
 <a name="roarr-integrations-using-with-elasticsearch"></a>
 ### Using with Elasticsearch
