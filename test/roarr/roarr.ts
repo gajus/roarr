@@ -68,7 +68,7 @@ test('replaces circular references with [Circular]', (t) => {
     {
       context: {
         bar: {
-          bar: '[Circular ~.bar]',
+          bar: '[Circular]',
         },
       },
       message: 'foo',
