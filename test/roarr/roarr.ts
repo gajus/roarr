@@ -53,32 +53,6 @@ test('creates a simple message', (t) => {
   ]);
 });
 
-test('replaces circular references with [Circular]', (t) => {
-  const log = createLoggerWithHistory();
-
-  const bar: any = {};
-
-  bar.bar = bar;
-
-  log({
-    bar,
-  }, 'foo');
-
-  t.deepEqual(log.messages, [
-    {
-      context: {
-        bar: {
-          bar: '[Circular]',
-        },
-      },
-      message: 'foo',
-      sequence: '0',
-      time,
-      version,
-    },
-  ]);
-});
-
 test('formats message using sprintf', (t) => {
   const log = createLoggerWithHistory();
 

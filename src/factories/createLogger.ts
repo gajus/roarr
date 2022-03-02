@@ -1,9 +1,7 @@
 import {
   printf,
 } from 'fast-printf';
-import stringify from 'fast-safe-stringify';
 import createGlobalThis from 'globalthis';
-import isCircular from 'is-circular';
 import {
   ROARR_LOG_FORMAT_VERSION,
 } from '../config';
@@ -86,10 +84,6 @@ export const createLogger = (
         ...parentContext,
         ...a,
       };
-    }
-
-    if (context !== defaultContext && isCircular(context)) {
-      context = JSON.parse(stringify(context));
     }
 
     if (typeof a === 'string' && b === undefined) {

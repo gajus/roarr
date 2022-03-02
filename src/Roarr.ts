@@ -2,6 +2,7 @@ import {
   boolean,
 } from 'boolean';
 import fastJson from 'fast-json-stringify';
+import safeStringify from 'fast-safe-stringify';
 import createGlobalThis from 'globalthis';
 import {
   logLevels,
@@ -22,12 +23,8 @@ import type {
   RoarrGlobalState,
 } from './types';
 
-const stringify = fastJson({
+const fastStringify = fastJson({
   properties: {
-    context: {
-      additionalProperties: true,
-      type: 'object',
-    },
     message: {
       type: 'string',
     },
@@ -61,9 +58,7 @@ const Roarr = logFactory((message) => {
   if (ROARR.write) {
     // Stringify message as soon as it is received to prevent
     // properties of the context from being modified by reference.
-    const body = stringify(message);
-
-    ROARR.write(body);
+    ROARR.write('{"context":' + safeStringify(message.context) + ',' + fastStringify(message).slice(1));
   }
 });
 
