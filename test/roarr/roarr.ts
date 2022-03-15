@@ -70,6 +70,17 @@ test('logs an empty message when first parameter is an object and the second par
   ]);
 });
 
+test('throws in case of invalid invocation', (t) => {
+  const log = createLoggerWithHistory();
+
+  t.throws(() => {
+    // @ts-expect-error Invalid invocation
+    log({}, {});
+  }, {
+    message: 'Message must be a string. Received object.',
+  });
+});
+
 test('formats message using sprintf', (t) => {
   const log = createLoggerWithHistory();
 
