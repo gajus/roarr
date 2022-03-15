@@ -53,6 +53,23 @@ test('creates a simple message', (t) => {
   ]);
 });
 
+test('logs an empty message when first parameter is an object and the second parameter is undefined', (t) => {
+  const log = createLoggerWithHistory();
+
+  // @ts-expect-error Invalid invocation
+  log({});
+
+  t.deepEqual(log.messages, [
+    {
+      context: {},
+      message: '',
+      sequence: '0',
+      time,
+      version,
+    },
+  ]);
+});
+
 test('formats message using sprintf', (t) => {
   const log = createLoggerWithHistory();
 

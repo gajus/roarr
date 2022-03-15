@@ -102,12 +102,18 @@ export const createLogger = (
         j,
       );
     } else {
+      let fallbackMessage = b;
+
       if (typeof b !== 'string') {
-        throw new TypeError('Message must be a string. Received ' + typeof b + '.');
+        if (b === undefined) {
+          fallbackMessage = '';
+        } else {
+          throw new TypeError('Message must be a string. Received ' + typeof b + '.');
+        }
       }
 
       message = printf(
-        b,
+        fallbackMessage,
         c,
         d,
         e,
