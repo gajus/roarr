@@ -9,8 +9,20 @@ export type LogWriter = (message: string) => void;
 
 export type MessageContext<T = {}> = JsonObject<T>;
 
+export type TopLevelAsyncLocalContext = {
+  messageContext: MessageContext,
+  transforms: ReadonlyArray<TransformMessageFunction<MessageContext>>,
+};
+
+export type NestedAsyncLocalContext = TopLevelAsyncLocalContext & {
+  sequence: number,
+  sequenceRoot: string,
+};
+
+export type AsyncLocalContext = NestedAsyncLocalContext | TopLevelAsyncLocalContext;
+
 export type RoarrGlobalState = {
-  asyncLocalStorage?: AsyncLocalStorage<MessageContext>,
+  asyncLocalStorage?: AsyncLocalStorage<AsyncLocalContext>,
   sequence: number,
   versions: readonly string[],
   write: LogWriter,
@@ -26,7 +38,7 @@ export type Message<T = MessageContext> = {
   readonly version: string,
 };
 
-export type TranslateMessageFunction<T> = (message: Message<T>) => Message<MessageContext>;
+export type TransformMessageFunction<T> = (message: Message<T>) => Message<MessageContext>;
 
 export type LogMethod<Z> = {
   (
@@ -56,12 +68,12 @@ export type LogMethod<Z> = {
 };
 
 type Child<Z> = {
-  <T = Z>(context: TranslateMessageFunction<MessageContext<T>>): Logger<T | Z>,
+  <T = Z>(context: TransformMessageFunction<MessageContext<T>>): Logger<T | Z>,
   (context: MessageContext): Logger<Z>,
 };
 
 export type Logger<Z = MessageContext> = LogMethod<Z> & {
-  adopt: <T>(routine: () => T, context?: MessageContext) => Promise<T>,
+  adopt: <T>(routine: () => T, context?: MessageContext | TransformMessageFunction<MessageContext>) => Promise<T>,
   child: Child<Z>,
   debug: LogMethod<Z>,
   error: LogMethod<Z>,

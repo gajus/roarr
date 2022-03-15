@@ -10,45 +10,70 @@ import {
 } from '../constants';
 import type {
   Logger,
+  TopLevelAsyncLocalContext,
+  AsyncLocalContext,
+  RoarrGlobalState,
   MessageContext,
   MessageEventHandler,
+  TransformMessageFunction,
 } from '../types';
+import {
+  hasOwnProperty,
+} from '../utilities';
 
-let loggedWarning = false;
+let loggedWarningAsyncLocalContext = false;
 
 const globalThis = createGlobalThis();
 
-const getAsyncLocalContext = () => {
-  const asyncLocalStorage = globalThis.ROARR.asyncLocalStorage;
+const getGlobalRoarrContext = (): RoarrGlobalState => {
+  return globalThis.ROARR;
+};
+
+const createDefaultAsyncLocalContext = (): TopLevelAsyncLocalContext => {
+  return {
+    messageContext: {},
+    transforms: [],
+  };
+};
+
+const getAsyncLocalContext = (): AsyncLocalContext => {
+  const asyncLocalStorage = getGlobalRoarrContext().asyncLocalStorage;
 
   if (!asyncLocalStorage) {
-    return {};
+    throw new Error('AsyncLocalContext is unavailable.');
   }
 
-  return asyncLocalStorage.getStore()?.context || {};
+  const asyncLocalContext = asyncLocalStorage.getStore();
+
+  if (asyncLocalContext) {
+    return asyncLocalContext;
+  }
+
+  return createDefaultAsyncLocalContext();
+};
+
+const isAsyncLocalContextAvailable = (): boolean => {
+  return Boolean(getGlobalRoarrContext().asyncLocalStorage);
 };
 
 const getSequence = () => {
-  const asyncLocalStorage = globalThis.ROARR.asyncLocalStorage;
+  if (isAsyncLocalContextAvailable()) {
+    const asyncLocalContext = getAsyncLocalContext();
 
-  if (!asyncLocalStorage) {
-    return String(globalThis.ROARR.sequence++);
+    if (hasOwnProperty(asyncLocalContext, 'sequenceRoot') && hasOwnProperty(asyncLocalContext, 'sequence')) {
+      return String(asyncLocalContext.sequenceRoot) + '.' + String(asyncLocalContext.sequence++);
+    }
+
+    return String(getGlobalRoarrContext().sequence++);
   }
 
-  const store = asyncLocalStorage.getStore();
-
-  if (store?.sequenceRoot !== undefined && store?.sequence !== undefined) {
-    return String(store.sequenceRoot) + '.' + String(store.sequence++);
-  }
-
-  return String(globalThis.ROARR.sequence++);
+  return String(getGlobalRoarrContext().sequence++);
 };
-
-const defaultContext = {};
 
 export const createLogger = (
   onMessage: MessageEventHandler,
-  parentContext?: MessageContext,
+  parentMessageContext: MessageContext = {},
+  transforms: ReadonlyArray<TransformMessageFunction<MessageContext>> = [],
 ): Logger => {
   const log = (
     a: any,
@@ -64,24 +89,27 @@ export const createLogger = (
   ) => {
     const time = Date.now();
     const sequence = getSequence();
-    const asyncLocalStorage = globalThis.ROARR.asyncLocalStorage;
+
+    let asyncLocalContext: AsyncLocalContext;
+
+    if (isAsyncLocalContextAvailable()) {
+      asyncLocalContext = getAsyncLocalContext();
+    } else {
+      asyncLocalContext = createDefaultAsyncLocalContext();
+    }
 
     let context;
     let message;
 
     if (typeof a === 'string') {
-      if (asyncLocalStorage) {
-        context = {
-          ...getAsyncLocalContext(),
-          ...parentContext,
-        };
-      } else {
-        context = parentContext ?? defaultContext;
-      }
+      context = {
+        ...asyncLocalContext.messageContext,
+        ...parentMessageContext,
+      };
     } else {
       context = {
-        ...getAsyncLocalContext(),
-        ...parentContext,
+        ...asyncLocalContext.messageContext,
+        ...parentMessageContext,
         ...a,
       };
     }
@@ -125,58 +153,84 @@ export const createLogger = (
       );
     }
 
-    onMessage({
+    let packet = {
       context,
       message,
       sequence,
       time,
       version: ROARR_LOG_FORMAT_VERSION,
-    });
+    };
+
+    for (const transform of [...asyncLocalContext.transforms, ...transforms]) {
+      packet = transform(packet);
+
+      if (typeof packet !== 'object' || packet === null) {
+        throw new Error('Message transform function must return a message object.');
+      }
+    }
+
+    onMessage(packet);
   };
 
+  /**
+   * Creates a child logger with the provided context.
+   * If context is an object, then its properties are prepended to all descending logs.
+   * If context is a function, then that function is used to process all descending logs.
+   */
   log.child = (context) => {
+    const asyncLocalContext = getAsyncLocalContext();
+
     if (typeof context === 'function') {
       return createLogger(
-        (message) => {
-          const nextMessage = context(message);
-
-          if (typeof nextMessage !== 'object' || nextMessage === null) {
-            throw new Error('Child middleware function must return a message object.');
-          }
-
-          onMessage(nextMessage);
+        onMessage,
+        {
+          ...asyncLocalContext.messageContext,
+          ...parentMessageContext,
+          ...context,
         },
-        parentContext,
+        [
+          context,
+          ...transforms,
+        ],
       );
     }
 
-    return createLogger(onMessage, {
-      ...getAsyncLocalContext(),
-      ...parentContext,
-      ...context,
-    });
+    return createLogger(
+      onMessage, {
+        ...asyncLocalContext.messageContext,
+        ...parentMessageContext,
+        ...context,
+      },
+      transforms,
+    );
   };
 
   log.getContext = () => {
+    let asyncLocalContext: AsyncLocalContext;
+
+    if (isAsyncLocalContextAvailable()) {
+      asyncLocalContext = getAsyncLocalContext();
+    } else {
+      asyncLocalContext = createDefaultAsyncLocalContext();
+    }
+
     return {
-      ...getAsyncLocalContext(),
-      ...parentContext ?? defaultContext,
+      ...asyncLocalContext.messageContext,
+      ...parentMessageContext,
     };
   };
 
   log.adopt = async (routine, context) => {
-    const asyncLocalStorage = globalThis.ROARR.asyncLocalStorage;
-
-    if (!asyncLocalStorage) {
-      if (loggedWarning === false) {
-        loggedWarning = true;
+    if (!isAsyncLocalContextAvailable()) {
+      if (loggedWarningAsyncLocalContext === false) {
+        loggedWarningAsyncLocalContext = true;
 
         onMessage({
           context: {
             logLevel: logLevels.warn,
             package: 'roarr',
           },
-          message: 'async_hooks are unavailable; Roarr.child will not function as expected',
+          message: 'async_hooks are unavailable; Roarr.adopt will not function as expected',
           sequence: getSequence(),
           time: Date.now(),
           version: ROARR_LOG_FORMAT_VERSION,
@@ -186,24 +240,47 @@ export const createLogger = (
       return routine();
     }
 
-    const store = asyncLocalStorage.getStore();
+    const asyncLocalContext = getAsyncLocalContext();
 
     let sequenceRoot;
 
-    if (store?.sequenceRoot !== undefined && store?.sequence !== undefined) {
-      sequenceRoot = String(store.sequenceRoot) + '.' + String(store.sequence++);
+    if (hasOwnProperty(asyncLocalContext, 'sequenceRoot')) {
+      sequenceRoot = asyncLocalContext.sequenceRoot + '.' + String(asyncLocalContext.sequence++);
     } else {
-      sequenceRoot = String(globalThis.ROARR.sequence++);
+      sequenceRoot = String(getGlobalRoarrContext().sequence++);
+    }
+
+    let nextContext = {
+      ...asyncLocalContext.messageContext,
+    };
+
+    const nextTransforms = [
+      ...asyncLocalContext.transforms,
+    ];
+
+    if (typeof context === 'function') {
+      nextTransforms.push(
+        context,
+      );
+    } else {
+      nextContext = {
+        ...nextContext,
+        ...context,
+      };
+    }
+
+    const asyncLocalStorage = getGlobalRoarrContext().asyncLocalStorage;
+
+    if (!asyncLocalStorage) {
+      throw new Error('Async local context unavailable.');
     }
 
     return asyncLocalStorage.run(
       {
-        context: {
-          ...store?.context,
-          ...context,
-        },
+        messageContext: nextContext,
         sequence: 0,
         sequenceRoot,
+        transforms: nextTransforms,
       },
       () => {
         return routine();

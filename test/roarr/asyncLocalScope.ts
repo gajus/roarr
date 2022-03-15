@@ -71,7 +71,7 @@ serial('warns if async_hooks are unavailable', async (t) => {
         logLevel: 40,
         package: 'roarr',
       },
-      message: 'async_hooks are unavailable; Roarr.child will not function as expected',
+      message: 'async_hooks are unavailable; Roarr.adopt will not function as expected',
       sequence: '0',
       time,
       version,
@@ -80,6 +80,8 @@ serial('warns if async_hooks are unavailable', async (t) => {
 });
 
 serial('inherits context from async local scope', async (t) => {
+  t.plan(1);
+
   const log = createLoggerWithHistory();
 
   await log.adopt(
@@ -94,21 +96,11 @@ serial('inherits context from async local scope', async (t) => {
       bar: 'bar',
     },
   );
-
-  t.deepEqual(log.messages, [
-    {
-      context: {
-        bar: 'bar',
-      },
-      message: 'foo',
-      sequence: '0.0',
-      time,
-      version,
-    },
-  ]);
 });
 
 serial('inherits context from parent async local scope', async (t) => {
+  t.plan(2);
+
   const log = createLoggerWithHistory();
 
   await log.adopt(
@@ -137,11 +129,76 @@ serial('inherits context from parent async local scope', async (t) => {
       bar: 'bar 0',
     },
   );
+});
+
+serial('inherits message transformer from async local scope', async (t) => {
+  const log = createLoggerWithHistory();
+
+  await log.adopt(
+    () => {
+      log('foo');
+    },
+    (message) => {
+      return {
+        ...message,
+        context: {
+          bar: 'bar',
+          ...message.context,
+        },
+      };
+    },
+  );
 
   t.deepEqual(log.messages, [
     {
       context: {
-        bar: 'bar 0',
+        bar: 'bar',
+      },
+      message: 'foo',
+      sequence: '0.0',
+      time,
+      version,
+    },
+  ]);
+});
+
+serial('inherits message transformer from parent async local scope', async (t) => {
+  const log = createLoggerWithHistory();
+
+  await log.adopt(
+    async () => {
+      log('foo 0');
+
+      await log.adopt(
+        () => {
+          log('foo 1');
+        },
+        (message) => {
+          return {
+            ...message,
+            context: {
+              baz: 'baz',
+              ...message.context,
+            },
+          };
+        },
+      );
+    },
+    (message) => {
+      return {
+        ...message,
+        context: {
+          bar: 'bar',
+          ...message.context,
+        },
+      };
+    },
+  );
+
+  t.deepEqual(log.messages, [
+    {
+      context: {
+        bar: 'bar',
       },
       message: 'foo 0',
       sequence: '0.0',
@@ -150,8 +207,8 @@ serial('inherits context from parent async local scope', async (t) => {
     },
     {
       context: {
-        bar: 'bar 0',
-        baz: 'baz 1',
+        bar: 'bar',
+        baz: 'baz',
       },
       message: 'foo 1',
       sequence: '0.1.0',

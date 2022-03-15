@@ -262,7 +262,7 @@ Refer to the [Usage documentation](#usage) for common usage examples.
 ### <code>adopt</code>
 
 ```ts
-<T>(routine: () => Promise<T>, context: MessageContext) => Promise<T>,
+<T>(routine: () => Promise<T>, context: MessageContext | TransformMessageFunction<MessageContext>) => Promise<T>,
 ```
 
 `adopt` function uses Node.js [`async_context`](https://nodejs.org/api/async_context.html) to pass-down context properties.
@@ -378,7 +378,7 @@ barLog.debug('foo 2');
 #### Function parameter
 
 ```ts
-<T>(context: TranslateMessageFunction<MessageContext<T>>): Logger<T>
+<T>(context: TransformMessageFunction<MessageContext<T>>): Logger<T>
 ```
 
 Creates a child logger that translates every subsequent message.
