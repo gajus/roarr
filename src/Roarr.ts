@@ -69,7 +69,7 @@ export type {
   Message,
   MessageEventHandler,
   RoarrGlobalState,
-  TranslateMessageFunction,
+  TransformMessageFunction,
 } from './types';
 
 export {

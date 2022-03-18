@@ -381,7 +381,7 @@ test('throws an error if child does not return an object', (t) => {
         return '';
       })('foo');
   }, {
-    message: 'Child middleware function must return a message object.',
+    message: 'Message transform function must return a message object.',
   });
 });
 
