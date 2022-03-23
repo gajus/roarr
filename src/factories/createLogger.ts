@@ -178,7 +178,13 @@ export const createLogger = (
    * If context is a function, then that function is used to process all descending logs.
    */
   log.child = (context) => {
-    const asyncLocalContext = getAsyncLocalContext();
+    let asyncLocalContext: AsyncLocalContext;
+
+    if (isAsyncLocalContextAvailable()) {
+      asyncLocalContext = getAsyncLocalContext();
+    } else {
+      asyncLocalContext = createDefaultAsyncLocalContext();
+    }
 
     if (typeof context === 'function') {
       return createLogger(
