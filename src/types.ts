@@ -21,9 +21,12 @@ export type NestedAsyncLocalContext = TopLevelAsyncLocalContext & {
 
 export type AsyncLocalContext = NestedAsyncLocalContext | TopLevelAsyncLocalContext;
 
+export type MessageSerializer = (message: Message<MessageContext>) => string;
+
 export type RoarrGlobalState = {
   asyncLocalStorage?: AsyncLocalStorage<AsyncLocalContext>,
   sequence: number,
+  serializeMessage?: MessageSerializer,
   versions: readonly string[],
   write: LogWriter,
 };

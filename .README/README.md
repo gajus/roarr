@@ -560,6 +560,26 @@ Roarr does not have reserved context property names. However, I encourage use of
 
 ## Recipes
 
+### Overriding message serializer
+
+Roarr is opinionated about how it serializes (converts objects to JSON string) log messages, e.g. in Node.js it uses a schema based serializer, which is very fast, but does not allow custom top-level properties.
+
+You can override this serializer by defining `ROARR.serializeMessage`:
+
+```ts
+import type {
+  MessageEventHandler,
+} from 'roarr';
+
+const ROARR = globalThis.ROARR = globalThis.ROARR || {};
+
+const serializeMessage: MessageEventHandler = (message) => {
+  return JSON.stringify(message);
+};
+
+ROARR.serializeMessage = serializeMessage;
+```
+
 ### Logging errors
 
 This is not specific to Roarr – this suggestion applies to any kind of logging.

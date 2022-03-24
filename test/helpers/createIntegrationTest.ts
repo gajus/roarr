@@ -19,6 +19,7 @@ export const createIntegrationTest = ({
   test.beforeEach(async (t) => {
     process.env.ROARR_LOG = writeLogs ? '1' : '0';
 
+    // This import is affected by the `process.env.ROARR_LOG` value.
     const {
       Roarr,
       ROARR,

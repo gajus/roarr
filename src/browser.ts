@@ -13,23 +13,27 @@ import {
 } from './getLogLevelName';
 import type {
   RoarrGlobalState,
+  MessageSerializer,
 } from './types';
 
 const globalThis = createGlobalThis();
 
 const ROARR = globalThis.ROARR = createRoarrInitialGlobalStateBrowser(globalThis.ROARR as RoarrGlobalState || {});
 
+const serializeMessage: MessageSerializer = (message) => {
+  return JSON.stringify(message);
+};
+
 const Roarr = createLogger((message) => {
   if (ROARR.write) {
     // Stringify message as soon as it is received to prevent
     // properties of the context from being modified by reference.
-    const body = JSON.stringify(message);
-
-    ROARR.write(body);
+    ROARR.write((ROARR.serializeMessage ?? serializeMessage)(message));
   }
 });
 
 export type {
+  MessageSerializer,
   Logger,
   LogLevelName,
   Message,

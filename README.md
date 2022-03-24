@@ -36,6 +36,7 @@ JSON logger for Node.js and browser.
         * [Context property names](#roarr-conventions-context-property-names)
         * [Using Roarr in an application](#roarr-conventions-using-roarr-in-an-application)
     * [Recipes](#roarr-recipes)
+        * [Overriding message serializer](#roarr-recipes-overriding-message-serializer)
         * [Logging errors](#roarr-recipes-logging-errors)
     * [Anti-patterns](#roarr-anti-patterns)
         * [Overriding `globalThis.ROARR.write` in Node.js](#roarr-anti-patterns-overriding-globalthis-roarr-write-in-node-js)
@@ -632,6 +633,27 @@ Roarr does not have reserved context property names. However, I encourage use of
 
 <a name="roarr-recipes"></a>
 ## Recipes
+
+<a name="roarr-recipes-overriding-message-serializer"></a>
+### Overriding message serializer
+
+Roarr is opinionated about how it serializes (converts objects to JSON string) log messages, e.g. in Node.js it uses a schema based serializer, which is very fast, but does not allow custom top-level properties.
+
+You can override this serializer by defining `ROARR.serializeMessage`:
+
+```ts
+import type {
+  MessageEventHandler,
+} from 'roarr';
+
+const ROARR = globalThis.ROARR = globalThis.ROARR || {};
+
+const serializeMessage: MessageEventHandler = (message) => {
+  return JSON.stringify(message);
+};
+
+ROARR.serializeMessage = serializeMessage;
+```
 
 <a name="roarr-recipes-logging-errors"></a>
 ### Logging errors

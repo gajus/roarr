@@ -20,6 +20,7 @@ import {
   getLogLevelName,
 } from './getLogLevelName';
 import type {
+  MessageSerializer,
   RoarrGlobalState,
 } from './types';
 
@@ -54,15 +55,20 @@ if (!enabled) {
   logFactory = createMockLogger;
 }
 
+const serializeMessage: MessageSerializer = (message) => {
+  return '{"context":' + safeStringify(message.context) + ',' + fastStringify(message).slice(1);
+};
+
 const Roarr = logFactory((message) => {
   if (ROARR.write) {
     // Stringify message as soon as it is received to prevent
     // properties of the context from being modified by reference.
-    ROARR.write('{"context":' + safeStringify(message.context) + ',' + fastStringify(message).slice(1));
+    ROARR.write((ROARR.serializeMessage ?? serializeMessage)(message));
   }
 });
 
 export type {
+  MessageSerializer,
   Logger,
   LogLevelName,
   LogWriter,
