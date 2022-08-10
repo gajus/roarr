@@ -81,6 +81,14 @@ test('throws in case of invalid invocation', (t) => {
   });
 });
 
+test('throws in case of invalid invocation (2)', (t) => {
+  const log = createLoggerWithHistory();
+
+  t.throws(() => {
+    log('test', 123);
+  });
+});
+
 test('formats message using sprintf', (t) => {
   const log = createLoggerWithHistory();
 

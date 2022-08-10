@@ -117,6 +117,10 @@ export const createLogger = (
     if (typeof a === 'string' && b === undefined) {
       message = a;
     } else if (typeof a === 'string') {
+      if (!a.includes('%')) {
+        throw new Error('When a string parameter is followed by other arguments, then it is assumed that you are attempting to format a message using printf syntax. You either forgot to add printf bindings or if you meant to add context to the log message, pass them in an object as the first parameter.');
+      }
+
       message = printf(
         a,
         b,
