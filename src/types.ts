@@ -47,10 +47,10 @@ export type Message<T = MessageContext> = {
 export type TransformMessageFunction<T> = (message: Message<T>) => Message<MessageContext>;
 
 export type LogMethod<Z> = {
-  (
+  <T extends string = string>(
     context: Z,
-    message: string,
-    c?: SprintfArgument,
+    message: T,
+    c?: T extends `${string}%${string}` ? SprintfArgument : never,
     d?: SprintfArgument,
     e?: SprintfArgument,
     f?: SprintfArgument,
@@ -59,9 +59,9 @@ export type LogMethod<Z> = {
     i?: SprintfArgument,
     j?: SprintfArgument
   ): void,
-  (
-    message: string,
-    b?: SprintfArgument,
+  <T extends string = string>(
+    message: T,
+    b?: T extends `${string}%${string}` ? SprintfArgument : never,
     c?: SprintfArgument,
     d?: SprintfArgument,
     e?: SprintfArgument,

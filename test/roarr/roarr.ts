@@ -85,6 +85,7 @@ test('throws in case of invalid invocation (2)', (t) => {
   const log = createLoggerWithHistory();
 
   t.throws(() => {
+    // @ts-expect-error Invalid invocation
     log('test', 123);
   });
 });
