@@ -2,12 +2,15 @@ import type {
   AsyncLocalStorage,
 } from 'async_hooks';
 
-export type JsonObject<T = {}> = T & { [Key in string]?: JsonValue<T> };
-export type JsonValue<T> = Array<JsonValue<T>> | JsonObject<T> | boolean | number | string | null;
+export type JsonValue = JsonObject | JsonValue[] | boolean | number | string | null;
+
+export type JsonObject = {
+  [k: string]: JsonValue,
+};
 
 export type LogWriter = (message: string) => void;
 
-export type MessageContext<T = {}> = JsonObject<T>;
+export type MessageContext<T = {}> = JsonObject & T;
 
 export type TopLevelAsyncLocalContext = {
   messageContext: MessageContext,
