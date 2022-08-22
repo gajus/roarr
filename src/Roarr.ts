@@ -68,12 +68,13 @@ const Roarr = logFactory((message) => {
 });
 
 export type {
-  MessageSerializer,
   Logger,
   LogLevelName,
   LogWriter,
   Message,
+  MessageContext,
   MessageEventHandler,
+  MessageSerializer,
   RoarrGlobalState,
   TransformMessageFunction,
 } from './types';

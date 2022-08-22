@@ -33,11 +33,12 @@ const Roarr = createLogger((message) => {
 });
 
 export type {
-  MessageSerializer,
   Logger,
   LogLevelName,
   Message,
+  MessageContext,
   MessageEventHandler,
+  MessageSerializer,
   RoarrGlobalState,
   TransformMessageFunction,
 } from './types';
