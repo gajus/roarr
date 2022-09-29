@@ -7,6 +7,14 @@ import type {
   MessageEventHandler,
 } from '../types';
 
+const createChildLogger = (log: Logger, logLevel: number) => {
+  return (a, b, c, d, e, f, g, h, i, j) => {
+    log.child({
+      logLevel,
+    })(a, b, c, d, e, f, g, h, i, j);
+  };
+};
+
 export const createMockLogger = (
   onMessage: MessageEventHandler,
   parentContext?: MessageContext,
@@ -27,41 +35,18 @@ export const createMockLogger = (
     return {};
   };
 
-  log.trace = (a, b, c, d, e, f, g, h, i, j) => {
-    log.child({
-      logLevel: logLevels.trace,
-    })(a, b, c, d, e, f, g, h, i, j);
-  };
-
-  log.debug = (a, b, c, d, e, f, g, h, i, j) => {
-    log.child({
-      logLevel: logLevels.debug,
-    })(a, b, c, d, e, f, g, h, i, j);
-  };
-
-  log.info = (a, b, c, d, e, f, g, h, i, j) => {
-    log.child({
-      logLevel: logLevels.info,
-    })(a, b, c, d, e, f, g, h, i, j);
-  };
-
-  log.warn = (a, b, c, d, e, f, g, h, i, j) => {
-    log.child({
-      logLevel: logLevels.warn,
-    })(a, b, c, d, e, f, g, h, i, j);
-  };
-
-  log.error = (a, b, c, d, e, f, g, h, i, j) => {
-    log.child({
-      logLevel: logLevels.error,
-    })(a, b, c, d, e, f, g, h, i, j);
-  };
-
-  log.fatal = (a, b, c, d, e, f, g, h, i, j) => {
-    log.child({
-      logLevel: logLevels.fatal,
-    })(a, b, c, d, e, f, g, h, i, j);
-  };
+  log.debug = createChildLogger(log, logLevels.debug);
+  log.debugOnce = createChildLogger(log, logLevels.debug);
+  log.error = createChildLogger(log, logLevels.error);
+  log.errorOnce = createChildLogger(log, logLevels.error);
+  log.fatal = createChildLogger(log, logLevels.fatal);
+  log.fatalOnce = createChildLogger(log, logLevels.fatal);
+  log.info = createChildLogger(log, logLevels.info);
+  log.infoOnce = createChildLogger(log, logLevels.info);
+  log.trace = createChildLogger(log, logLevels.trace);
+  log.traceOnce = createChildLogger(log, logLevels.trace);
+  log.warn = createChildLogger(log, logLevels.warn);
+  log.warnOnce = createChildLogger(log, logLevels.warn);
 
   return log;
 };

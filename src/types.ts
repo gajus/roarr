@@ -28,6 +28,7 @@ export type MessageSerializer = (message: Message<MessageContext>) => string;
 
 export type RoarrGlobalState = {
   asyncLocalStorage?: AsyncLocalStorage<AsyncLocalContext>,
+  onceLog: Set<string>,
   sequence: number,
   serializeMessage?: MessageSerializer,
   versions: readonly string[],
@@ -82,12 +83,18 @@ export type Logger<Z = MessageContext> = LogMethod<Z> & {
   adopt: <T>(routine: () => T, context?: MessageContext | TransformMessageFunction<MessageContext>) => Promise<T>,
   child: Child<Z>,
   debug: LogMethod<Z>,
+  debugOnce: LogMethod<Z>,
   error: LogMethod<Z>,
+  errorOnce: LogMethod<Z>,
   fatal: LogMethod<Z>,
+  fatalOnce: LogMethod<Z>,
   getContext: () => MessageContext,
   info: LogMethod<Z>,
+  infoOnce: LogMethod<Z>,
   trace: LogMethod<Z>,
+  traceOnce: LogMethod<Z>,
   warn: LogMethod<Z>,
+  warnOnce: LogMethod<Z>,
 };
 
 export type MessageEventHandler = (message: Message<MessageContext>) => void;

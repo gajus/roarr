@@ -1,6 +1,7 @@
 import {
   printf,
 } from 'fast-printf';
+import safeStringify from 'fast-safe-stringify';
 import createGlobalThis from 'globalthis';
 import {
   ROARR_LOG_FORMAT_VERSION,
@@ -68,6 +69,38 @@ const getSequence = () => {
   }
 
   return String(getGlobalRoarrContext().sequence++);
+};
+
+const createChildLogger = (log: Logger, logLevel: number) => {
+  return (a, b, c, d, e, f, g, h, i, j) => {
+    log.child({
+      logLevel,
+    })(a, b, c, d, e, f, g, h, i, j);
+  };
+};
+
+const MAX_ONCE_ENTRIES = 1_000;
+
+const createOnceChildLogger = (log: Logger, logLevel: number) => {
+  return (a, b, c, d, e, f, g, h, i, j) => {
+    const key = safeStringify({a, b, c, d, e, f, g, h, i, j, logLevel});
+
+    const onceLog = getGlobalRoarrContext().onceLog;
+
+    if (onceLog.has(key)) {
+      return;
+    }
+
+    onceLog.add(key);
+
+    if (onceLog.size > MAX_ONCE_ENTRIES) {
+      onceLog.clear();
+    }
+
+    log.child({
+      logLevel,
+    })(a, b, c, d, e, f, g, h, i, j);
+  };
 };
 
 export const createLogger = (
@@ -298,41 +331,18 @@ export const createLogger = (
     );
   };
 
-  log.trace = (a, b, c, d, e, f, g, h, i, j) => {
-    log.child({
-      logLevel: logLevels.trace,
-    })(a, b, c, d, e, f, g, h, i, j);
-  };
-
-  log.debug = (a, b, c, d, e, f, g, h, i, j) => {
-    log.child({
-      logLevel: logLevels.debug,
-    })(a, b, c, d, e, f, g, h, i, j);
-  };
-
-  log.info = (a, b, c, d, e, f, g, h, i, j) => {
-    log.child({
-      logLevel: logLevels.info,
-    })(a, b, c, d, e, f, g, h, i, j);
-  };
-
-  log.warn = (a, b, c, d, e, f, g, h, i, j) => {
-    log.child({
-      logLevel: logLevels.warn,
-    })(a, b, c, d, e, f, g, h, i, j);
-  };
-
-  log.error = (a, b, c, d, e, f, g, h, i, j) => {
-    log.child({
-      logLevel: logLevels.error,
-    })(a, b, c, d, e, f, g, h, i, j);
-  };
-
-  log.fatal = (a, b, c, d, e, f, g, h, i, j) => {
-    log.child({
-      logLevel: logLevels.fatal,
-    })(a, b, c, d, e, f, g, h, i, j);
-  };
+  log.debug = createChildLogger(log, logLevels.debug);
+  log.debugOnce = createOnceChildLogger(log, logLevels.debug);
+  log.error = createChildLogger(log, logLevels.error);
+  log.errorOnce = createOnceChildLogger(log, logLevels.error);
+  log.fatal = createChildLogger(log, logLevels.fatal);
+  log.fatalOnce = createOnceChildLogger(log, logLevels.fatal);
+  log.info = createChildLogger(log, logLevels.info);
+  log.infoOnce = createOnceChildLogger(log, logLevels.info);
+  log.trace = createChildLogger(log, logLevels.trace);
+  log.traceOnce = createOnceChildLogger(log, logLevels.trace);
+  log.warn = createChildLogger(log, logLevels.warn);
+  log.warnOnce = createOnceChildLogger(log, logLevels.warn);
 
   return log;
 };
