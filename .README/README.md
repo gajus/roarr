@@ -416,6 +416,17 @@ Produces output:
 {"context":{"logLevel":60},"message":"foo","sequence":"5","time":1506776210000,"version":"2.0.0"}
 ```
 
+### `traceOnce`
+### `debugOnce`
+### `infoOnce`
+### `warnOnce`
+### `errorOnce`
+### `fatalOnce`
+
+Just like the regular logger methods, but logs the message only once.
+
+Note: Internally, Roarr keeps a record of the last 1,000 `Once` invocations. If this buffer overflows, then the message is going to be logged again until the next time the buffer overflows again. 
+
 ## Utilities
 
 ### `getLogLevelName`
@@ -436,6 +447,7 @@ import type {
 
 getLogLevelName(numericLogLevel: number): LogLevelName;
 ```
+
 ## Middlewares
 
 Roarr logger supports middlewares implemented as [`child`](#child) message translate functions, e.g.

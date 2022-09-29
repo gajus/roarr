@@ -25,6 +25,7 @@ export const createRoarrInitialGlobalState = (currentState: any): RoarrGlobalSta
   versions.sort(compareSemver);
 
   let newState = {
+    onceLog: new Set<string>(),
     sequence: 0,
     ...currentState,
     versions,

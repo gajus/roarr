@@ -26,6 +26,12 @@ JSON logger for Node.js and browser.
         * [`warn`](#roarr-api-warn)
         * [`error`](#roarr-api-error)
         * [`fatal`](#roarr-api-fatal)
+        * [`traceOnce`](#roarr-api-traceonce)
+        * [`debugOnce`](#roarr-api-debugonce)
+        * [`infoOnce`](#roarr-api-infoonce)
+        * [`warnOnce`](#roarr-api-warnonce)
+        * [`errorOnce`](#roarr-api-erroronce)
+        * [`fatalOnce`](#roarr-api-fatalonce)
     * [Utilities](#roarr-utilities)
         * [`getLogLevelName`](#roarr-utilities-getloglevelname)
     * [Middlewares](#roarr-middlewares)
@@ -479,6 +485,23 @@ Produces output:
 {"context":{"logLevel":60},"message":"foo","sequence":"5","time":1506776210000,"version":"2.0.0"}
 ```
 
+<a name="roarr-api-traceonce"></a>
+### <code>traceOnce</code>
+<a name="roarr-api-debugonce"></a>
+### <code>debugOnce</code>
+<a name="roarr-api-infoonce"></a>
+### <code>infoOnce</code>
+<a name="roarr-api-warnonce"></a>
+### <code>warnOnce</code>
+<a name="roarr-api-erroronce"></a>
+### <code>errorOnce</code>
+<a name="roarr-api-fatalonce"></a>
+### <code>fatalOnce</code>
+
+Just like the regular logger methods, but logs the message only once.
+
+Note: Internally, Roarr keeps a record of the last 1,000 `Once` invocations. If this buffer overflows, then the message is going to be logged again until the next time the buffer overflows again. 
+
 <a name="roarr-utilities"></a>
 ## Utilities
 
@@ -501,6 +524,7 @@ import type {
 
 getLogLevelName(numericLogLevel: number): LogLevelName;
 ```
+
 <a name="roarr-middlewares"></a>
 ## Middlewares
 

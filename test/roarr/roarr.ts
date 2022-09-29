@@ -462,6 +462,25 @@ test('convenience methods trace, debug, info, warn, error and fatal prepend a lo
   ]);
 });
 
+test('*Once methods log only once', (t) => {
+  const log = createLoggerWithHistory();
+
+  log.traceOnce('foo');
+  log.traceOnce('foo');
+
+  t.deepEqual(log.messages, [
+    {
+      context: {
+        logLevel: 10,
+      },
+      message: 'foo',
+      sequence: '0',
+      time,
+      version,
+    },
+  ]);
+});
+
 test('does not produce an error when message contains % without an associated parameter', (t) => {
   const log = createLoggerWithHistory();
   log.trace('http://commons.wikimedia.org/wiki/Special:FilePath/Cucumis%20anguria.JPG');
