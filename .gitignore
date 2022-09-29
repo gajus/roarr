@@ -16,4 +16,3 @@ node_modules
 !.nycrc
 !.README
 !.travis.yml
-/package-lock.json
