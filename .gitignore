@@ -6,13 +6,12 @@ node_modules
 !.editorconfig
 !.eslintignore
 !.eslintrc
-!.flowconfig
 !.github
 !.gitignore
 !.husky
 !.ncurc.js
-!.npmrc
 !.npmignore
+!.npmrc
 !.nycrc
 !.README
-!.travis.yml
+!.releaserc
