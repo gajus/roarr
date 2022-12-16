@@ -61,7 +61,7 @@ const getSequence = () => {
   if (isAsyncLocalContextAvailable()) {
     const asyncLocalContext = getAsyncLocalContext();
 
-    if (hasOwnProperty(asyncLocalContext, 'sequenceRoot') && hasOwnProperty(asyncLocalContext, 'sequence')) {
+    if (hasOwnProperty(asyncLocalContext, 'sequenceRoot') && hasOwnProperty(asyncLocalContext, 'sequence') && typeof asyncLocalContext.sequence === 'number') {
       return String(asyncLocalContext.sequenceRoot) + '.' + String(asyncLocalContext.sequence++);
     }
 
@@ -305,7 +305,7 @@ export const createLogger = (
 
     let sequenceRoot;
 
-    if (hasOwnProperty(asyncLocalContext, 'sequenceRoot')) {
+    if (hasOwnProperty(asyncLocalContext, 'sequenceRoot') && hasOwnProperty(asyncLocalContext, 'sequence') && typeof asyncLocalContext.sequence === 'number') {
       sequenceRoot = asyncLocalContext.sequenceRoot + '.' + String(asyncLocalContext.sequence++);
     } else {
       sequenceRoot = String(getGlobalRoarrContext().sequence++);

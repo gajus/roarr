@@ -1,10 +1,7 @@
 /* eslint-disable max-nested-callbacks */
 /* eslint-disable ava/use-test */
 
-import {
-  serial,
-  beforeEach,
-} from 'ava';
+import test from 'ava';
 import delay from 'delay';
 import createGlobalThis from 'globalthis';
 import {
@@ -21,7 +18,7 @@ import {
 const time = -1;
 const version = '2.0.0';
 
-beforeEach(() => {
+test.beforeEach(() => {
   const globalThis = createGlobalThis();
 
   globalThis.ROARR = null;
@@ -44,7 +41,7 @@ const createLoggerWithHistory = (): Logger & {messages: Message[], } => {
   return log;
 };
 
-serial('warns if async_hooks are unavailable', async (t) => {
+test.serial('warns if async_hooks are unavailable', async (t) => {
   const firstLog = createLoggerWithHistory();
 
   const log = firstLog.child({
@@ -79,7 +76,7 @@ serial('warns if async_hooks are unavailable', async (t) => {
   ]);
 });
 
-serial('inherits context from async local scope', async (t) => {
+test.serial('inherits context from async local scope', async (t) => {
   t.plan(1);
 
   const log = createLoggerWithHistory();
@@ -98,7 +95,7 @@ serial('inherits context from async local scope', async (t) => {
   );
 });
 
-serial('inherits context from parent async local scope', async (t) => {
+test.serial('inherits context from parent async local scope', async (t) => {
   t.plan(2);
 
   const log = createLoggerWithHistory();
@@ -131,7 +128,7 @@ serial('inherits context from parent async local scope', async (t) => {
   );
 });
 
-serial('inherits message transformer from async local scope', async (t) => {
+test.serial('inherits message transformer from async local scope', async (t) => {
   const log = createLoggerWithHistory();
 
   await log.adopt(
@@ -162,7 +159,7 @@ serial('inherits message transformer from async local scope', async (t) => {
   ]);
 });
 
-serial('inherits message transformer from parent async local scope', async (t) => {
+test.serial('inherits message transformer from parent async local scope', async (t) => {
   const log = createLoggerWithHistory();
 
   await log.adopt(
@@ -218,7 +215,7 @@ serial('inherits message transformer from parent async local scope', async (t) =
   ]);
 });
 
-serial('top-level adopt increments global sequence', async (t) => {
+test.serial('top-level adopt increments global sequence', async (t) => {
   const log = createLoggerWithHistory();
 
   void log.adopt(
@@ -251,7 +248,7 @@ serial('top-level adopt increments global sequence', async (t) => {
   ]);
 });
 
-serial('top-level adopt increments global sequence (async)', async (t) => {
+test.serial('top-level adopt increments global sequence (async)', async (t) => {
   const log = createLoggerWithHistory();
 
   void log.adopt(
@@ -284,7 +281,7 @@ serial('top-level adopt increments global sequence (async)', async (t) => {
   ]);
 });
 
-serial('logs within adopt increment local sequence', async (t) => {
+test.serial('logs within adopt increment local sequence', async (t) => {
   const log = createLoggerWithHistory();
 
   void log.adopt(
@@ -333,7 +330,7 @@ serial('logs within adopt increment local sequence', async (t) => {
   ]);
 });
 
-serial('logs within adopt increment local sequence (async)', async (t) => {
+test.serial('logs within adopt increment local sequence (async)', async (t) => {
   const log = createLoggerWithHistory();
 
   void log.adopt(
@@ -382,7 +379,7 @@ serial('logs within adopt increment local sequence (async)', async (t) => {
   ]);
 });
 
-serial('nested adopt increment local sequence', async (t) => {
+test.serial('nested adopt increment local sequence', async (t) => {
   const log = createLoggerWithHistory();
 
   void log.adopt(
@@ -415,7 +412,7 @@ serial('nested adopt increment local sequence', async (t) => {
   ]);
 });
 
-serial('nested adopt increment local sequence (async)', async (t) => {
+test.serial('nested adopt increment local sequence (async)', async (t) => {
   const log = createLoggerWithHistory();
 
   void log.adopt(
@@ -448,7 +445,7 @@ serial('nested adopt increment local sequence (async)', async (t) => {
   ]);
 });
 
-serial('adopted scope maintains reference to local sequence', async (t) => {
+test.serial('adopted scope maintains reference to local sequence', async (t) => {
   const log = createLoggerWithHistory();
 
   void log.adopt(
@@ -506,7 +503,7 @@ serial('adopted scope maintains reference to local sequence', async (t) => {
   ]);
 });
 
-serial('maintains correct local reference in an async scope', async (t) => {
+test.serial('maintains correct local reference in an async scope', async (t) => {
   const log = createLoggerWithHistory();
 
   void log.adopt(() => {

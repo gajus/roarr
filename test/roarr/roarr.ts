@@ -1,6 +1,4 @@
-import test, {
-  beforeEach,
-} from 'ava';
+import test from 'ava';
 import createGlobalThis from 'globalthis';
 import {
   createLogger,
@@ -16,7 +14,7 @@ import {
 const time = -1;
 const version = '2.0.0';
 
-beforeEach(() => {
+test.beforeEach(() => {
   const globalThis = createGlobalThis();
 
   globalThis.ROARR = createRoarrInitialGlobalState({});

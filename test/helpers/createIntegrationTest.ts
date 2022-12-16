@@ -2,14 +2,14 @@
 /* eslint-disable ava/use-test */
 
 import anyTest, {
-  type TestInterface,
+  type TestFn,
 } from 'ava';
 import * as sinon from 'sinon';
 
 export const createIntegrationTest = ({
   writeLogs,
 }: {writeLogs: boolean, }) => {
-  const test = anyTest as TestInterface<{
+  const test = anyTest as TestFn<{
     ROARR: any,
     Roarr: any,
     write: sinon.SinonStubbedMember<(message: string) => void>,
