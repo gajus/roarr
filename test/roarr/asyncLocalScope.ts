@@ -215,7 +215,7 @@ test.serial('inherits message transformer from parent async local scope', async 
   ]);
 });
 
-test.serial('top-level adopt increments global sequence', async (t) => {
+test.serial('top-level adopt increments global sequence', (t) => {
   const log = createLoggerWithHistory();
 
   void log.adopt(
@@ -251,13 +251,13 @@ test.serial('top-level adopt increments global sequence', async (t) => {
 test.serial('top-level adopt increments global sequence (async)', async (t) => {
   const log = createLoggerWithHistory();
 
-  void log.adopt(
+  await log.adopt(
     async () => {
       log('foo');
     },
   );
 
-  void log.adopt(
+  await log.adopt(
     async () => {
       log('bar');
     },
@@ -281,7 +281,7 @@ test.serial('top-level adopt increments global sequence (async)', async (t) => {
   ]);
 });
 
-test.serial('logs within adopt increment local sequence', async (t) => {
+test.serial('logs within adopt increment local sequence', (t) => {
   const log = createLoggerWithHistory();
 
   void log.adopt(
@@ -333,14 +333,14 @@ test.serial('logs within adopt increment local sequence', async (t) => {
 test.serial('logs within adopt increment local sequence (async)', async (t) => {
   const log = createLoggerWithHistory();
 
-  void log.adopt(
+  await log.adopt(
     async () => {
       log('foo');
       log('bar');
     },
   );
 
-  void log.adopt(
+  await log.adopt(
     async () => {
       log('baz');
       log('qux');
@@ -379,7 +379,7 @@ test.serial('logs within adopt increment local sequence (async)', async (t) => {
   ]);
 });
 
-test.serial('nested adopt increment local sequence', async (t) => {
+test.serial('nested adopt increment local sequence', (t) => {
   const log = createLoggerWithHistory();
 
   void log.adopt(
@@ -415,7 +415,7 @@ test.serial('nested adopt increment local sequence', async (t) => {
 test.serial('nested adopt increment local sequence (async)', async (t) => {
   const log = createLoggerWithHistory();
 
-  void log.adopt(
+  await log.adopt(
     async () => {
       log('foo');
 
@@ -445,7 +445,7 @@ test.serial('nested adopt increment local sequence (async)', async (t) => {
   ]);
 });
 
-test.serial('adopted scope maintains reference to local sequence', async (t) => {
+test.serial('adopted scope maintains reference to local sequence', (t) => {
   const log = createLoggerWithHistory();
 
   void log.adopt(
