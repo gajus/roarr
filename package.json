@@ -20,8 +20,8 @@
     "boolean": "^3.1.4",
     "fast-json-stringify": "^2.7.10",
     "fast-printf": "^1.6.9",
-    "fast-safe-stringify": "^2.1.1",
     "globalthis": "^1.0.2",
+    "safe-stable-stringify": "^2.4.1",
     "semver-compare": "^1.0.0"
   },
   "description": "JSON logger for Node.js and browser.",

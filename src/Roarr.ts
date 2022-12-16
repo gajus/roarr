@@ -2,8 +2,8 @@ import {
   boolean,
 } from 'boolean';
 import fastJson from 'fast-json-stringify';
-import safeStringify from 'fast-safe-stringify';
 import createGlobalThis from 'globalthis';
+import safeStringify from 'safe-stable-stringify';
 import {
   logLevels,
 } from './constants';

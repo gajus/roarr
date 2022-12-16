@@ -1,8 +1,8 @@
 import {
   printf,
 } from 'fast-printf';
-import safeStringify from 'fast-safe-stringify';
 import createGlobalThis from 'globalthis';
+import safeStringify from 'safe-stable-stringify';
 import {
   ROARR_LOG_FORMAT_VERSION,
 } from '../config';
@@ -84,6 +84,10 @@ const MAX_ONCE_ENTRIES = 1_000;
 const createOnceChildLogger = (log: Logger, logLevel: number) => {
   return (a, b, c, d, e, f, g, h, i, j) => {
     const key = safeStringify({a, b, c, d, e, f, g, h, i, j, logLevel});
+
+    if (!key) {
+      throw new Error('Expected key to be a string');
+    }
 
     const onceLog = getGlobalRoarrContext().onceLog;
 
