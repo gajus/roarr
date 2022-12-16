@@ -8,9 +8,9 @@ import {
 import {
   createRoarrInitialGlobalState,
 } from '../../src/factories/createRoarrInitialGlobalState';
-import type {
-  Message,
-  Logger,
+import {
+  type Message,
+  type Logger,
 } from '../../src/types';
 
 const time = -1;
@@ -181,7 +181,9 @@ test('formats message using sprintf (with context)', (t) => {
 test('creates logger with a context', (t) => {
   const log = createLoggerWithHistory();
 
-  log.child({foo: 'bar'})('baz');
+  log.child({
+    foo: 'bar',
+  })('baz');
 
   t.deepEqual(log.messages, [
     {
@@ -199,7 +201,11 @@ test('creates logger with a context', (t) => {
 test('prepends context to the message context', (t) => {
   const log = createLoggerWithHistory();
 
-  log.child({foo: 'bar'})({baz: 'qux'}, 'quux');
+  log.child({
+    foo: 'bar',
+  })({
+    baz: 'qux',
+  }, 'quux');
 
   t.deepEqual(log.messages, [
     {
@@ -218,7 +224,11 @@ test('prepends context to the message context', (t) => {
 test('prepends context to the message context (is overridden)', (t) => {
   const log = createLoggerWithHistory();
 
-  log.child({foo: 'bar 0'})({foo: 'bar 1'}, 'quux');
+  log.child({
+    foo: 'bar 0',
+  })({
+    foo: 'bar 1',
+  }, 'quux');
 
   t.deepEqual(log.messages, [
     {
@@ -236,7 +246,11 @@ test('prepends context to the message context (is overridden)', (t) => {
 test('appends context to the previous child context', (t) => {
   const log = createLoggerWithHistory();
 
-  log.child({foo: 'bar'}).child({baz: 'qux'})('quux');
+  log.child({
+    foo: 'bar',
+  }).child({
+    baz: 'qux',
+  })('quux');
 
   t.deepEqual(log.messages, [
     {
@@ -255,7 +269,11 @@ test('appends context to the previous child context', (t) => {
 test('appends context to the previous child context (overrides)', (t) => {
   const log = createLoggerWithHistory();
 
-  log.child({foo: 'bar 0'}).child({foo: 'bar 1'})('qux');
+  log.child({
+    foo: 'bar 0',
+  }).child({
+    foo: 'bar 1',
+  })('qux');
 
   t.deepEqual(log.messages, [
     {

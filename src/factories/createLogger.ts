@@ -9,14 +9,14 @@ import {
 import {
   logLevels,
 } from '../constants';
-import type {
-  Logger,
-  TopLevelAsyncLocalContext,
-  AsyncLocalContext,
-  RoarrGlobalState,
-  MessageContext,
-  MessageEventHandler,
-  TransformMessageFunction,
+import {
+  type Logger,
+  type TopLevelAsyncLocalContext,
+  type AsyncLocalContext,
+  type RoarrGlobalState,
+  type MessageContext,
+  type MessageEventHandler,
+  type TransformMessageFunction,
 } from '../types';
 import {
   hasOwnProperty,
@@ -83,7 +83,19 @@ const MAX_ONCE_ENTRIES = 1_000;
 
 const createOnceChildLogger = (log: Logger, logLevel: number) => {
   return (a, b, c, d, e, f, g, h, i, j) => {
-    const key = safeStringify({a, b, c, d, e, f, g, h, i, j, logLevel});
+    const key = safeStringify({
+      a,
+      b,
+      c,
+      d,
+      e,
+      f,
+      g,
+      h,
+      i,
+      j,
+      logLevel,
+    });
 
     if (!key) {
       throw new Error('Expected key to be a string');
@@ -202,7 +214,10 @@ export const createLogger = (
       version: ROARR_LOG_FORMAT_VERSION,
     };
 
-    for (const transform of [...asyncLocalContext.transforms, ...transforms]) {
+    for (const transform of [
+      ...asyncLocalContext.transforms,
+      ...transforms,
+    ]) {
       packet = transform(packet);
 
       if (typeof packet !== 'object' || packet === null) {
@@ -247,8 +262,7 @@ export const createLogger = (
         ...asyncLocalContext.messageContext,
         ...parentMessageContext,
         ...context,
-      },
-      transforms,
+      }, transforms,
     );
   };
 

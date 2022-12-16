@@ -1,5 +1,5 @@
-import type {
-  LogLevelName,
+import {
+  type LogLevelName,
 } from './types';
 
 export const getLogLevelName = (numericLogLevel: number): LogLevelName => {

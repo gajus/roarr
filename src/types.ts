@@ -1,6 +1,6 @@
-import type {
-  AsyncLocalStorage,
-} from 'async_hooks';
+import {
+  type AsyncLocalStorage,
+} from 'node:async_hooks';
 
 export type JsonValue = JsonObject | JsonValue[] | boolean | number | string | readonly JsonValue[] | null | undefined;
 

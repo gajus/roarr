@@ -5,9 +5,6 @@ import fastJson from 'fast-json-stringify';
 import createGlobalThis from 'globalthis';
 import safeStringify from 'safe-stable-stringify';
 import {
-  logLevels,
-} from './constants';
-import {
   createLogger,
 } from './factories/createLogger';
 import {
@@ -17,11 +14,8 @@ import {
   createRoarrInitialGlobalState,
 } from './factories/createRoarrInitialGlobalState';
 import {
-  getLogLevelName,
-} from './getLogLevelName';
-import type {
-  MessageSerializer,
-  RoarrGlobalState,
+  type MessageSerializer,
+  type RoarrGlobalState,
 } from './types';
 
 const fastStringify = fastJson({
@@ -44,7 +38,9 @@ const fastStringify = fastJson({
 
 const globalThis = createGlobalThis();
 
-const ROARR = globalThis.ROARR = createRoarrInitialGlobalState(globalThis.ROARR as RoarrGlobalState || {});
+const ROARR = createRoarrInitialGlobalState(globalThis.ROARR as RoarrGlobalState || {});
+
+globalThis.ROARR = ROARR;
 
 let logFactory = createLogger;
 
@@ -80,8 +76,14 @@ export type {
 } from './types';
 
 export {
-  getLogLevelName,
-  logLevels,
+
   Roarr,
   ROARR,
 };
+
+export {
+  logLevels,
+} from './constants';
+export {
+  getLogLevelName,
+} from './getLogLevelName';

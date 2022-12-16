@@ -1,5 +1,5 @@
-import type {
-  LogWriter,
+import {
+  type LogWriter,
 } from '../types';
 
 const createBlockingWriter = (stream: NodeJS.WritableStream): LogWriter => {

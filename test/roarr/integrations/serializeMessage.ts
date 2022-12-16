@@ -23,5 +23,5 @@ test('serialize message', (t) => {
 
   log.info('test');
 
-  t.regex(write.firstCall.args[0], /{"message":"test"}/);
+  t.is(write.firstCall.args[0], '{"message":"test"}');
 });

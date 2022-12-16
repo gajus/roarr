@@ -1,24 +1,20 @@
 import createGlobalThis from 'globalthis';
 import {
-  logLevels,
-} from './constants';
-import {
   createLogger,
 } from './factories/createLogger';
 import {
   createRoarrInitialGlobalStateBrowser,
 } from './factories/createRoarrInitialGlobalStateBrowser';
 import {
-  getLogLevelName,
-} from './getLogLevelName';
-import type {
-  RoarrGlobalState,
-  MessageSerializer,
+  type RoarrGlobalState,
+  type MessageSerializer,
 } from './types';
 
 const globalThis = createGlobalThis();
 
-const ROARR = globalThis.ROARR = createRoarrInitialGlobalStateBrowser(globalThis.ROARR as RoarrGlobalState || {});
+const ROARR = createRoarrInitialGlobalStateBrowser(globalThis.ROARR as RoarrGlobalState || {});
+
+globalThis.ROARR = ROARR;
 
 const serializeMessage: MessageSerializer = (message) => {
   return JSON.stringify(message);
@@ -44,8 +40,14 @@ export type {
 } from './types';
 
 export {
-  getLogLevelName,
-  logLevels,
+
   Roarr,
   ROARR,
 };
+
+export {
+  logLevels,
+} from './constants';
+export {
+  getLogLevelName,
+} from './getLogLevelName';

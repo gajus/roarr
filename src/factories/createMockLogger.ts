@@ -1,10 +1,10 @@
 import {
   logLevels,
 } from '../constants';
-import type {
-  Logger,
-  MessageContext,
-  MessageEventHandler,
+import {
+  type Logger,
+  type MessageContext,
+  type MessageEventHandler,
 } from '../types';
 
 const createChildLogger = (log: Logger, logLevel: number) => {
@@ -19,6 +19,7 @@ export const createMockLogger = (
   onMessage: MessageEventHandler,
   parentContext?: MessageContext,
 ): Logger => {
+  // eslint-disable-next-line unicorn/consistent-function-scoping
   const log: Logger = () => {
     return undefined;
   };

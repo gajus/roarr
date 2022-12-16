@@ -2,8 +2,8 @@ import compareSemver from 'semver-compare';
 import {
   ROARR_VERSION,
 } from '../config';
-import type {
-  RoarrGlobalState,
+import {
+  type RoarrGlobalState,
 } from '../types';
 
 export const createRoarrInitialGlobalStateBrowser = (currentState: any): RoarrGlobalState => {

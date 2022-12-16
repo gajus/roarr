@@ -13,9 +13,9 @@ import {
 import {
   createRoarrInitialGlobalState,
 } from '../../src/factories/createRoarrInitialGlobalState';
-import type {
-  Logger,
-  Message,
+import {
+  type Logger,
+  type Message,
 } from '../../src/types';
 
 const time = -1;

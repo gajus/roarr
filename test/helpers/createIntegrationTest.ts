@@ -1,10 +1,9 @@
 /* eslint-disable node/no-process-env */
 /* eslint-disable ava/use-test */
 
-import type {
-  TestInterface,
+import anyTest, {
+  type TestInterface,
 } from 'ava';
-import anyTest from 'ava';
 import * as sinon from 'sinon';
 
 export const createIntegrationTest = ({
