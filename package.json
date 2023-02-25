@@ -74,6 +74,6 @@
     "lint": "eslint ./src ./test && tsc --noEmit",
     "test": "NODE_ENV=test ava --serial --verbose"
   },
-  "typings": "./dist/src/Roarr.d.ts",
+  "types": "./dist/src/Roarr.d.ts",
   "version": "1.0.0"
 }
