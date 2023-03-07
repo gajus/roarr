@@ -5,14 +5,14 @@
     "url": "http://gajus.com"
   },
   "ava": {
-    "extensions": [
-      "ts"
+    "extensions": {
+      "ts": "module"
+    },
+    "nodeArguments": [
+      "--loader=tsx"
     ],
     "files": [
       "test/roarr/**/*"
-    ],
-    "require": [
-      "ts-node/register/transpile-only"
     ]
   },
   "browser": "./dist/src/browser.js",
