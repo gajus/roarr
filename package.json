@@ -47,7 +47,7 @@
     "nyc": "^15.1.0",
     "semantic-release": "^19.0.5",
     "sinon": "^11.1.2",
-    "ts-node": "^10.9.1",
+    "tsx": "^3.12.3",
     "typescript": "^4.9.4"
   },
   "engines": {
@@ -66,7 +66,7 @@
     "url": "git@github.com:gajus/roarr.git"
   },
   "scripts": {
-    "benchmark": "ROARR_LOG=true ts-node --transpile-only test/benchmark.ts",
+    "benchmark": "ROARR_LOG=true tsx test/benchmark.ts",
     "build": "del-cli ./dist && tsc",
     "dev": "tsc --watch",
     "lint": "eslint ./src ./test && tsc --noEmit",
