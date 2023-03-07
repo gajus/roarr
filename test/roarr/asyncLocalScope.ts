@@ -1,19 +1,12 @@
 /* eslint-disable max-nested-callbacks */
 /* eslint-disable ava/use-test */
 
+import { createLogger } from '../../src/factories/createLogger';
+import { createRoarrInitialGlobalState } from '../../src/factories/createRoarrInitialGlobalState';
+import { type Logger, type Message } from '../../src/types';
 import test from 'ava';
 import delay from 'delay';
 import createGlobalThis from 'globalthis';
-import {
-  createLogger,
-} from '../../src/factories/createLogger';
-import {
-  createRoarrInitialGlobalState,
-} from '../../src/factories/createRoarrInitialGlobalState';
-import {
-  type Logger,
-  type Message,
-} from '../../src/types';
 
 const time = -1;
 const version = '2.0.0';
@@ -26,7 +19,7 @@ test.beforeEach(() => {
   globalThis.ROARR = createRoarrInitialGlobalState({});
 });
 
-const createLoggerWithHistory = (): Logger & {messages: Message[], } => {
+const createLoggerWithHistory = (): Logger & { messages: Message[] } => {
   const messages: Message[] = [];
 
   const log = createLogger((message) => {
@@ -68,7 +61,8 @@ test.serial('warns if async_hooks are unavailable', async (t) => {
         logLevel: 40,
         package: 'roarr',
       },
-      message: 'async_hooks are unavailable; Roarr.adopt will not function as expected',
+      message:
+        'async_hooks are unavailable; Roarr.adopt will not function as expected',
       sequence: '0',
       time,
       version,
@@ -102,18 +96,26 @@ test.serial('inherits context from parent async local scope', async (t) => {
 
   await log.adopt(
     async () => {
-      t.deepEqual(log.getContext(), {
-        bar: 'bar 0',
-      }, 'first-level');
+      t.deepEqual(
+        log.getContext(),
+        {
+          bar: 'bar 0',
+        },
+        'first-level',
+      );
 
       log('foo 0');
 
       await log.adopt(
         () => {
-          t.deepEqual(log.getContext(), {
-            bar: 'bar 0',
-            baz: 'baz 1',
-          }, 'second-level');
+          t.deepEqual(
+            log.getContext(),
+            {
+              bar: 'bar 0',
+              baz: 'baz 1',
+            },
+            'second-level',
+          );
 
           log('foo 1');
         },
@@ -128,107 +130,109 @@ test.serial('inherits context from parent async local scope', async (t) => {
   );
 });
 
-test.serial('inherits message transformer from async local scope', async (t) => {
-  const log = createLoggerWithHistory();
+test.serial(
+  'inherits message transformer from async local scope',
+  async (t) => {
+    const log = createLoggerWithHistory();
 
-  await log.adopt(
-    () => {
-      log('foo');
-    },
-    (message) => {
-      return {
-        ...message,
+    await log.adopt(
+      () => {
+        log('foo');
+      },
+      (message) => {
+        return {
+          ...message,
+          context: {
+            bar: 'bar',
+            ...message.context,
+          },
+        };
+      },
+    );
+
+    t.deepEqual(log.messages, [
+      {
         context: {
           bar: 'bar',
-          ...message.context,
         },
-      };
-    },
-  );
-
-  t.deepEqual(log.messages, [
-    {
-      context: {
-        bar: 'bar',
+        message: 'foo',
+        sequence: '0.0',
+        time,
+        version,
       },
-      message: 'foo',
-      sequence: '0.0',
-      time,
-      version,
-    },
-  ]);
-});
+    ]);
+  },
+);
 
-test.serial('inherits message transformer from parent async local scope', async (t) => {
-  const log = createLoggerWithHistory();
+test.serial(
+  'inherits message transformer from parent async local scope',
+  async (t) => {
+    const log = createLoggerWithHistory();
 
-  await log.adopt(
-    async () => {
-      log('foo 0');
+    await log.adopt(
+      async () => {
+        log('foo 0');
 
-      await log.adopt(
-        () => {
-          log('foo 1');
-        },
-        (message) => {
-          return {
-            ...message,
-            context: {
-              baz: 'baz',
-              ...message.context,
-            },
-          };
-        },
-      );
-    },
-    (message) => {
-      return {
-        ...message,
+        await log.adopt(
+          () => {
+            log('foo 1');
+          },
+          (message) => {
+            return {
+              ...message,
+              context: {
+                baz: 'baz',
+                ...message.context,
+              },
+            };
+          },
+        );
+      },
+      (message) => {
+        return {
+          ...message,
+          context: {
+            bar: 'bar',
+            ...message.context,
+          },
+        };
+      },
+    );
+
+    t.deepEqual(log.messages, [
+      {
         context: {
           bar: 'bar',
-          ...message.context,
         },
-      };
-    },
-  );
-
-  t.deepEqual(log.messages, [
-    {
-      context: {
-        bar: 'bar',
+        message: 'foo 0',
+        sequence: '0.0',
+        time,
+        version,
       },
-      message: 'foo 0',
-      sequence: '0.0',
-      time,
-      version,
-    },
-    {
-      context: {
-        bar: 'bar',
-        baz: 'baz',
+      {
+        context: {
+          bar: 'bar',
+          baz: 'baz',
+        },
+        message: 'foo 1',
+        sequence: '0.1.0',
+        time,
+        version,
       },
-      message: 'foo 1',
-      sequence: '0.1.0',
-      time,
-      version,
-    },
-  ]);
-});
+    ]);
+  },
+);
 
 test.serial('top-level adopt increments global sequence', (t) => {
   const log = createLoggerWithHistory();
 
-  void log.adopt(
-    () => {
-      log('foo');
-    },
-  );
+  void log.adopt(() => {
+    log('foo');
+  });
 
-  void log.adopt(
-    () => {
-      log('bar');
-    },
-  );
+  void log.adopt(() => {
+    log('bar');
+  });
 
   t.deepEqual(log.messages, [
     {
@@ -251,17 +255,13 @@ test.serial('top-level adopt increments global sequence', (t) => {
 test.serial('top-level adopt increments global sequence (async)', async (t) => {
   const log = createLoggerWithHistory();
 
-  await log.adopt(
-    async () => {
-      log('foo');
-    },
-  );
+  await log.adopt(async () => {
+    log('foo');
+  });
 
-  await log.adopt(
-    async () => {
-      log('bar');
-    },
-  );
+  await log.adopt(async () => {
+    log('bar');
+  });
 
   t.deepEqual(log.messages, [
     {
@@ -284,19 +284,15 @@ test.serial('top-level adopt increments global sequence (async)', async (t) => {
 test.serial('logs within adopt increment local sequence', (t) => {
   const log = createLoggerWithHistory();
 
-  void log.adopt(
-    () => {
-      log('foo');
-      log('bar');
-    },
-  );
+  void log.adopt(() => {
+    log('foo');
+    log('bar');
+  });
 
-  void log.adopt(
-    () => {
-      log('baz');
-      log('qux');
-    },
-  );
+  void log.adopt(() => {
+    log('baz');
+    log('qux');
+  });
 
   t.deepEqual(log.messages, [
     {
@@ -333,19 +329,15 @@ test.serial('logs within adopt increment local sequence', (t) => {
 test.serial('logs within adopt increment local sequence (async)', async (t) => {
   const log = createLoggerWithHistory();
 
-  await log.adopt(
-    async () => {
-      log('foo');
-      log('bar');
-    },
-  );
+  await log.adopt(async () => {
+    log('foo');
+    log('bar');
+  });
 
-  await log.adopt(
-    async () => {
-      log('baz');
-      log('qux');
-    },
-  );
+  await log.adopt(async () => {
+    log('baz');
+    log('qux');
+  });
 
   t.deepEqual(log.messages, [
     {
@@ -382,17 +374,13 @@ test.serial('logs within adopt increment local sequence (async)', async (t) => {
 test.serial('nested adopt increment local sequence', (t) => {
   const log = createLoggerWithHistory();
 
-  void log.adopt(
-    () => {
-      log('foo');
+  void log.adopt(() => {
+    log('foo');
 
-      void log.adopt(
-        () => {
-          log('bar');
-        },
-      );
-    },
-  );
+    void log.adopt(() => {
+      log('bar');
+    });
+  });
 
   t.deepEqual(log.messages, [
     {
@@ -415,17 +403,13 @@ test.serial('nested adopt increment local sequence', (t) => {
 test.serial('nested adopt increment local sequence (async)', async (t) => {
   const log = createLoggerWithHistory();
 
-  await log.adopt(
-    async () => {
-      log('foo');
+  await log.adopt(async () => {
+    log('foo');
 
-      await log.adopt(
-        async () => {
-          log('bar');
-        },
-      );
-    },
-  );
+    await log.adopt(async () => {
+      log('bar');
+    });
+  });
 
   t.deepEqual(log.messages, [
     {
@@ -448,21 +432,17 @@ test.serial('nested adopt increment local sequence (async)', async (t) => {
 test.serial('adopted scope maintains reference to local sequence', (t) => {
   const log = createLoggerWithHistory();
 
-  void log.adopt(
-    () => {
-      log('foo');
+  void log.adopt(() => {
+    log('foo');
 
-      void log.adopt(
-        () => {
-          log('bar 0');
-          log('bar 1');
-          log('bar 2');
-        },
-      );
+    void log.adopt(() => {
+      log('bar 0');
+      log('bar 1');
+      log('bar 2');
+    });
 
-      log('baz');
-    },
-  );
+    log('baz');
+  });
 
   t.deepEqual(log.messages, [
     {
@@ -503,61 +483,63 @@ test.serial('adopted scope maintains reference to local sequence', (t) => {
   ]);
 });
 
-test.serial('maintains correct local reference in an async scope', async (t) => {
-  const log = createLoggerWithHistory();
+test.serial(
+  'maintains correct local reference in an async scope',
+  async (t) => {
+    const log = createLoggerWithHistory();
 
-  void log.adopt(() => {
-    log('foo 0');
     void log.adopt(() => {
-      log('bar 0');
+      log('foo 0');
       void log.adopt(() => {
-        log('baz 0');
-        setTimeout(() => {
-          log('baz 1');
-        }, 10);
+        log('bar 0');
+        void log.adopt(() => {
+          log('baz 0');
+          setTimeout(() => {
+            log('baz 1');
+          }, 10);
+        });
+        log('bar 1');
       });
-      log('bar 1');
     });
-  });
 
-  await delay(20);
+    await delay(20);
 
-  t.deepEqual(log.messages, [
-    {
-      context: {},
-      message: 'foo 0',
-      sequence: '0.0',
-      time: -1,
-      version: '2.0.0',
-    },
-    {
-      context: {},
-      message: 'bar 0',
-      sequence: '0.1.0',
-      time: -1,
-      version: '2.0.0',
-    },
-    {
-      context: {},
-      message: 'baz 0',
-      sequence: '0.1.1.0',
-      time: -1,
-      version: '2.0.0',
-    },
-    {
-      context: {},
-      message: 'bar 1',
-      sequence: '0.1.2',
-      time: -1,
-      version: '2.0.0',
-    },
-    {
-      context: {},
-      message: 'baz 1',
-      sequence: '0.1.1.1',
-      time: -1,
-      version: '2.0.0',
-    },
-  ]);
-});
-
+    t.deepEqual(log.messages, [
+      {
+        context: {},
+        message: 'foo 0',
+        sequence: '0.0',
+        time: -1,
+        version: '2.0.0',
+      },
+      {
+        context: {},
+        message: 'bar 0',
+        sequence: '0.1.0',
+        time: -1,
+        version: '2.0.0',
+      },
+      {
+        context: {},
+        message: 'baz 0',
+        sequence: '0.1.1.0',
+        time: -1,
+        version: '2.0.0',
+      },
+      {
+        context: {},
+        message: 'bar 1',
+        sequence: '0.1.2',
+        time: -1,
+        version: '2.0.0',
+      },
+      {
+        context: {},
+        message: 'baz 1',
+        sequence: '0.1.1.1',
+        time: -1,
+        version: '2.0.0',
+      },
+    ]);
+  },
+);

@@ -1,3 +1,1 @@
-export {
-  hasOwnProperty,
-} from './hasOwnProperty';
+export { hasOwnProperty } from './hasOwnProperty';

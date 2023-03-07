@@ -1,22 +1,11 @@
-import {
-  boolean,
-} from 'boolean';
+import { createLogger } from './factories/createLogger';
+import { createMockLogger } from './factories/createMockLogger';
+import { createRoarrInitialGlobalState } from './factories/createRoarrInitialGlobalState';
+import { type MessageSerializer, type RoarrGlobalState } from './types';
+import { boolean } from 'boolean';
 import fastJson from 'fast-json-stringify';
 import createGlobalThis from 'globalthis';
 import safeStringify from 'safe-stable-stringify';
-import {
-  createLogger,
-} from './factories/createLogger';
-import {
-  createMockLogger,
-} from './factories/createMockLogger';
-import {
-  createRoarrInitialGlobalState,
-} from './factories/createRoarrInitialGlobalState';
-import {
-  type MessageSerializer,
-  type RoarrGlobalState,
-} from './types';
 
 const fastStringify = fastJson({
   properties: {
@@ -38,7 +27,9 @@ const fastStringify = fastJson({
 
 const globalThis = createGlobalThis();
 
-const ROARR = createRoarrInitialGlobalState(globalThis.ROARR as RoarrGlobalState || {});
+const ROARR = createRoarrInitialGlobalState(
+  (globalThis.ROARR as RoarrGlobalState) || {},
+);
 
 globalThis.ROARR = ROARR;
 
@@ -52,7 +43,12 @@ if (!enabled) {
 }
 
 const serializeMessage: MessageSerializer = (message) => {
-  return '{"context":' + safeStringify(message.context) + ',' + fastStringify(message).slice(1);
+  return (
+    '{"context":' +
+    safeStringify(message.context) +
+    ',' +
+    fastStringify(message).slice(1)
+  );
 };
 
 const Roarr = logFactory((message) => {
@@ -75,15 +71,7 @@ export type {
   TransformMessageFunction,
 } from './types';
 
-export {
+export { ROARR, Roarr };
 
-  Roarr,
-  ROARR,
-};
-
-export {
-  logLevels,
-} from './constants';
-export {
-  getLogLevelName,
-} from './getLogLevelName';
+export { logLevels } from './constants';
+export { getLogLevelName } from './getLogLevelName';

@@ -4,6 +4,7 @@ language: en
 minWordLength: 5
 version: '0.2'
 words:
-  - roarr
   - Gajus
   - Kuizinas
+  - roarr
+  - sprintf

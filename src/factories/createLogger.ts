@@ -1,26 +1,18 @@
+import { ROARR_LOG_FORMAT_VERSION } from '../config';
+import { logLevels } from '../constants';
 import {
-  printf,
-} from 'fast-printf';
-import createGlobalThis from 'globalthis';
-import safeStringify from 'safe-stable-stringify';
-import {
-  ROARR_LOG_FORMAT_VERSION,
-} from '../config';
-import {
-  logLevels,
-} from '../constants';
-import {
-  type Logger,
-  type TopLevelAsyncLocalContext,
   type AsyncLocalContext,
-  type RoarrGlobalState,
+  type Logger,
   type MessageContext,
   type MessageEventHandler,
+  type RoarrGlobalState,
+  type TopLevelAsyncLocalContext,
   type TransformMessageFunction,
 } from '../types';
-import {
-  hasOwnProperty,
-} from '../utilities';
+import { hasOwnProperty } from '../utilities';
+import { printf } from 'fast-printf';
+import createGlobalThis from 'globalthis';
+import safeStringify from 'safe-stable-stringify';
 
 let loggedWarningAsyncLocalContext = false;
 
@@ -61,8 +53,16 @@ const getSequence = () => {
   if (isAsyncLocalContextAvailable()) {
     const asyncLocalContext = getAsyncLocalContext();
 
-    if (hasOwnProperty(asyncLocalContext, 'sequenceRoot') && hasOwnProperty(asyncLocalContext, 'sequence') && typeof asyncLocalContext.sequence === 'number') {
-      return String(asyncLocalContext.sequenceRoot) + '.' + String(asyncLocalContext.sequence++);
+    if (
+      hasOwnProperty(asyncLocalContext, 'sequenceRoot') &&
+      hasOwnProperty(asyncLocalContext, 'sequence') &&
+      typeof asyncLocalContext.sequence === 'number'
+    ) {
+      return (
+        String(asyncLocalContext.sequenceRoot) +
+        '.' +
+        String(asyncLocalContext.sequence++)
+      );
     }
 
     return String(getGlobalRoarrContext().sequence++);
@@ -72,17 +72,17 @@ const getSequence = () => {
 };
 
 const createChildLogger = (log: Logger, logLevel: number) => {
-  return (a, b, c, d, e, f, g, h, i, j) => {
+  return (a, b, c, d, e, f, g, h, index, index_) => {
     log.child({
       logLevel,
-    })(a, b, c, d, e, f, g, h, i, j);
+    })(a, b, c, d, e, f, g, h, index, index_);
   };
 };
 
 const MAX_ONCE_ENTRIES = 1_000;
 
 const createOnceChildLogger = (log: Logger, logLevel: number) => {
-  return (a, b, c, d, e, f, g, h, i, j) => {
+  return (a, b, c, d, e, f, g, h, index, index_) => {
     const key = safeStringify({
       a,
       b,
@@ -92,8 +92,8 @@ const createOnceChildLogger = (log: Logger, logLevel: number) => {
       f,
       g,
       h,
-      i,
-      j,
+      i: index,
+      j: index_,
       logLevel,
     });
 
@@ -115,7 +115,7 @@ const createOnceChildLogger = (log: Logger, logLevel: number) => {
 
     log.child({
       logLevel,
-    })(a, b, c, d, e, f, g, h, i, j);
+    })(a, b, c, d, e, f, g, h, index, index_);
   };
 };
 
@@ -133,8 +133,8 @@ export const createLogger = (
     f: any,
     g: any,
     h: any,
-    i: any,
-    j: any,
+    index: any,
+    index_: any,
   ) => {
     const time = Date.now();
     const sequence = getSequence();
@@ -167,21 +167,12 @@ export const createLogger = (
       message = a;
     } else if (typeof a === 'string') {
       if (!a.includes('%')) {
-        throw new Error('When a string parameter is followed by other arguments, then it is assumed that you are attempting to format a message using printf syntax. You either forgot to add printf bindings or if you meant to add context to the log message, pass them in an object as the first parameter.');
+        throw new Error(
+          'When a string parameter is followed by other arguments, then it is assumed that you are attempting to format a message using printf syntax. You either forgot to add printf bindings or if you meant to add context to the log message, pass them in an object as the first parameter.',
+        );
       }
 
-      message = printf(
-        a,
-        b,
-        c,
-        d,
-        e,
-        f,
-        g,
-        h,
-        i,
-        j,
-      );
+      message = printf(a, b, c, d, e, f, g, h, index, index_);
     } else {
       let fallbackMessage = b;
 
@@ -189,21 +180,13 @@ export const createLogger = (
         if (b === undefined) {
           fallbackMessage = '';
         } else {
-          throw new TypeError('Message must be a string. Received ' + typeof b + '.');
+          throw new TypeError(
+            'Message must be a string. Received ' + typeof b + '.',
+          );
         }
       }
 
-      message = printf(
-        fallbackMessage,
-        c,
-        d,
-        e,
-        f,
-        g,
-        h,
-        i,
-        j,
-      );
+      message = printf(fallbackMessage, c, d, e, f, g, h, index, index_);
     }
 
     let packet = {
@@ -214,14 +197,13 @@ export const createLogger = (
       version: ROARR_LOG_FORMAT_VERSION,
     };
 
-    for (const transform of [
-      ...asyncLocalContext.transforms,
-      ...transforms,
-    ]) {
+    for (const transform of [...asyncLocalContext.transforms, ...transforms]) {
       packet = transform(packet);
 
       if (typeof packet !== 'object' || packet === null) {
-        throw new Error('Message transform function must return a message object.');
+        throw new Error(
+          'Message transform function must return a message object.',
+        );
       }
     }
 
@@ -250,19 +232,18 @@ export const createLogger = (
           ...parentMessageContext,
           ...context,
         },
-        [
-          context,
-          ...transforms,
-        ],
+        [context, ...transforms],
       );
     }
 
     return createLogger(
-      onMessage, {
+      onMessage,
+      {
         ...asyncLocalContext.messageContext,
         ...parentMessageContext,
         ...context,
-      }, transforms,
+      },
+      transforms,
     );
   };
 
@@ -291,7 +272,8 @@ export const createLogger = (
             logLevel: logLevels.warn,
             package: 'roarr',
           },
-          message: 'async_hooks are unavailable; Roarr.adopt will not function as expected',
+          message:
+            'async_hooks are unavailable; Roarr.adopt will not function as expected',
           sequence: getSequence(),
           time: Date.now(),
           version: ROARR_LOG_FORMAT_VERSION,
@@ -305,8 +287,15 @@ export const createLogger = (
 
     let sequenceRoot;
 
-    if (hasOwnProperty(asyncLocalContext, 'sequenceRoot') && hasOwnProperty(asyncLocalContext, 'sequence') && typeof asyncLocalContext.sequence === 'number') {
-      sequenceRoot = asyncLocalContext.sequenceRoot + '.' + String(asyncLocalContext.sequence++);
+    if (
+      hasOwnProperty(asyncLocalContext, 'sequenceRoot') &&
+      hasOwnProperty(asyncLocalContext, 'sequence') &&
+      typeof asyncLocalContext.sequence === 'number'
+    ) {
+      sequenceRoot =
+        asyncLocalContext.sequenceRoot +
+        '.' +
+        String(asyncLocalContext.sequence++);
     } else {
       sequenceRoot = String(getGlobalRoarrContext().sequence++);
     }
@@ -315,14 +304,10 @@ export const createLogger = (
       ...asyncLocalContext.messageContext,
     };
 
-    const nextTransforms = [
-      ...asyncLocalContext.transforms,
-    ];
+    const nextTransforms = [...asyncLocalContext.transforms];
 
     if (typeof context === 'function') {
-      nextTransforms.push(
-        context,
-      );
+      nextTransforms.push(context);
     } else {
       nextContext = {
         ...nextContext,

@@ -1,6 +1,4 @@
-import {
-  type LogLevelName,
-} from './types';
+import { type LogLevelName } from './types';
 
 export const getLogLevelName = (numericLogLevel: number): LogLevelName => {
   if (numericLogLevel <= 10) {

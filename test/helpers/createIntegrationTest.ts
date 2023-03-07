@@ -1,28 +1,25 @@
 /* eslint-disable node/no-process-env */
 /* eslint-disable ava/use-test */
 
-import anyTest, {
-  type TestFn,
-} from 'ava';
+import anyTest, { type TestFn } from 'ava';
 import * as sinon from 'sinon';
 
 export const createIntegrationTest = ({
   writeLogs,
-}: {writeLogs: boolean, }) => {
+}: {
+  writeLogs: boolean;
+}) => {
   const test = anyTest as TestFn<{
-    ROARR: any,
-    Roarr: any,
-    write: sinon.SinonStubbedMember<(message: string) => void>,
+    ROARR: any;
+    Roarr: any;
+    write: sinon.SinonStubbedMember<(message: string) => void>;
   }>;
 
   test.beforeEach(async (t) => {
     process.env.ROARR_LOG = writeLogs ? '1' : '0';
 
     // This import is affected by the `process.env.ROARR_LOG` value.
-    const {
-      Roarr,
-      ROARR,
-    } = await import('../../src/Roarr');
+    const { Roarr, ROARR } = await import('../../src/Roarr');
 
     sinon.restore();
 

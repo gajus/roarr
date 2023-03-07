@@ -505,7 +505,7 @@ Depending on your configuration, consider one of the following log transports:
 
 ## Node.js environment variables
 
-Use environment variables to control `roarr` behaviour.
+Use environment variables to control `roarr` behavior.
 
 |Name||Function|Default|
 |---|---|---|---|

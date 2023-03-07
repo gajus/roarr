@@ -1,18 +1,13 @@
+import { createLogger } from './factories/createLogger';
+import { createRoarrInitialGlobalStateBrowser } from './factories/createRoarrInitialGlobalStateBrowser';
+import { type MessageSerializer, type RoarrGlobalState } from './types';
 import createGlobalThis from 'globalthis';
-import {
-  createLogger,
-} from './factories/createLogger';
-import {
-  createRoarrInitialGlobalStateBrowser,
-} from './factories/createRoarrInitialGlobalStateBrowser';
-import {
-  type RoarrGlobalState,
-  type MessageSerializer,
-} from './types';
 
 const globalThis = createGlobalThis();
 
-const ROARR = createRoarrInitialGlobalStateBrowser(globalThis.ROARR as RoarrGlobalState || {});
+const ROARR = createRoarrInitialGlobalStateBrowser(
+  (globalThis.ROARR as RoarrGlobalState) || {},
+);
 
 globalThis.ROARR = ROARR;
 
@@ -39,15 +34,7 @@ export type {
   TransformMessageFunction,
 } from './types';
 
-export {
+export { ROARR, Roarr };
 
-  Roarr,
-  ROARR,
-};
-
-export {
-  logLevels,
-} from './constants';
-export {
-  getLogLevelName,
-} from './getLogLevelName';
+export { logLevels } from './constants';
+export { getLogLevelName } from './getLogLevelName';

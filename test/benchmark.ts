@@ -1,12 +1,8 @@
 /* eslint-disable no-console */
 
-import {
-  Suite,
-} from 'benchmark';
+import { Roarr } from '../src/Roarr';
+import { Suite } from 'benchmark';
 import createGlobalThis from 'globalthis';
-import {
-  Roarr,
-} from '../src/Roarr';
 
 // eslint-disable-next-line node/no-process-env
 if (process.env.ROARR_LOG !== 'true') {
@@ -56,9 +52,12 @@ const globalThis = createGlobalThis();
   suite.add(
     'message with context',
     () => {
-      Roarr.info({
-        foo: 'bar',
-      }, 'foo');
+      Roarr.info(
+        {
+          foo: 'bar',
+        },
+        'foo',
+      );
     },
     {
       setup: () => {

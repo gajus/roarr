@@ -1,6 +1,4 @@
-import {
-  logLevels,
-} from '../constants';
+import { logLevels } from '../constants';
 import {
   type Logger,
   type MessageContext,
@@ -8,10 +6,10 @@ import {
 } from '../types';
 
 const createChildLogger = (log: Logger, logLevel: number) => {
-  return (a, b, c, d, e, f, g, h, i, j) => {
+  return (a, b, c, d, e, f, g, h, index, index_) => {
     log.child({
       logLevel,
-    })(a, b, c, d, e, f, g, h, i, j);
+    })(a, b, c, d, e, f, g, h, index, index_);
   };
 };
 
@@ -28,7 +26,7 @@ export const createMockLogger = (
     return routine();
   };
 
-  log.child = (context) => {
+  log.child = () => {
     return createMockLogger(onMessage, parentContext);
   };
 

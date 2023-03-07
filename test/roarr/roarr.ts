@@ -1,15 +1,8 @@
+import { createLogger } from '../../src/factories/createLogger';
+import { createRoarrInitialGlobalState } from '../../src/factories/createRoarrInitialGlobalState';
+import { type Logger, type Message } from '../../src/types';
 import test from 'ava';
 import createGlobalThis from 'globalthis';
-import {
-  createLogger,
-} from '../../src/factories/createLogger';
-import {
-  createRoarrInitialGlobalState,
-} from '../../src/factories/createRoarrInitialGlobalState';
-import {
-  type Message,
-  type Logger,
-} from '../../src/types';
 
 const time = -1;
 const version = '2.0.0';
@@ -20,7 +13,7 @@ test.beforeEach(() => {
   globalThis.ROARR = createRoarrInitialGlobalState({});
 });
 
-const createLoggerWithHistory = (): Logger & {messages: Message[], } => {
+const createLoggerWithHistory = (): Logger & { messages: Message[] } => {
   const messages: any = [];
 
   const log: any = createLogger((message) => {
@@ -71,12 +64,15 @@ test('logs an empty message when first parameter is an object and the second par
 test('throws in case of invalid invocation', (t) => {
   const log = createLoggerWithHistory();
 
-  t.throws(() => {
-    // @ts-expect-error Invalid invocation
-    log({}, {});
-  }, {
-    message: 'Message must be a string. Received object.',
-  });
+  t.throws(
+    () => {
+      // @ts-expect-error Invalid invocation
+      log({}, {});
+    },
+    {
+      message: 'Message must be a string. Received object.',
+    },
+  );
 });
 
 test('throws in case of invalid invocation (2)', (t) => {
@@ -139,9 +135,12 @@ test('formats message using sprintf (digit variables)', (t) => {
 test('creates message with a context', (t) => {
   const log = createLoggerWithHistory();
 
-  log({
-    foo: 'bar',
-  }, 'baz');
+  log(
+    {
+      foo: 'bar',
+    },
+    'baz',
+  );
 
   t.deepEqual(log.messages, [
     {
@@ -159,9 +158,13 @@ test('creates message with a context', (t) => {
 test('formats message using sprintf (with context)', (t) => {
   const log = createLoggerWithHistory();
 
-  log({
-    foo: 'bar',
-  }, 'baz %s', 'qux');
+  log(
+    {
+      foo: 'bar',
+    },
+    'baz %s',
+    'qux',
+  );
 
   t.deepEqual(log.messages, [
     {
@@ -201,9 +204,12 @@ test('prepends context to the message context', (t) => {
 
   log.child({
     foo: 'bar',
-  })({
-    baz: 'qux',
-  }, 'quux');
+  })(
+    {
+      baz: 'qux',
+    },
+    'quux',
+  );
 
   t.deepEqual(log.messages, [
     {
@@ -224,9 +230,12 @@ test('prepends context to the message context (is overridden)', (t) => {
 
   log.child({
     foo: 'bar 0',
-  })({
-    foo: 'bar 1',
-  }, 'quux');
+  })(
+    {
+      foo: 'bar 1',
+    },
+    'quux',
+  );
 
   t.deepEqual(log.messages, [
     {
@@ -244,11 +253,13 @@ test('prepends context to the message context (is overridden)', (t) => {
 test('appends context to the previous child context', (t) => {
   const log = createLoggerWithHistory();
 
-  log.child({
-    foo: 'bar',
-  }).child({
-    baz: 'qux',
-  })('quux');
+  log
+    .child({
+      foo: 'bar',
+    })
+    .child({
+      baz: 'qux',
+    })('quux');
 
   t.deepEqual(log.messages, [
     {
@@ -267,11 +278,13 @@ test('appends context to the previous child context', (t) => {
 test('appends context to the previous child context (overrides)', (t) => {
   const log = createLoggerWithHistory();
 
-  log.child({
-    foo: 'bar 0',
-  }).child({
-    foo: 'bar 1',
-  })('qux');
+  log
+    .child({
+      foo: 'bar 0',
+    })
+    .child({
+      foo: 'bar 1',
+    })('qux');
 
   t.deepEqual(log.messages, [
     {
@@ -289,13 +302,12 @@ test('appends context to the previous child context (overrides)', (t) => {
 test('translates child message', (t) => {
   const log = createLoggerWithHistory();
 
-  log
-    .child((message) => {
-      return {
-        ...message,
-        message: message.message + 'bar',
-      };
-    })('foo');
+  log.child((message) => {
+    return {
+      ...message,
+      message: message.message + 'bar',
+    };
+  })('foo');
 
   t.deepEqual(log.messages, [
     {
@@ -311,7 +323,7 @@ test('translates child message', (t) => {
 test('serializes context using a transformer', (t) => {
   const log = createLoggerWithHistory();
 
-  const log1 = log.child<{error1: Error, }>((message) => {
+  const log1 = log.child<{ error1: Error }>((message) => {
     if (!message.context.error1) {
       return message;
     }
@@ -325,16 +337,22 @@ test('serializes context using a transformer', (t) => {
     };
   });
 
-  log1.error({
-    error1: new Error('foo'),
-  }, 'log1');
+  log1.error(
+    {
+      error1: new Error('foo'),
+    },
+    'log1',
+  );
 
   // @ts-expect-error error2 is not allowed
-  log1.error({
-    error2: new Error('foo'),
-  }, 'log1');
+  log1.error(
+    {
+      error2: new Error('foo'),
+    },
+    'log1',
+  );
 
-  const log2 = log1.child<{error2: Error, }>((message) => {
+  const log2 = log1.child<{ error2: Error }>((message) => {
     return {
       ...message,
       context: {
@@ -344,15 +362,21 @@ test('serializes context using a transformer', (t) => {
     };
   });
 
-  log2.error({
-    error1: new Error('foo'),
-    error2: new Error('foo'),
-  }, 'log2');
+  log2.error(
+    {
+      error1: new Error('foo'),
+      error2: new Error('foo'),
+    },
+    'log2',
+  );
 
   // @ts-expect-error error2 is not allowed
-  log2.error({
-    error3: new Error('foo'),
-  }, 'log2');
+  log2.error(
+    {
+      error3: new Error('foo'),
+    },
+    'log2',
+  );
 
   t.like(log.messages[0], {
     context: {
@@ -388,7 +412,7 @@ test('does not allow to extend context without a transformer', (t) => {
   const log = createLoggerWithHistory();
 
   // @ts-expect-error cannot type child without a translator
-  log.child<{foo: string, }>({});
+  log.child<{ foo: string }>({});
 
   log.child({});
 
@@ -398,16 +422,19 @@ test('does not allow to extend context without a transformer', (t) => {
 test('throws an error if child does not return an object', (t) => {
   const log = createLoggerWithHistory();
 
-  t.throws(() => {
-    log
+  t.throws(
+    () => {
+      log
 
-      // @ts-expect-error result must be an object
-      .child(() => {
-        return '';
-      })('foo');
-  }, {
-    message: 'Message transform function must return a message object.',
-  });
+        // @ts-expect-error result must be an object
+        .child(() => {
+          return '';
+        })('foo');
+    },
+    {
+      message: 'Message transform function must return a message object.',
+    },
+  );
 });
 
 test('convenience methods trace, debug, info, warn, error and fatal prepend a logLevel property', (t) => {
@@ -499,13 +526,16 @@ test('*Once methods log only once', (t) => {
 
 test('does not produce an error when message contains % without an associated parameter', (t) => {
   const log = createLoggerWithHistory();
-  log.trace('http://commons.wikimedia.org/wiki/Special:FilePath/Cucumis%20anguria.JPG');
+  log.trace(
+    'http://commons.wikimedia.org/wiki/Special:FilePath/Cucumis%20anguria.JPG',
+  );
   t.deepEqual(log.messages, [
     {
       context: {
         logLevel: 10,
       },
-      message: 'http://commons.wikimedia.org/wiki/Special:FilePath/Cucumis%20anguria.JPG',
+      message:
+        'http://commons.wikimedia.org/wiki/Special:FilePath/Cucumis%20anguria.JPG',
       sequence: '0',
       time,
       version,
