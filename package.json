@@ -38,7 +38,6 @@
     "ava": "^5.1.0",
     "benchmark": "^2.1.4",
     "coveralls": "^3.1.1",
-    "del-cli": "^4.0.1",
     "delay": "^5.0.0",
     "domain-parent": "^1.0.0",
     "eslint": "^8.35.0",
@@ -67,7 +66,7 @@
   },
   "scripts": {
     "benchmark": "ROARR_LOG=true tsx test/benchmark.ts",
-    "build": "del-cli ./dist && tsc",
+    "build": "rm -fr ./dist && tsc",
     "dev": "tsc --watch",
     "lint": "eslint ./src ./test && tsc --noEmit",
     "test": "NODE_ENV=test ava --serial --verbose"
