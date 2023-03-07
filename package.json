@@ -43,7 +43,6 @@
     "domain-parent": "^1.0.0",
     "eslint": "^8.29.0",
     "eslint-config-canonical": "^37.0.3",
-    "gitdown": "^3.1.4",
     "husky": "^7.0.4",
     "nyc": "^15.1.0",
     "semantic-release": "^19.0.5",
@@ -69,7 +68,6 @@
   "scripts": {
     "benchmark": "ROARR_LOG=true ts-node --transpile-only test/benchmark.ts",
     "build": "del-cli ./dist && tsc",
-    "create-readme": "gitdown ./.README/README.md --output-file ./README.md",
     "dev": "tsc --watch",
     "lint": "eslint ./src ./test && tsc --noEmit",
     "test": "NODE_ENV=test ava --serial --verbose"

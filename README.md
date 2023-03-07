@@ -1,4 +1,3 @@
-<a name="roarr"></a>
 # Roarr
 
 [![NPM version](http://img.shields.io/npm/v/roarr.svg?style=flat-square)](https://www.npmjs.org/package/roarr)
@@ -7,53 +6,6 @@
 
 JSON logger for Node.js and browser.
 
-* [Roarr](#roarr)
-    * [Motivation](#roarr-motivation)
-    * [Usage](#roarr-usage)
-        * [Producing logs](#roarr-usage-producing-logs)
-        * [Consuming logs](#roarr-usage-consuming-logs)
-        * [Filtering logs](#roarr-usage-filtering-logs)
-    * [Log message format](#roarr-log-message-format)
-    * [API](#roarr-api)
-        * [`adopt`](#roarr-api-adopt)
-        * [`child`](#roarr-api-child)
-        * [`getContext`](#roarr-api-getcontext)
-        * [`trace`](#roarr-api-trace)
-        * [`debug`](#roarr-api-debug)
-        * [`info`](#roarr-api-info)
-        * [`warn`](#roarr-api-warn)
-        * [`error`](#roarr-api-error)
-        * [`fatal`](#roarr-api-fatal)
-        * [`traceOnce`](#roarr-api-traceonce)
-        * [`debugOnce`](#roarr-api-debugonce)
-        * [`infoOnce`](#roarr-api-infoonce)
-        * [`warnOnce`](#roarr-api-warnonce)
-        * [`errorOnce`](#roarr-api-erroronce)
-        * [`fatalOnce`](#roarr-api-fatalonce)
-    * [Utilities](#roarr-utilities)
-        * [`getLogLevelName`](#roarr-utilities-getloglevelname)
-    * [Middlewares](#roarr-middlewares)
-    * [CLI program](#roarr-cli-program)
-    * [Transports](#roarr-transports)
-    * [Node.js environment variables](#roarr-node-js-environment-variables)
-    * [Conventions](#roarr-conventions)
-        * [Context property names](#roarr-conventions-context-property-names)
-        * [Using Roarr in an application](#roarr-conventions-using-roarr-in-an-application)
-    * [Recipes](#roarr-recipes)
-        * [Overriding message serializer](#roarr-recipes-overriding-message-serializer)
-        * [Logging errors](#roarr-recipes-logging-errors)
-    * [Anti-patterns](#roarr-anti-patterns)
-        * [Overriding `globalThis.ROARR.write` in Node.js](#roarr-anti-patterns-overriding-globalthis-roarr-write-in-node-js)
-    * [Integrations](#roarr-integrations)
-        * [Using with Sentry](#roarr-integrations-using-with-sentry)
-        * [Using with Fastify](#roarr-integrations-using-with-fastify)
-        * [Using with Elasticsearch](#roarr-integrations-using-with-elasticsearch)
-        * [Using with Scalyr](#roarr-integrations-using-with-scalyr)
-    * [Documenting use of Roarr](#roarr-documenting-use-of-roarr)
-    * [Developing](#roarr-developing)
-
-
-<a name="roarr-motivation"></a>
 ## Motivation
 
 For a long time I have been a big fan of using [`debug`](https://github.com/visionmedia/debug). `debug` is simple to use, works in Node.js and browser, does not require configuration and it is fast. However, problems arise when you need to parse logs. Anything but one-line text messages cannot be parsed in a safe way.
@@ -80,10 +32,8 @@ In other words,
 
 Roarr is this logger.
 
-<a name="roarr-usage"></a>
 ## Usage
 
-<a name="roarr-usage-producing-logs"></a>
 ### Producing logs
 
 Roarr logger API for producing logs is the same in Node.js and browser.
@@ -101,12 +51,10 @@ import {
 log('foo');
 ```
 
-<a name="roarr-usage-consuming-logs"></a>
 ### Consuming logs
 
 Roarr logs are consumed differently in Node.js and browser.
 
-<a name="roarr-usage-consuming-logs-node-js"></a>
 #### Node.js
 
 In Node.js, Roarr logging is disabled by default. To enable logging, you must start program with an environment variable `ROARR_LOG` set to `true`, e.g.
@@ -117,7 +65,6 @@ ROARR_LOG=true node ./index.js
 
 All logs will be written to stdout.
 
-<a name="roarr-usage-consuming-logs-browser"></a>
 #### Browser
 
 In a browser, you must implement `ROARR.write` method to read logs, e.g.
@@ -163,10 +110,8 @@ If your platform does not support [`globalThis`](https://developer.mozilla.org/e
 
 You may also use [`@roarr/browser-log-writer`](https://github.com/gajus/roarr-browser-log-writer) that implements and opinionated browser logger with [Liqe](https://github.com/gajus/liqe) query support for filtering logs.
 
-<a name="roarr-usage-filtering-logs"></a>
 ### Filtering logs
 
-<a name="roarr-usage-filtering-logs-node-js-1"></a>
 #### Node.js
 
 In Node.js, Roarr prints all or none logs (refer to the [`ROARR_LOG` environment variable](#environment-variables) documentation).
@@ -177,7 +122,6 @@ Use [`@roarr/cli` program](https://github.com/gajus/roarr-cli#filtering-logs) to
 ROARR_LOG=true node ./index.js | roarr --filter 'context.logLevel:>30'
 ```
 
-<a name="roarr-usage-filtering-logs-browser-1"></a>
 #### Browser
 
 In a browser, Roarr calls `globalThis.ROARR.write` for every log message. Implement your own custom logic to filter logs, e.g.
@@ -192,7 +136,6 @@ globalThis.ROARR.write = (message) => {
 };
 ```
 
-<a name="roarr-log-message-format"></a>
 ## Log message format
 
 |Property name|Contents|
@@ -220,7 +163,6 @@ Example:
 }
 ```
 
-<a name="roarr-api"></a>
 ## API
 
 `roarr` package exports a function with the following API:
@@ -263,8 +205,7 @@ To put it into words:
 
 Refer to the [Usage documentation](#usage) for common usage examples.
 
-<a name="roarr-api-adopt"></a>
-### <code>adopt</code>
+### `adopt`
 
 ```ts
 <T>(routine: () => Promise<T>, context: MessageContext | TransformMessageFunction<MessageContext>) => Promise<T>,
@@ -299,8 +240,7 @@ log.adopt(
 {"context":{"bar":"bar 0","baz":"baz 1"},"message":"foo 1","sequence":"0.0","time":1506776210000,"version":"2.0.0"}
 ```
 
-<a name="roarr-api-adopt-sequence-value"></a>
-#### <code>sequence</code> value
+#### `sequence` value
 
 `sequence` represents async context hierarchy in [`ltree`](https://www.postgresql.org/docs/current/ltree.html) format, i.e.
 
@@ -336,20 +276,17 @@ log.adopt(() => {
 
 Notice that even though logs `baz 0` and `baz 1` were produced at different times, you can tell that one was produced after another by looking at their sequence values `0.1.1.0` and `0.1.1.1`.
 
-<a name="roarr-api-adopt-requirements"></a>
 #### Requirements
 
 * `adopt` method only works in Node.js.
 
-<a name="roarr-api-child"></a>
-### <code>child</code>
+### `child`
 
 The `child` function has two signatures:
 
 1. Accepts an object.
 2. Accepts a function.
 
-<a name="roarr-api-child-object-parameter"></a>
 #### Object parameter
 
 ```ts
@@ -379,7 +316,6 @@ barLog.debug('foo 2');
 {"context":{"foo":"bar","logLevel":20},"message":"foo 2","sequence":"1","time":1506776210000,"version":"2.0.0"}
 ```
 
-<a name="roarr-api-child-function-parameter"></a>
 #### Function parameter
 
 ```ts
@@ -423,8 +359,7 @@ barLog.debug({
 
 A typical use case for this pattern is serialization (e.g. of HTTP request, response or error object) and redaction of sensitive data from logs.
 
-<a name="roarr-api-getcontext"></a>
-### <code>getContext</code>
+### `getContext`
 
 Returns the current context.
 
@@ -444,18 +379,12 @@ childLogger.getContext();
 // {foo: 'bar'}
 ```
 
-<a name="roarr-api-trace"></a>
-### <code>trace</code>
-<a name="roarr-api-debug"></a>
-### <code>debug</code>
-<a name="roarr-api-info"></a>
-### <code>info</code>
-<a name="roarr-api-warn"></a>
-### <code>warn</code>
-<a name="roarr-api-error"></a>
-### <code>error</code>
-<a name="roarr-api-fatal"></a>
-### <code>fatal</code>
+### `trace`
+### `debug`
+### `info`
+### `warn`
+### `error`
+### `fatal`
 
 Convenience methods for logging a message with `logLevel` context property value set to a numeric value representing the [log level](#log-levels), e.g.
 
@@ -483,28 +412,20 @@ Produces output:
 {"context":{"logLevel":60},"message":"foo","sequence":"5","time":1506776210000,"version":"2.0.0"}
 ```
 
-<a name="roarr-api-traceonce"></a>
-### <code>traceOnce</code>
-<a name="roarr-api-debugonce"></a>
-### <code>debugOnce</code>
-<a name="roarr-api-infoonce"></a>
-### <code>infoOnce</code>
-<a name="roarr-api-warnonce"></a>
-### <code>warnOnce</code>
-<a name="roarr-api-erroronce"></a>
-### <code>errorOnce</code>
-<a name="roarr-api-fatalonce"></a>
-### <code>fatalOnce</code>
+### `traceOnce`
+### `debugOnce`
+### `infoOnce`
+### `warnOnce`
+### `errorOnce`
+### `fatalOnce`
 
 Just like the regular logger methods, but logs the message only once.
 
 Note: Internally, Roarr keeps a record of the last 1,000 `Once` invocations. If this buffer overflows, then the message is going to be logged again until the next time the buffer overflows again. 
 
-<a name="roarr-utilities"></a>
 ## Utilities
 
-<a name="roarr-utilities-getloglevelname"></a>
-### <code>getLogLevelName</code>
+### `getLogLevelName`
 
 Provides log level name (trace, debug, ...) for a numeric log level (10, 20, ...).
 
@@ -523,7 +444,6 @@ import type {
 getLogLevelName(numericLogLevel: number): LogLevelName;
 ```
 
-<a name="roarr-middlewares"></a>
 ## Middlewares
 
 Roarr logger supports middlewares implemented as [`child`](#child) message translate functions, e.g.
@@ -555,7 +475,6 @@ The following are the official middlewares:
 
 Raise an issue to add your middleware of your own creation.
 
-<a name="roarr-cli-program"></a>
 ## CLI program
 
 Roarr CLI program provides ability to filter and pretty-print Roarr logs.
@@ -570,7 +489,6 @@ npm install @roarr/cli -g
 
 Explore all CLI commands and options using `roarr --help` or refer to [`@roarr/cli`](https://github.com/gajus/roarr-cli) documentation.
 
-<a name="roarr-transports"></a>
 ## Transports
 
 A transport in most logging libraries is something that runs in-process to perform some operation with the finalized log line. For example, a transport might send the log line to a standard syslog server after processing the log line and reformatting it.
@@ -585,7 +503,6 @@ Depending on your configuration, consider one of the following log transports:
 * [logagent](https://github.com/sematext/logagent-js) for aggregating at a process level (written in JavaScript).
 * [Fluentd](https://www.fluentd.org/) for aggregating logs at a container orchestration level (e.g. Kubernetes) (written in Ruby).
 
-<a name="roarr-node-js-environment-variables"></a>
 ## Node.js environment variables
 
 Use environment variables to control `roarr` behaviour.
@@ -597,10 +514,8 @@ Use environment variables to control `roarr` behaviour.
 
 When using `ROARR_STREAM=STDERR`, use [`3>&1 1>&2 2>&3 3>&-`](https://stackoverflow.com/a/2381643/368691) to pipe stderr output.
 
-<a name="roarr-conventions"></a>
 ## Conventions
 
-<a name="roarr-conventions-context-property-names"></a>
 ### Context property names
 
 Roarr does not have reserved context property names. However, I encourage use of the following conventions:
@@ -614,7 +529,6 @@ Roarr does not have reserved context property names. However, I encourage use of
 
 The `roarr pretty-print` [CLI program](#cli-program) is using the context property names suggested in the conventions to pretty-print the logs for the developer inspection purposes.
 
-<a name="roarr-conventions-context-property-names-log-levels"></a>
 #### Log levels
 
 The `roarr pretty-print` [CLI program](#cli-program) translates `logLevel` values to the following human-readable names:
@@ -628,7 +542,6 @@ The `roarr pretty-print` [CLI program](#cli-program) translates `logLevel` value
 |50|ERROR|
 |60|FATAL|
 
-<a name="roarr-conventions-using-roarr-in-an-application"></a>
 ### Using Roarr in an application
 
 To avoid code duplication, you can use a singleton pattern to export a logger instance with predefined context properties (e.g. describing the application).
@@ -653,10 +566,8 @@ export const Logger = Roarr.child({
 
 Roarr does not have reserved context property names. However, I encourage use of the [conventions](#conventions).
 
-<a name="roarr-recipes"></a>
 ## Recipes
 
-<a name="roarr-recipes-overriding-message-serializer"></a>
 ### Overriding message serializer
 
 Roarr is opinionated about how it serializes (converts objects to JSON string) log messages, e.g. in Node.js it uses a schema based serializer, which is very fast, but does not allow custom top-level properties.
@@ -677,7 +588,6 @@ const serializeMessage: MessageEventHandler = (message) => {
 ROARR.serializeMessage = serializeMessage;
 ```
 
-<a name="roarr-recipes-logging-errors"></a>
 ### Logging errors
 
 This is not specific to Roarr – this suggestion applies to any kind of logging.
@@ -709,30 +619,24 @@ send((error, result) => {
 
 Without using serialization, your errors will be logged without the error name and stack trace.
 
-<a name="roarr-anti-patterns"></a>
 ## Anti-patterns
 
-<a name="roarr-anti-patterns-overriding-globalthis-roarr-write-in-node-js"></a>
-### Overriding <code>globalThis.ROARR.write</code> in Node.js
+### Overriding `globalThis.ROARR.write` in Node.js
 
 Overriding `globalThis.ROARR.write` in Node.js works the same way as it down in [browser](#browser). However, overriding `ROARR.write` in Node.js is considered an anti-pattern because it defeats some of the major benefits outlined in [Motivation](https://github.com/gajus/roarr#motivation) section of the documentation. Namely, by overriding `ROARR.write` in Node.js you are adding blocking events to the event cycle and coupling application logic with log handling logic.
 
 If you have a use case that asks for overriding `ROARR.write` in Node.js, then [raise an issue](https://github.com/gajus/roarr/issues) to discuss your requirements.
 
-<a name="roarr-integrations"></a>
 ## Integrations
 
-<a name="roarr-integrations-using-with-sentry"></a>
 ### Using with Sentry
 
 https://github.com/gajus/roarr-sentry
 
-<a name="roarr-integrations-using-with-fastify"></a>
 ### Using with Fastify
 
 https://github.com/gajus/roarr-fastify
 
-<a name="roarr-integrations-using-with-elasticsearch"></a>
 ### Using with Elasticsearch
 
 If you are using [Elasticsearch](https://www.elastic.co/products/elasticsearch), you will want to create an [index template](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html).
@@ -785,7 +689,6 @@ The following serves as the ground work for the index template. It includes the 
 }
 ```
 
-<a name="roarr-integrations-using-with-scalyr"></a>
 ### Using with Scalyr
 
 If you are using [Scalyr](https://www.scalyr.com/), you will want to create a custom parser `RoarrLogger`:
@@ -807,7 +710,6 @@ If you are using [Scalyr](https://www.scalyr.com/), you will want to create a cu
 
 and configure the individual programs to use `RoarrLogger`. In case of Kubernetes, this means adding a `log.config.scalyr.com/attributes.parser: RoarrLogger` annotation to the associated deployment, pod or container.
 
-<a name="roarr-documenting-use-of-roarr"></a>
 ## Documenting use of Roarr
 
 If your package is using Roarr, include instructions in `README.md` describing how to enable logging, e.g.
@@ -822,7 +724,6 @@ Export `ROARR_LOG=true` environment variable to enable log printing to `stdout`.
 Use [`roarr-cli`](https://github.com/gajus/roarr-cli) program to pretty-print the logs.
 ```
 
-<a name="roarr-developing"></a>
 ## Developing
 
 Every time a change is made to the logger, one must update `ROARR_VERSION` value in [`./src/config.ts`](./src/config.ts).
