@@ -2,23 +2,22 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "declaration": true,
+    "declarationMap": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "module": "commonjs",
     "moduleResolution": "node",
+    "noEmit": true,
     "noImplicitAny": false,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
     "outDir": "dist",
     "skipLibCheck": true,
+    "sourceMap": true,
     "strict": true,
     "target": "es2018"
   },
-  "exclude": [
-    "dist",
-    "node_modules"
-  ],
   "include": [
     "src",
     "test"

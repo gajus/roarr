@@ -49,6 +49,10 @@
     "tsx": "^3.12.3",
     "typescript": "^4.9.4"
   },
+  "files": [
+    "src",
+    "dist"
+  ],
   "engines": {
     "node": ">=12.0"
   },
@@ -58,7 +62,7 @@
     "json"
   ],
   "license": "BSD-3-Clause",
-  "main": "./dist/src/Roarr.js",
+  "main": "./dist/Roarr.js",
   "name": "roarr",
   "repository": {
     "type": "git",
@@ -66,11 +70,11 @@
   },
   "scripts": {
     "benchmark": "ROARR_LOG=true tsx test/benchmark.ts",
-    "build": "rm -fr ./dist && tsc",
-    "dev": "tsc --watch",
-    "lint": "eslint ./src ./test && tsc --noEmit",
+    "build": "rm -fr ./dist && tsc --project tsconfig.build.json",
+    "dev": "tsc --watch --project tsconfig.build.json",
+    "lint": "eslint ./src ./test && tsc",
     "test": "NODE_ENV=test ava --serial --verbose"
   },
-  "types": "./dist/src/Roarr.d.ts",
+  "types": "./dist/Roarr.d.ts",
   "version": "1.0.0"
 }
