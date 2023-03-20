@@ -1,5 +1,5 @@
 {
-  "ignorePatterns": ["./dist"],
+  "ignorePatterns": ["dist"],
   "extends": [
     "canonical",
     "canonical/node",
