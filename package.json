@@ -8,11 +8,11 @@
     "extensions": {
       "ts": "module"
     },
-    "nodeArguments": [
-      "--loader=tsx"
-    ],
     "files": [
       "test/roarr/**/*"
+    ],
+    "nodeArguments": [
+      "--loader=tsx"
     ]
   },
   "browser": "./dist/browser.js",
@@ -41,7 +41,7 @@
     "delay": "^5.0.0",
     "domain-parent": "^1.0.0",
     "eslint": "^8.36.0",
-    "eslint-config-canonical": "^40.0.9",
+    "eslint-config-canonical": "^41.0.1",
     "husky": "^7.0.4",
     "nyc": "^15.1.0",
     "semantic-release": "^19.0.5",
@@ -49,13 +49,13 @@
     "tsx": "^3.12.3",
     "typescript": "^5.0.2"
   },
+  "engines": {
+    "node": ">=12.0"
+  },
   "files": [
     "src",
     "dist"
   ],
-  "engines": {
-    "node": ">=12.0"
-  },
   "keywords": [
     "log",
     "logger",

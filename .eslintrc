@@ -1,11 +1,6 @@
 {
-  "ignorePatterns": ["dist"],
-  "extends": [
-    "canonical",
-    "canonical/node",
-    "canonical/typescript",
-    "canonical/prettier"
-  ],
+  "ignorePatterns": ["dist", "package-lock.json"],
+  "extends": "canonical/auto",
   "rules": {
     "@typescript-eslint/no-explicit-any": 0,
     "unicorn/prevent-abbreviations": 0,
