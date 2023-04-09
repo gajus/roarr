@@ -710,6 +710,38 @@ If you are using [Scalyr](https://www.scalyr.com/), you will want to create a cu
 
 and configure the individual programs to use `RoarrLogger`. In case of Kubernetes, this means adding a `log.config.scalyr.com/attributes.parser: RoarrLogger` annotation to the associated deployment, pod or container.
 
+### Using with NestJS
+
+If you are using [NestJS](https://docs.nestjs.com/), you can use [`nestjs-logger-roarr`](https://www.npmjs.com/package/nestjs-logger-roarr) to perform logging inside your application.
+
+To enable one shared logger for the entire application:
+
+```typescript
+import { RoarrLoggerService } from nestjs-logger-roarr';
+import { AppModule } from "app.module";
+
+const logger = RoarrLoggerService.sharedInstance();
+const app = await NestFactory.create(AppModule, { logger });
+```
+
+To enable mutiple injected loggers via the usual Module syntax:
+
+```typescript
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config;
+import { RoarrLoggerModule } from 'nestjs-logger-roarr';
+
+@Module({
+  imports: [
+    RoarrLoggerModule.forRoot({
+      logLevel: 'warn', // this is the *minimum* log level that will be displayed
+    }),
+  ]
+})
+
+export class AppModule {}
+```
+
 ## Documenting use of Roarr
 
 If your package is using Roarr, include instructions in `README.md` describing how to enable logging, e.g.
