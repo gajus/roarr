@@ -21,6 +21,7 @@
     "fast-json-stringify": "^5.8.0",
     "fast-printf": "^1.6.9",
     "globalthis": "^1.0.2",
+    "jest": "^29.7.0",
     "safe-stable-stringify": "^2.4.3",
     "semver-compare": "^1.0.0"
   },
@@ -31,6 +32,7 @@
     "@semantic-release/github": "^8.0.7",
     "@semantic-release/npm": "^9.0.1",
     "@types/globalthis": "^1.0.1",
+    "@types/jest": "^29.5.5",
     "@types/json-stringify-safe": "^5.0.0",
     "@types/node": "^16.10.9",
     "@types/semver-compare": "^1.0.1",
@@ -46,6 +48,7 @@
     "nyc": "^15.1.0",
     "semantic-release": "^19.0.5",
     "sinon": "^11.1.2",
+    "ts-jest": "^29.1.1",
     "tsx": "^3.12.3",
     "typescript": "^5.0.2"
   },
@@ -73,7 +76,9 @@
     "build": "rm -fr ./dist && tsc --project tsconfig.build.json",
     "dev": "tsc --watch --project tsconfig.build.json",
     "lint": "eslint ./src ./test && tsc",
-    "test": "NODE_ENV=test ava --serial --verbose"
+    "test": "npm run test:jest && npm run test:ava",
+    "test:ava": "NODE_ENV=test ava --serial --verbose",
+    "test:jest": "jest --detectLeaks"
   },
   "types": "./dist/Roarr.d.ts",
   "version": "1.0.0"
