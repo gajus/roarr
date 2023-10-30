@@ -2,11 +2,10 @@ import { createLogger } from './factories/createLogger';
 import { createMockLogger } from './factories/createMockLogger';
 import { createRoarrInitialGlobalState } from './factories/createRoarrInitialGlobalState';
 import { type MessageSerializer, type RoarrGlobalState } from './types';
-import { boolean } from 'boolean';
+import { isTruthy } from './utilities/isTruthy';
 import fastJson from 'fast-json-stringify';
 import createGlobalThis from 'globalthis';
 import safeStringify from 'safe-stable-stringify';
-import { isTruthy } from './utilities/isTruthy';
 
 const fastStringify = fastJson({
   properties: {
