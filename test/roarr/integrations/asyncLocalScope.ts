@@ -1,11 +1,15 @@
 /* eslint-disable max-nested-callbacks */
 /* eslint-disable ava/use-test */
 
-import { createLogger } from '../../src/factories/createLogger';
-import { createRoarrInitialGlobalState } from '../../src/factories/createRoarrInitialGlobalState';
-import { type Logger, type Message } from '../../src/types';
-import test from 'ava';
+import { createLogger } from '../../../src/factories/createLogger';
+import { createRoarrInitialGlobalState } from '../../../src/factories/createRoarrInitialGlobalState';
+import { type Logger, type Message } from '../../../src/types';
+import { createIntegrationTest } from '../../helpers/createIntegrationTest';
 import { setTimeout } from 'node:timers/promises';
+
+const test = createIntegrationTest({
+  writeLogs: true,
+});
 
 const time = -1;
 const version = '2.0.0';

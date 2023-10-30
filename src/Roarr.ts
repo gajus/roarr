@@ -1,8 +1,6 @@
 import { createLogger } from './factories/createLogger';
-import { createMockLogger } from './factories/createMockLogger';
 import { createRoarrInitialGlobalState } from './factories/createRoarrInitialGlobalState';
 import { type MessageSerializer, type RoarrGlobalState } from './types';
-import { isTruthy } from './utilities/isTruthy';
 import fastJson from 'fast-json-stringify';
 import safeStringify from 'safe-stable-stringify';
 
@@ -30,15 +28,6 @@ const ROARR = createRoarrInitialGlobalState(
 
 globalThis.ROARR = ROARR;
 
-let logFactory = createLogger;
-
-// eslint-disable-next-line node/no-process-env
-const enabled = isTruthy(process.env.ROARR_LOG ?? '');
-
-if (!enabled) {
-  logFactory = createMockLogger;
-}
-
 const serializeMessage: MessageSerializer = (message) => {
   return (
     '{"context":' +
@@ -48,7 +37,7 @@ const serializeMessage: MessageSerializer = (message) => {
   );
 };
 
-const Roarr = logFactory((message) => {
+const Roarr = createLogger((message) => {
   if (ROARR.write) {
     // Stringify message as soon as it is received to prevent
     // properties of the context from being modified by reference.

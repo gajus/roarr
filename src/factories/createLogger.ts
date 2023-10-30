@@ -10,6 +10,9 @@ import {
   type TransformMessageFunction,
 } from '../types';
 import { hasOwnProperty } from '../utilities';
+import { isBrowser } from '../utilities/isBrowser';
+import { isTruthy } from '../utilities/isTruthy';
+import { createMockLogger } from './createMockLogger';
 import { printf } from 'fast-printf';
 import safeStringify from 'safe-stable-stringify';
 
@@ -121,6 +124,15 @@ export const createLogger = (
   parentMessageContext: MessageContext = {},
   transforms: ReadonlyArray<TransformMessageFunction<MessageContext>> = [],
 ): Logger => {
+  if (!isBrowser()) {
+    // eslint-disable-next-line node/no-process-env
+    const enabled = isTruthy(process.env.ROARR_LOG ?? '');
+
+    if (!enabled) {
+      return createMockLogger(onMessage, parentMessageContext);
+    }
+  }
+
   const log = (
     a: any,
     b: any,
