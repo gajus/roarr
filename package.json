@@ -28,7 +28,6 @@
     "@semantic-release/commit-analyzer": "^11.0.0",
     "@semantic-release/github": "^9.2.1",
     "@semantic-release/npm": "^11.0.0",
-    "@types/globalthis": "^1.0.3",
     "@types/node": "^20.8.9",
     "@types/semver-compare": "^1.0.2",
     "ava": "^5.3.1",
