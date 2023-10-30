@@ -5,8 +5,8 @@ import { createLogger } from '../../src/factories/createLogger';
 import { createRoarrInitialGlobalState } from '../../src/factories/createRoarrInitialGlobalState';
 import { type Logger, type Message } from '../../src/types';
 import test from 'ava';
-import delay from 'delay';
 import createGlobalThis from 'globalthis';
+import { setTimeout } from 'node:timers/promises';
 
 const time = -1;
 const version = '2.0.0';
@@ -494,15 +494,16 @@ test.serial(
         log('bar 0');
         void log.adopt(() => {
           log('baz 0');
-          setTimeout(() => {
+          // eslint-disable-next-line promise/prefer-await-to-then
+          setTimeout(10).then(() => {
             log('baz 1');
-          }, 10);
+          });
         });
         log('bar 1');
       });
     });
 
-    await delay(20);
+    await setTimeout(20);
 
     t.deepEqual(log.messages, [
       {
