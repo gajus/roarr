@@ -11,12 +11,9 @@ import {
 } from '../types';
 import { hasOwnProperty } from '../utilities';
 import { printf } from 'fast-printf';
-import createGlobalThis from 'globalthis';
 import safeStringify from 'safe-stable-stringify';
 
 let loggedWarningAsyncLocalContext = false;
-
-const globalThis = createGlobalThis();
 
 const getGlobalRoarrContext = (): RoarrGlobalState => {
   return globalThis.ROARR;

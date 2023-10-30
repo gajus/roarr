@@ -1,9 +1,6 @@
 import { createLogger } from './factories/createLogger';
 import { createRoarrInitialGlobalStateBrowser } from './factories/createRoarrInitialGlobalStateBrowser';
 import { type MessageSerializer, type RoarrGlobalState } from './types';
-import createGlobalThis from 'globalthis';
-
-const globalThis = createGlobalThis();
 
 const ROARR = createRoarrInitialGlobalStateBrowser(
   (globalThis.ROARR as RoarrGlobalState) || {},

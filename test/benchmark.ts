@@ -2,14 +2,11 @@
 
 import { Roarr } from '../src/Roarr';
 import { Suite } from 'benchmark';
-import createGlobalThis from 'globalthis';
 
 // eslint-disable-next-line node/no-process-env
 if (process.env.ROARR_LOG !== 'true') {
   throw new Error('Must run benchmark with ROARR_LOG=true.');
 }
-
-const globalThis = createGlobalThis();
 
 (() => {
   const suite = new Suite('roarr', {

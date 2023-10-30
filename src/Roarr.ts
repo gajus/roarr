@@ -4,7 +4,6 @@ import { createRoarrInitialGlobalState } from './factories/createRoarrInitialGlo
 import { type MessageSerializer, type RoarrGlobalState } from './types';
 import { isTruthy } from './utilities/isTruthy';
 import fastJson from 'fast-json-stringify';
-import createGlobalThis from 'globalthis';
 import safeStringify from 'safe-stable-stringify';
 
 const fastStringify = fastJson({
@@ -24,8 +23,6 @@ const fastStringify = fastJson({
   },
   type: 'object',
 });
-
-const globalThis = createGlobalThis();
 
 const ROARR = createRoarrInitialGlobalState(
   (globalThis.ROARR as RoarrGlobalState) || {},

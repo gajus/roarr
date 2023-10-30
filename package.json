@@ -19,7 +19,6 @@
   "dependencies": {
     "fast-json-stringify": "^5.8.0",
     "fast-printf": "^1.6.9",
-    "globalthis": "^1.0.3",
     "safe-stable-stringify": "^2.4.3",
     "semver-compare": "^1.0.0"
   },

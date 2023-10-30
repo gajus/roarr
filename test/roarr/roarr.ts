@@ -2,14 +2,11 @@ import { createLogger } from '../../src/factories/createLogger';
 import { createRoarrInitialGlobalState } from '../../src/factories/createRoarrInitialGlobalState';
 import { type Logger, type Message } from '../../src/types';
 import test from 'ava';
-import createGlobalThis from 'globalthis';
 
 const time = -1;
 const version = '2.0.0';
 
 test.beforeEach(() => {
-  const globalThis = createGlobalThis();
-
   globalThis.ROARR = createRoarrInitialGlobalState({});
 });
 

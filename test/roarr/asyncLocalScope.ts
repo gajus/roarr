@@ -5,15 +5,12 @@ import { createLogger } from '../../src/factories/createLogger';
 import { createRoarrInitialGlobalState } from '../../src/factories/createRoarrInitialGlobalState';
 import { type Logger, type Message } from '../../src/types';
 import test from 'ava';
-import createGlobalThis from 'globalthis';
 import { setTimeout } from 'node:timers/promises';
 
 const time = -1;
 const version = '2.0.0';
 
 test.beforeEach(() => {
-  const globalThis = createGlobalThis();
-
   globalThis.ROARR = null;
 
   globalThis.ROARR = createRoarrInitialGlobalState({});
