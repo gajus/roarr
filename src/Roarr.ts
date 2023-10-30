@@ -6,6 +6,7 @@ import { boolean } from 'boolean';
 import fastJson from 'fast-json-stringify';
 import createGlobalThis from 'globalthis';
 import safeStringify from 'safe-stable-stringify';
+import { isTruthy } from './utilities/isTruthy';
 
 const fastStringify = fastJson({
   properties: {
@@ -36,7 +37,7 @@ globalThis.ROARR = ROARR;
 let logFactory = createLogger;
 
 // eslint-disable-next-line node/no-process-env
-const enabled = boolean(process.env.ROARR_LOG ?? '');
+const enabled = isTruthy(process.env.ROARR_LOG ?? '');
 
 if (!enabled) {
   logFactory = createMockLogger;
