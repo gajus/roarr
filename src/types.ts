@@ -112,7 +112,6 @@ export type Logger<Z = MessageContext> = LogMethod<Z> & {
 
 export type MessageEventHandler = (message: Message<MessageContext>) => void;
 
-// eslint-disable-next-line @typescript-eslint/sort-type-union-intersection-members
 export type LogLevelName =
   | 'debug'
   | 'error'
