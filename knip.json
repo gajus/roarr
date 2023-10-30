@@ -1,0 +1,4 @@
+{
+  "entry": ["src/Roarr.ts", "src/browser.ts"],
+  "project": ["src/**/*!", "test/**/*"]
+}
