@@ -11,6 +11,7 @@ type JsonValue =
   | undefined;
 
 /**
+ * @see https://stackoverflow.com/a/77390832/368691
  * @public
  */
 export type JsonObject = {
