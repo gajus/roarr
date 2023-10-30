@@ -124,7 +124,7 @@ export const createLogger = (
   parentMessageContext: MessageContext = {},
   transforms: ReadonlyArray<TransformMessageFunction<MessageContext>> = [],
 ): Logger => {
-  if (!isBrowser()) {
+  if (!isBrowser() && typeof process !== 'undefined') {
     // eslint-disable-next-line node/no-process-env
     const enabled = isTruthy(process.env.ROARR_LOG ?? '');
 
