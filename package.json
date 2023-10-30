@@ -26,9 +26,9 @@
   "description": "JSON logger for Node.js and browser.",
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
-    "@semantic-release/commit-analyzer": "^9.0.2",
-    "@semantic-release/github": "^8.0.7",
-    "@semantic-release/npm": "^9.0.1",
+    "@semantic-release/commit-analyzer": "^11.0.0",
+    "@semantic-release/github": "^9.2.1",
+    "@semantic-release/npm": "^11.0.0",
     "@types/globalthis": "^1.0.1",
     "@types/json-stringify-safe": "^5.0.0",
     "@types/node": "^16.10.9",
@@ -43,7 +43,7 @@
     "eslint-config-canonical": "^41.0.1",
     "husky": "^7.0.4",
     "nyc": "^15.1.0",
-    "semantic-release": "^19.0.5",
+    "semantic-release": "^22.0.5",
     "sinon": "^11.1.2",
     "tsx": "^3.12.3",
     "typescript": "^5.0.2"
