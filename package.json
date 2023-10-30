@@ -36,7 +36,7 @@
     "benchmark": "^2.1.4",
     "eslint": "^8.52.0",
     "eslint-config-canonical": "^42.3.0",
-    "husky": "^7.0.4",
+    "husky": "^8.0.3",
     "knip": "^2.38.4",
     "nyc": "^15.1.0",
     "semantic-release": "^22.0.5",
