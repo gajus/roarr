@@ -1,6 +1,6 @@
 import { type AsyncLocalStorage } from 'node:async_hooks';
 
-export type JsonValue =
+type JsonValue =
   | JsonObject
   | JsonValue[]
   | boolean
@@ -10,7 +10,7 @@ export type JsonValue =
   | null
   | undefined;
 
-export type JsonObject = {
+type JsonObject = {
   [k: string]: JsonValue;
 };
 
@@ -23,7 +23,7 @@ export type TopLevelAsyncLocalContext = {
   transforms: ReadonlyArray<TransformMessageFunction<MessageContext>>;
 };
 
-export type NestedAsyncLocalContext = TopLevelAsyncLocalContext & {
+type NestedAsyncLocalContext = TopLevelAsyncLocalContext & {
   sequence: number;
   sequenceRoot: string;
 };
@@ -43,7 +43,7 @@ export type RoarrGlobalState = {
   write: LogWriter;
 };
 
-export type SprintfArgument = boolean | number | string | null;
+type SprintfArgument = boolean | number | string | null;
 
 export type Message<T = MessageContext> = {
   readonly context: T;
@@ -57,7 +57,7 @@ export type TransformMessageFunction<T> = (
   message: Message<T>,
 ) => Message<MessageContext>;
 
-export type LogMethod<Z> = {
+type LogMethod<Z> = {
   <T extends string = string>(
     context: Z,
     message: T,
