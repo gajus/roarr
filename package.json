@@ -19,19 +19,19 @@
   "dependencies": {
     "fast-json-stringify": "^5.8.0",
     "fast-printf": "^1.6.9",
-    "globalthis": "^1.0.2",
+    "globalthis": "^1.0.3",
     "safe-stable-stringify": "^2.4.3",
     "semver-compare": "^1.0.0"
   },
   "description": "JSON logger for Node.js and browser.",
   "devDependencies": {
-    "@istanbuljs/nyc-config-typescript": "^1.0.1",
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@semantic-release/commit-analyzer": "^11.0.0",
     "@semantic-release/github": "^9.2.1",
     "@semantic-release/npm": "^11.0.0",
-    "@types/globalthis": "^1.0.1",
-    "@types/node": "^16.10.9",
-    "@types/semver-compare": "^1.0.1",
+    "@types/globalthis": "^1.0.3",
+    "@types/node": "^20.8.9",
+    "@types/semver-compare": "^1.0.2",
     "ava": "^5.3.1",
     "benchmark": "^2.1.4",
     "eslint": "^8.52.0",
@@ -41,7 +41,7 @@
     "nyc": "^15.1.0",
     "semantic-release": "^22.0.5",
     "sinon": "^17.0.0",
-    "tsx": "^3.12.3",
+    "tsx": "^3.14.0",
     "typescript": "^5.2.2"
   },
   "engines": {
