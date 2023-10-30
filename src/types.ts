@@ -10,7 +10,10 @@ type JsonValue =
   | null
   | undefined;
 
-type JsonObject = {
+/**
+ * @public
+ */
+export type JsonObject = {
   [k: string]: JsonValue;
 };
 
