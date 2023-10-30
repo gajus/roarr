@@ -32,7 +32,7 @@
     "@types/globalthis": "^1.0.1",
     "@types/node": "^16.10.9",
     "@types/semver-compare": "^1.0.1",
-    "ava": "^5.1.0",
+    "ava": "^5.3.1",
     "benchmark": "^2.1.4",
     "eslint": "^8.52.0",
     "eslint-config-canonical": "^42.3.0",
