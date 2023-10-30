@@ -1,26 +1,7 @@
 import { createLogger } from './factories/createLogger';
 import { createRoarrInitialGlobalState } from './factories/createRoarrInitialGlobalState';
 import { type MessageSerializer, type RoarrGlobalState } from './types';
-import fastJson from 'fast-json-stringify';
 import safeStringify from 'safe-stable-stringify';
-
-const fastStringify = fastJson({
-  properties: {
-    message: {
-      type: 'string',
-    },
-    sequence: {
-      type: 'string',
-    },
-    time: {
-      type: 'integer',
-    },
-    version: {
-      type: 'string',
-    },
-  },
-  type: 'object',
-});
 
 const ROARR = createRoarrInitialGlobalState(
   (globalThis.ROARR as RoarrGlobalState) || {},
@@ -29,12 +10,7 @@ const ROARR = createRoarrInitialGlobalState(
 globalThis.ROARR = ROARR;
 
 const serializeMessage: MessageSerializer = (message) => {
-  return (
-    '{"context":' +
-    safeStringify(message.context) +
-    ',' +
-    fastStringify(message).slice(1)
-  );
+  return safeStringify(message);
 };
 
 const Roarr = createLogger((message) => {
