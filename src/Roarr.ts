@@ -1,7 +1,7 @@
 import { createLogger } from './factories/createLogger';
 import { createRoarrInitialGlobalState } from './factories/createRoarrInitialGlobalState';
 import { type MessageSerializer, type RoarrGlobalState } from './types';
-import safeStringify from 'safe-stable-stringify';
+import { stringify } from './utilities/stringify';
 
 const ROARR = createRoarrInitialGlobalState(
   (globalThis.ROARR as RoarrGlobalState) || {},
@@ -10,7 +10,7 @@ const ROARR = createRoarrInitialGlobalState(
 globalThis.ROARR = ROARR;
 
 const serializeMessage: MessageSerializer = (message) => {
-  return safeStringify(message);
+  return stringify(message);
 };
 
 const Roarr = createLogger((message) => {
