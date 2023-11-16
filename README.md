@@ -756,6 +756,18 @@ Export `ROARR_LOG=true` environment variable to enable log printing to `stdout`.
 Use [`roarr-cli`](https://github.com/gajus/roarr-cli) program to pretty-print the logs.
 ```
 
+## Context Truncation
+
+Roarr by default truncates context properties if the context object is wider or deeper than 10 properties. At the moment, this is a hard-coded value. Waiting for feedback on whether this is a reasonable default and if it needs to be configurable.
+
+When the context goes over this limit, you will start seeing `...` entries in your logs, e.g.
+
+```json
+{"a":"a","b":"b","c":"c","d":"d","e":"e","f":"f","g":"g","h":"h","i":"i","j":"j","...":"1 item not stringified"}
+```
+
+The reason for this is to prevent accidental logging of massive objects that can cause context truncation and performance issues.
+
 ## Developing
 
 Every time a change is made to the logger, one must update `ROARR_VERSION` value in [`./src/config.ts`](./src/config.ts).
