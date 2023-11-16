@@ -62,3 +62,22 @@ test('stringifies key=value (circular)', (t) => {
 
   t.is(stringify(foo), '{"foo":"[Circular]"}');
 });
+
+test('overlapping log members are truncated', (t) => {
+  t.is(
+    stringify({
+      a: 'a',
+      b: 'b',
+      c: 'c',
+      d: 'd',
+      e: 'e',
+      f: 'f',
+      g: 'g',
+      h: 'h',
+      i: 'i',
+      j: 'j',
+      k: 'k',
+    }),
+    '{"a":"a","b":"b","c":"c","d":"d","e":"e","f":"f","g":"g","h":"h","i":"i","j":"j","...":"1 item not stringified"}',
+  );
+});
