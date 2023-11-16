@@ -2,6 +2,15 @@ import { configure } from 'safe-stable-stringify';
 
 const safeStringify = configure({
   deterministic: false,
+  // The reason for the following values is because it is fairly easy
+  // to accidentally pass astronomically large objects to the logger.
+  // For context, we were debugging a UI slowdown that was caused by
+  // unknowingly trying to pass 5MB worth of data to the logger context.
+  //
+  // I am starting with hard limits for now to assess the impact of the changes,
+  // but we may want to make these configurable in the future.
+  maximumBreadth: 10,
+  maximumDepth: 10,
   strict: false,
 });
 
