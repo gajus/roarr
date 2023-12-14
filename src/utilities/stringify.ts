@@ -9,7 +9,7 @@ const safeStringify = configure({
   //
   // I am starting with hard limits for now to assess the impact of the changes,
   // but we may want to make these configurable in the future.
-  maximumBreadth: 10,
+  maximumBreadth: 30,
   maximumDepth: 10,
   strict: false,
 });
