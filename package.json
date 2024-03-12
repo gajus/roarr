@@ -29,7 +29,7 @@
     "@semantic-release/npm": "^11.0.0",
     "@types/node": "^20.8.9",
     "@types/semver-compare": "^1.0.2",
-    "ava": "^5.3.1",
+    "ava": "^6.1.2",
     "benchmark": "^2.1.4",
     "eslint": "^8.52.0",
     "eslint-config-canonical": "^42.3.0",
@@ -38,8 +38,8 @@
     "nyc": "^15.1.0",
     "semantic-release": "^22.0.5",
     "sinon": "^17.0.0",
-    "tsx": "^3.14.0",
-    "typescript": "^5.2.2"
+    "tsx": "^4.7.1",
+    "typescript": "^5.4.2"
   },
   "engines": {
     "node": ">=18.0"
