@@ -12,7 +12,7 @@
       "test/roarr/**/*"
     ],
     "nodeArguments": [
-      "--loader=tsx"
+      "--import=tsimp"
     ]
   },
   "browser": "./dist/browser.js",
@@ -38,6 +38,7 @@
     "nyc": "^15.1.0",
     "semantic-release": "^22.0.5",
     "sinon": "^17.0.0",
+    "tsimp": "^2.0.11",
     "tsx": "^4.7.1",
     "typescript": "^5.4.2"
   },
@@ -65,7 +66,7 @@
     "build": "rm -fr ./dist && tsc --project tsconfig.build.json",
     "dev": "tsc --watch --project tsconfig.build.json",
     "lint": "eslint ./src ./test && tsc && knip",
-    "test": "NODE_ENV=test ava --serial --verbose"
+    "test": "ava --serial --verbose"
   },
   "types": "./dist/Roarr.d.ts",
   "version": "1.0.0"

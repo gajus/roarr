@@ -1,6 +1,14 @@
 {
   "$schema": "https://unpkg.com/knip@2/schema.json",
-  "entry": ["src/Roarr.ts", "src/browser.ts"],
-  "project": ["src/**/*!", "test/**/*"],
-  "ignoreDependencies": ["husky"]
+  "entry": [
+    "src/Roarr.ts",
+    "src/browser.ts"
+  ],
+  "ignoreDependencies": [
+    "husky"
+  ],
+  "project": [
+    "src/**/*!",
+    "test/**/*"
+  ]
 }

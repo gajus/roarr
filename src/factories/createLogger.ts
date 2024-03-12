@@ -9,7 +9,7 @@ import {
   type TopLevelAsyncLocalContext,
   type TransformMessageFunction,
 } from '../types';
-import { hasOwnProperty } from '../utilities';
+import { hasOwnProperty } from '../utilities/hasOwnProperty';
 import { isBrowser } from '../utilities/isBrowser';
 import { isTruthy } from '../utilities/isTruthy';
 import { createMockLogger } from './createMockLogger';
