@@ -576,12 +576,12 @@ You can override this serializer by defining `ROARR.serializeMessage`:
 
 ```ts
 import type {
-  MessageEventHandler,
+  MessageSerializer,
 } from 'roarr';
 
 const ROARR = globalThis.ROARR = globalThis.ROARR || {};
 
-const serializeMessage: MessageEventHandler = (message) => {
+const serializeMessage: MessageSerializer = (message) => {
   return JSON.stringify(message);
 };
 
