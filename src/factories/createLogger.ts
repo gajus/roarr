@@ -206,13 +206,26 @@ export const createLogger = (
       version: ROARR_LOG_FORMAT_VERSION,
     };
 
-    for (const transform of [...asyncLocalContext.transforms, ...transforms]) {
-      packet = transform(packet);
+    // Iterate over transforms without creating a new array
+    if (asyncLocalContext.transforms.length > 0 || transforms.length > 0) {
+      for (const transform of asyncLocalContext.transforms) {
+        packet = transform(packet);
 
-      if (typeof packet !== 'object' || packet === null) {
-        throw new Error(
-          'Message transform function must return a message object.',
-        );
+        if (typeof packet !== 'object' || packet === null) {
+          throw new Error(
+            'Message transform function must return a message object.',
+          );
+        }
+      }
+
+      for (const transform of transforms) {
+        packet = transform(packet);
+
+        if (typeof packet !== 'object' || packet === null) {
+          throw new Error(
+            'Message transform function must return a message object.',
+          );
+        }
       }
     }
 
