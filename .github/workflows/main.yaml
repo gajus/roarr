@@ -3,6 +3,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: release
     name: Test
+    permissions:
+      contents: write
+      id-token: write
+      issues: write
+      pull-requests: write
     steps:
       - name: setup repository
         uses: actions/checkout@v3
@@ -11,7 +16,7 @@ jobs:
       - name: setup node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "21"
+          node-version: "24"
       - run: npm ci
       - run: npm run lint
       - run: npm run test
@@ -19,7 +24,6 @@ jobs:
       - run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 name: Test, build and release
 on:
   push:
