@@ -16,14 +16,6 @@ import { createMockLogger } from './createMockLogger';
 import { printf } from 'fast-printf';
 import safeStringify from 'safe-stable-stringify';
 
-const stringify = (value: unknown): string | undefined => {
-  try {
-    return JSON.stringify(value);
-  } catch {
-    return safeStringify(value);
-  }
-};
-
 let loggedWarningAsyncLocalContext = false;
 
 const getGlobalRoarrContext = (): RoarrGlobalState => {
@@ -80,36 +72,73 @@ const getSequence = () => {
 };
 
 const createChildLogger = (log: Logger, logLevel: number) => {
-  return (a, b, c, d, e, f, g, h, index, index_) => {
-    log.child({
-      logLevel,
-    })(a, b, c, d, e, f, g, h, index, index_);
+  return (
+    a: unknown,
+    b: unknown,
+    c: unknown,
+    d: unknown,
+    e: unknown,
+    f: unknown,
+    g: unknown,
+    h: unknown,
+    index: unknown,
+    index_: unknown,
+  ) => {
+    if (typeof a === 'string') {
+      // Message-only call: inject logLevel as context
+      (log as any)({ logLevel }, a, b, c, d, e, f, g, h, index);
+    } else {
+      // Context + message call: merge logLevel into existing context
+      (log as any)(
+        { ...(a as object), logLevel },
+        b,
+        c,
+        d,
+        e,
+        f,
+        g,
+        h,
+        index,
+        index_,
+      );
+    }
   };
 };
 
 const MAX_ONCE_ENTRIES = 1_000;
 
+const buildOnceKey = (logLevel: number, a: unknown, b: unknown): string => {
+  // For most use cases, the first two arguments (context/message) are sufficient
+  // to uniquely identify a log call. This avoids expensive full serialization.
+  if (typeof a === 'string') {
+    return `${logLevel}:${a}`;
+  }
+
+  // When context is provided, include stringified context + message
+  try {
+    return `${logLevel}:${JSON.stringify(a)}:${b}`;
+  } catch {
+    return `${logLevel}:${safeStringify(a)}:${b}`;
+  }
+};
+
 const createOnceChildLogger = (log: Logger, logLevel: number) => {
-  return (a, b, c, d, e, f, g, h, index, index_) => {
-    const key = stringify({
-      a,
-      b,
-      c,
-      d,
-      e,
-      f,
-      g,
-      h,
-      i: index,
-      j: index_,
-      logLevel,
-    });
-
-    if (!key) {
-      throw new Error('Expected key to be a string');
-    }
-
+  return (
+    a: unknown,
+    b: unknown,
+    c: unknown,
+    d: unknown,
+    e: unknown,
+    f: unknown,
+    g: unknown,
+    h: unknown,
+    index: unknown,
+    index_: unknown,
+  ) => {
     const onceLog = getGlobalRoarrContext().onceLog;
+
+    // Build key first, check cache before doing any other work
+    const key = buildOnceKey(logLevel, a, b);
 
     if (onceLog.has(key)) {
       return;
@@ -121,9 +150,23 @@ const createOnceChildLogger = (log: Logger, logLevel: number) => {
       onceLog.clear();
     }
 
-    log.child({
-      logLevel,
-    })(a, b, c, d, e, f, g, h, index, index_);
+    // Optimized: directly inject logLevel instead of creating child logger
+    if (typeof a === 'string') {
+      (log as any)({ logLevel }, a, b, c, d, e, f, g, h, index);
+    } else {
+      (log as any)(
+        { ...(a as object), logLevel },
+        b,
+        c,
+        d,
+        e,
+        f,
+        g,
+        h,
+        index,
+        index_,
+      );
+    }
   };
 };
 

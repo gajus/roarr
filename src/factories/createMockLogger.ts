@@ -1,16 +1,12 @@
-import { logLevels } from '../constants';
 import {
   type Logger,
   type MessageContext,
   type MessageEventHandler,
 } from '../types';
 
-const createChildLogger = (log: Logger, logLevel: number) => {
-  return (a, b, c, d, e, f, g, h, index, index_) => {
-    log.child({
-      logLevel,
-    })(a, b, c, d, e, f, g, h, index, index_);
-  };
+// Mock logger level methods are no-ops - no need for child logger creation
+const noopLevelMethod = () => {
+  return undefined;
 };
 
 export const createMockLogger = (
@@ -34,18 +30,19 @@ export const createMockLogger = (
     return {};
   };
 
-  log.debug = createChildLogger(log, logLevels.debug);
-  log.debugOnce = createChildLogger(log, logLevels.debug);
-  log.error = createChildLogger(log, logLevels.error);
-  log.errorOnce = createChildLogger(log, logLevels.error);
-  log.fatal = createChildLogger(log, logLevels.fatal);
-  log.fatalOnce = createChildLogger(log, logLevels.fatal);
-  log.info = createChildLogger(log, logLevels.info);
-  log.infoOnce = createChildLogger(log, logLevels.info);
-  log.trace = createChildLogger(log, logLevels.trace);
-  log.traceOnce = createChildLogger(log, logLevels.trace);
-  log.warn = createChildLogger(log, logLevels.warn);
-  log.warnOnce = createChildLogger(log, logLevels.warn);
+  // All level methods are no-ops for mock logger - no child logger needed
+  log.debug = noopLevelMethod;
+  log.debugOnce = noopLevelMethod;
+  log.error = noopLevelMethod;
+  log.errorOnce = noopLevelMethod;
+  log.fatal = noopLevelMethod;
+  log.fatalOnce = noopLevelMethod;
+  log.info = noopLevelMethod;
+  log.infoOnce = noopLevelMethod;
+  log.trace = noopLevelMethod;
+  log.traceOnce = noopLevelMethod;
+  log.warn = noopLevelMethod;
+  log.warnOnce = noopLevelMethod;
 
   return log;
 };
