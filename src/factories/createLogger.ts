@@ -16,6 +16,14 @@ import { createMockLogger } from './createMockLogger';
 import { printf } from 'fast-printf';
 import safeStringify from 'safe-stable-stringify';
 
+const stringify = (value: unknown): string | undefined => {
+  try {
+    return JSON.stringify(value);
+  } catch {
+    return safeStringify(value);
+  }
+};
+
 let loggedWarningAsyncLocalContext = false;
 
 const getGlobalRoarrContext = (): RoarrGlobalState => {
@@ -83,7 +91,7 @@ const MAX_ONCE_ENTRIES = 1_000;
 
 const createOnceChildLogger = (log: Logger, logLevel: number) => {
   return (a, b, c, d, e, f, g, h, index, index_) => {
-    const key = safeStringify({
+    const key = stringify({
       a,
       b,
       c,
