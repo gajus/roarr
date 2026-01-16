@@ -146,14 +146,27 @@ export const createLogger = (
     index_: any,
   ) => {
     const time = Date.now();
-    const sequence = getSequence();
 
-    let asyncLocalContext: AsyncLocalContext;
+    // Cache global context to avoid repeated lookups
+    const globalContext = globalThis.ROARR as RoarrGlobalState;
+    const asyncLocalStorage = globalContext.asyncLocalStorage;
 
-    if (isAsyncLocalContextAvailable()) {
-      asyncLocalContext = getAsyncLocalContext();
+    // Get async local context with single lookup (or use default)
+    const asyncLocalContext: AsyncLocalContext =
+      asyncLocalStorage?.getStore() ?? createDefaultAsyncLocalContext();
+
+    // Generate sequence inline using cached references
+    let sequence: string;
+    if (
+      'sequenceRoot' in asyncLocalContext &&
+      typeof asyncLocalContext.sequence === 'number'
+    ) {
+      sequence =
+        asyncLocalContext.sequenceRoot +
+        '.' +
+        String(asyncLocalContext.sequence++);
     } else {
-      asyncLocalContext = createDefaultAsyncLocalContext();
+      sequence = String(globalContext.sequence++);
     }
 
     let context;
