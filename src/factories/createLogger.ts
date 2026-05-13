@@ -71,50 +71,13 @@ const getSequence = () => {
   return String(getGlobalRoarrContext().sequence++);
 };
 
-const createChildLogger = (log: Logger, logLevel: number) => {
-  return (
-    a: unknown,
-    b: unknown,
-    c: unknown,
-    d: unknown,
-    e: unknown,
-    f: unknown,
-    g: unknown,
-    h: unknown,
-    index: unknown,
-    index_: unknown,
-  ) => {
-    if (typeof a === 'string') {
-      // Message-only call: inject logLevel as context
-      (log as any)({ logLevel }, a, b, c, d, e, f, g, h, index);
-    } else {
-      // Context + message call: merge logLevel into existing context
-      (log as any)(
-        { ...(a as object), logLevel },
-        b,
-        c,
-        d,
-        e,
-        f,
-        g,
-        h,
-        index,
-        index_,
-      );
-    }
-  };
-};
-
 const MAX_ONCE_ENTRIES = 1_000;
 
 const buildOnceKey = (logLevel: number, a: unknown, b: unknown): string => {
-  // For most use cases, the first two arguments (context/message) are sufficient
-  // to uniquely identify a log call. This avoids expensive full serialization.
   if (typeof a === 'string') {
     return `${logLevel}:${a}`;
   }
 
-  // When context is provided, include stringified context + message
   try {
     return `${logLevel}:${JSON.stringify(a)}:${b}`;
   } catch {
@@ -122,8 +85,18 @@ const buildOnceKey = (logLevel: number, a: unknown, b: unknown): string => {
   }
 };
 
-const createOnceChildLogger = (log: Logger, logLevel: number) => {
-  return (
+// Shared prototype for all logger instances.
+// Methods use `this` (the log function itself) to dispatch,
+// avoiding per-instance closure allocations.
+const loggerPrototype: any = Object.create(Function.prototype);
+
+for (const logLevelName of Object.keys(logLevels) as Array<
+  keyof typeof logLevels
+>) {
+  const logLevel = logLevels[logLevelName];
+
+  loggerPrototype[logLevelName] = function (
+    this: any,
     a: unknown,
     b: unknown,
     c: unknown,
@@ -134,10 +107,28 @@ const createOnceChildLogger = (log: Logger, logLevel: number) => {
     h: unknown,
     index: unknown,
     index_: unknown,
-  ) => {
-    const onceLog = getGlobalRoarrContext().onceLog;
+  ) {
+    if (typeof a === 'string') {
+      this({ logLevel }, a, b, c, d, e, f, g, h, index);
+    } else {
+      this({ ...(a as object), logLevel }, b, c, d, e, f, g, h, index, index_);
+    }
+  };
 
-    // Build key first, check cache before doing any other work
+  loggerPrototype[logLevelName + 'Once'] = function (
+    this: any,
+    a: unknown,
+    b: unknown,
+    c: unknown,
+    d: unknown,
+    e: unknown,
+    f: unknown,
+    g: unknown,
+    h: unknown,
+    index: unknown,
+    index_: unknown,
+  ) {
+    const onceLog = getGlobalRoarrContext().onceLog;
     const key = buildOnceKey(logLevel, a, b);
 
     if (onceLog.has(key)) {
@@ -150,24 +141,141 @@ const createOnceChildLogger = (log: Logger, logLevel: number) => {
       onceLog.clear();
     }
 
-    // Optimized: directly inject logLevel instead of creating child logger
     if (typeof a === 'string') {
-      (log as any)({ logLevel }, a, b, c, d, e, f, g, h, index);
+      this({ logLevel }, a, b, c, d, e, f, g, h, index);
     } else {
-      (log as any)(
-        { ...(a as object), logLevel },
-        b,
-        c,
-        d,
-        e,
-        f,
-        g,
-        h,
-        index,
-        index_,
-      );
+      this({ ...(a as object), logLevel }, b, c, d, e, f, g, h, index, index_);
     }
   };
+}
+
+loggerPrototype.child = function (this: any, context: any) {
+  const onMessage = this._onMessage;
+  const parentMessageContext = this._parentMessageContext;
+  const transforms = this._transforms;
+
+  let asyncLocalContext: AsyncLocalContext;
+
+  if (isAsyncLocalContextAvailable()) {
+    asyncLocalContext = getAsyncLocalContext();
+  } else {
+    asyncLocalContext = createDefaultAsyncLocalContext();
+  }
+
+  if (typeof context === 'function') {
+    return createLogger(
+      onMessage,
+      {
+        ...asyncLocalContext.messageContext,
+        ...parentMessageContext,
+        ...context,
+      },
+      [context, ...transforms],
+    );
+  }
+
+  return createLogger(
+    onMessage,
+    {
+      ...asyncLocalContext.messageContext,
+      ...parentMessageContext,
+      ...context,
+    },
+    transforms,
+  );
+};
+
+loggerPrototype.getContext = function (this: any) {
+  const parentMessageContext = this._parentMessageContext;
+
+  let asyncLocalContext: AsyncLocalContext;
+
+  if (isAsyncLocalContextAvailable()) {
+    asyncLocalContext = getAsyncLocalContext();
+  } else {
+    asyncLocalContext = createDefaultAsyncLocalContext();
+  }
+
+  return {
+    ...asyncLocalContext.messageContext,
+    ...parentMessageContext,
+  };
+};
+
+loggerPrototype.adopt = async function (
+  this: any,
+  routine: any,
+  context: any,
+) {
+  if (!isAsyncLocalContextAvailable()) {
+    if (loggedWarningAsyncLocalContext === false) {
+      loggedWarningAsyncLocalContext = true;
+
+      this._onMessage({
+        context: {
+          logLevel: logLevels.warn,
+          package: 'roarr',
+        },
+        message:
+          'async_hooks are unavailable; Roarr.adopt will not function as expected',
+        sequence: getSequence(),
+        time: Date.now(),
+        version: ROARR_LOG_FORMAT_VERSION,
+      });
+    }
+
+    return routine();
+  }
+
+  const asyncLocalContext = getAsyncLocalContext();
+
+  let sequenceRoot;
+
+  if (
+    hasOwnProperty(asyncLocalContext, 'sequenceRoot') &&
+    hasOwnProperty(asyncLocalContext, 'sequence') &&
+    typeof asyncLocalContext.sequence === 'number'
+  ) {
+    sequenceRoot =
+      asyncLocalContext.sequenceRoot +
+      '.' +
+      String(asyncLocalContext.sequence++);
+  } else {
+    sequenceRoot = String(getGlobalRoarrContext().sequence++);
+  }
+
+  let nextContext = {
+    ...asyncLocalContext.messageContext,
+  };
+
+  const nextTransforms = [...asyncLocalContext.transforms];
+
+  if (typeof context === 'function') {
+    nextTransforms.push(context);
+  } else {
+    nextContext = {
+      ...nextContext,
+      ...context,
+    };
+  }
+
+  const asyncLocalStorage = getGlobalRoarrContext().asyncLocalStorage;
+
+  if (!asyncLocalStorage) {
+    throw new Error('Async local context unavailable.');
+  }
+
+  return asyncLocalStorage.run(
+    {
+      messageContext: nextContext,
+      sequence: 0,
+      sequenceRoot,
+      transforms: nextTransforms,
+    },
+    () => {
+      return routine();
+    },
+  );
 };
 
 export const createLogger = (
@@ -184,7 +292,7 @@ export const createLogger = (
     }
   }
 
-  const log = (
+  const log: any = (
     a: any,
     b: any,
     c: any,
@@ -198,15 +306,12 @@ export const createLogger = (
   ) => {
     const time = Date.now();
 
-    // Cache global context to avoid repeated lookups
     const globalContext = globalThis.ROARR as RoarrGlobalState;
     const asyncLocalStorage = globalContext.asyncLocalStorage;
 
-    // Get async local context with single lookup (or use default)
     const asyncLocalContext: AsyncLocalContext =
       asyncLocalStorage?.getStore() ?? createDefaultAsyncLocalContext();
 
-    // Generate sequence inline using cached references
     let sequence: string;
     if (
       'sequenceRoot' in asyncLocalContext &&
@@ -270,7 +375,6 @@ export const createLogger = (
       version: ROARR_LOG_FORMAT_VERSION,
     };
 
-    // Iterate over transforms without creating a new array
     if (asyncLocalContext.transforms.length > 0 || transforms.length > 0) {
       for (const transform of asyncLocalContext.transforms) {
         packet = transform(packet);
@@ -296,142 +400,11 @@ export const createLogger = (
     onMessage(packet);
   };
 
-  /**
-   * Creates a child logger with the provided context.
-   * If context is an object, then its properties are prepended to all descending logs.
-   * If context is a function, then that function is used to process all descending logs.
-   */
-  log.child = (context) => {
-    let asyncLocalContext: AsyncLocalContext;
+  log._onMessage = onMessage;
+  log._parentMessageContext = parentMessageContext;
+  log._transforms = transforms;
 
-    if (isAsyncLocalContextAvailable()) {
-      asyncLocalContext = getAsyncLocalContext();
-    } else {
-      asyncLocalContext = createDefaultAsyncLocalContext();
-    }
+  Object.setPrototypeOf(log, loggerPrototype);
 
-    if (typeof context === 'function') {
-      return createLogger(
-        onMessage,
-        {
-          ...asyncLocalContext.messageContext,
-          ...parentMessageContext,
-          ...context,
-        },
-        [context, ...transforms],
-      );
-    }
-
-    return createLogger(
-      onMessage,
-      {
-        ...asyncLocalContext.messageContext,
-        ...parentMessageContext,
-        ...context,
-      },
-      transforms,
-    );
-  };
-
-  log.getContext = () => {
-    let asyncLocalContext: AsyncLocalContext;
-
-    if (isAsyncLocalContextAvailable()) {
-      asyncLocalContext = getAsyncLocalContext();
-    } else {
-      asyncLocalContext = createDefaultAsyncLocalContext();
-    }
-
-    return {
-      ...asyncLocalContext.messageContext,
-      ...parentMessageContext,
-    };
-  };
-
-  log.adopt = async (routine, context) => {
-    if (!isAsyncLocalContextAvailable()) {
-      if (loggedWarningAsyncLocalContext === false) {
-        loggedWarningAsyncLocalContext = true;
-
-        onMessage({
-          context: {
-            logLevel: logLevels.warn,
-            package: 'roarr',
-          },
-          message:
-            'async_hooks are unavailable; Roarr.adopt will not function as expected',
-          sequence: getSequence(),
-          time: Date.now(),
-          version: ROARR_LOG_FORMAT_VERSION,
-        });
-      }
-
-      return routine();
-    }
-
-    const asyncLocalContext = getAsyncLocalContext();
-
-    let sequenceRoot;
-
-    if (
-      hasOwnProperty(asyncLocalContext, 'sequenceRoot') &&
-      hasOwnProperty(asyncLocalContext, 'sequence') &&
-      typeof asyncLocalContext.sequence === 'number'
-    ) {
-      sequenceRoot =
-        asyncLocalContext.sequenceRoot +
-        '.' +
-        String(asyncLocalContext.sequence++);
-    } else {
-      sequenceRoot = String(getGlobalRoarrContext().sequence++);
-    }
-
-    let nextContext = {
-      ...asyncLocalContext.messageContext,
-    };
-
-    const nextTransforms = [...asyncLocalContext.transforms];
-
-    if (typeof context === 'function') {
-      nextTransforms.push(context);
-    } else {
-      nextContext = {
-        ...nextContext,
-        ...context,
-      };
-    }
-
-    const asyncLocalStorage = getGlobalRoarrContext().asyncLocalStorage;
-
-    if (!asyncLocalStorage) {
-      throw new Error('Async local context unavailable.');
-    }
-
-    return asyncLocalStorage.run(
-      {
-        messageContext: nextContext,
-        sequence: 0,
-        sequenceRoot,
-        transforms: nextTransforms,
-      },
-      () => {
-        return routine();
-      },
-    );
-  };
-
-  log.debug = createChildLogger(log, logLevels.debug);
-  log.debugOnce = createOnceChildLogger(log, logLevels.debug);
-  log.error = createChildLogger(log, logLevels.error);
-  log.errorOnce = createOnceChildLogger(log, logLevels.error);
-  log.fatal = createChildLogger(log, logLevels.fatal);
-  log.fatalOnce = createOnceChildLogger(log, logLevels.fatal);
-  log.info = createChildLogger(log, logLevels.info);
-  log.infoOnce = createOnceChildLogger(log, logLevels.info);
-  log.trace = createChildLogger(log, logLevels.trace);
-  log.traceOnce = createOnceChildLogger(log, logLevels.trace);
-  log.warn = createChildLogger(log, logLevels.warn);
-  log.warnOnce = createOnceChildLogger(log, logLevels.warn);
-
-  return log;
+  return log as Logger;
 };

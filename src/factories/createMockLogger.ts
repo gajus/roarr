@@ -1,48 +1,47 @@
+import { logLevels } from '../constants';
 import {
   type Logger,
   type MessageContext,
   type MessageEventHandler,
 } from '../types';
 
-// Mock logger level methods are no-ops - no need for child logger creation
 const noopLevelMethod = () => {
   return undefined;
 };
+
+const mockLoggerPrototype: any = Object.create(Function.prototype);
+
+mockLoggerPrototype.adopt = async function (_routine: any) {
+  return _routine();
+};
+
+mockLoggerPrototype.child = function (this: any) {
+  return createMockLogger(this._onMessage, this._parentMessageContext);
+};
+
+mockLoggerPrototype.getContext = function () {
+  return {};
+};
+
+for (const logLevelName of Object.keys(logLevels) as Array<
+  keyof typeof logLevels
+>) {
+  mockLoggerPrototype[logLevelName] = noopLevelMethod;
+  mockLoggerPrototype[logLevelName + 'Once'] = noopLevelMethod;
+}
 
 export const createMockLogger = (
   onMessage: MessageEventHandler,
   parentContext?: MessageContext,
 ): Logger => {
-  // eslint-disable-next-line unicorn/consistent-function-scoping
-  const log: Logger = () => {
+  const log: any = () => {
     return undefined;
   };
 
-  log.adopt = async (routine) => {
-    return routine();
-  };
+  log._onMessage = onMessage;
+  log._parentMessageContext = parentContext;
 
-  log.child = () => {
-    return createMockLogger(onMessage, parentContext);
-  };
+  Object.setPrototypeOf(log, mockLoggerPrototype);
 
-  log.getContext = () => {
-    return {};
-  };
-
-  // All level methods are no-ops for mock logger - no child logger needed
-  log.debug = noopLevelMethod;
-  log.debugOnce = noopLevelMethod;
-  log.error = noopLevelMethod;
-  log.errorOnce = noopLevelMethod;
-  log.fatal = noopLevelMethod;
-  log.fatalOnce = noopLevelMethod;
-  log.info = noopLevelMethod;
-  log.infoOnce = noopLevelMethod;
-  log.trace = noopLevelMethod;
-  log.traceOnce = noopLevelMethod;
-  log.warn = noopLevelMethod;
-  log.warnOnce = noopLevelMethod;
-
-  return log;
+  return log as Logger;
 };
