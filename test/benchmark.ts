@@ -119,5 +119,34 @@ if (process.env.ROARR_LOG !== 'true') {
     },
   );
 
+  suite.add(
+    'child logger creation',
+    () => {
+      Roarr.child({ queryId: '123' });
+    },
+    {
+      setup: () => {
+        globalThis.ROARR.write = () => {
+          return undefined;
+        };
+      },
+    },
+  );
+
+  suite.add(
+    'child logger creation + log',
+    () => {
+      const child = Roarr.child({ queryId: '123' });
+      child.info('foo');
+    },
+    {
+      setup: () => {
+        globalThis.ROARR.write = () => {
+          return undefined;
+        };
+      },
+    },
+  );
+
   suite.run();
 })();
