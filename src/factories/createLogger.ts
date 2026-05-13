@@ -22,11 +22,9 @@ const getGlobalRoarrContext = (): RoarrGlobalState => {
   return globalThis.ROARR;
 };
 
-const createDefaultAsyncLocalContext = (): TopLevelAsyncLocalContext => {
-  return {
-    messageContext: {},
-    transforms: [],
-  };
+const defaultAsyncLocalContext: TopLevelAsyncLocalContext = {
+  messageContext: {},
+  transforms: [],
 };
 
 const getAsyncLocalContext = (): AsyncLocalContext => {
@@ -42,7 +40,7 @@ const getAsyncLocalContext = (): AsyncLocalContext => {
     return asyncLocalContext;
   }
 
-  return createDefaultAsyncLocalContext();
+  return defaultAsyncLocalContext;
 };
 
 const isAsyncLocalContextAvailable = (): boolean => {
@@ -159,7 +157,7 @@ loggerPrototype.child = function (this: any, context: any) {
   if (isAsyncLocalContextAvailable()) {
     asyncLocalContext = getAsyncLocalContext();
   } else {
-    asyncLocalContext = createDefaultAsyncLocalContext();
+    asyncLocalContext = defaultAsyncLocalContext;
   }
 
   if (typeof context === 'function') {
@@ -193,7 +191,7 @@ loggerPrototype.getContext = function (this: any) {
   if (isAsyncLocalContextAvailable()) {
     asyncLocalContext = getAsyncLocalContext();
   } else {
-    asyncLocalContext = createDefaultAsyncLocalContext();
+    asyncLocalContext = defaultAsyncLocalContext;
   }
 
   return {
@@ -310,7 +308,7 @@ export const createLogger = (
     const asyncLocalStorage = globalContext.asyncLocalStorage;
 
     const asyncLocalContext: AsyncLocalContext =
-      asyncLocalStorage?.getStore() ?? createDefaultAsyncLocalContext();
+      asyncLocalStorage?.getStore() ?? defaultAsyncLocalContext;
 
     let sequence: string;
     if (
