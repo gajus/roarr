@@ -35,5 +35,9 @@ export const createIntegrationTest = ({
     };
   });
 
+  test.afterEach((t) => {
+    t.context.ROARR.teardown?.();
+  });
+
   return test;
 };

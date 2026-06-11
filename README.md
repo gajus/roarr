@@ -588,6 +588,22 @@ const serializeMessage: MessageSerializer = (message) => {
 ROARR.serializeMessage = serializeMessage;
 ```
 
+### Cleaning up Roarr in test environments
+
+In Node.js, Roarr registers an `error` listener on the configured output stream to ignore `EPIPE` errors. Test runners that create isolated module environments may need to remove that listener during teardown.
+
+```ts
+import {
+  ROARR,
+} from 'roarr';
+
+afterEach(() => {
+  ROARR.teardown?.();
+});
+```
+
+This is only needed for test environments that repeatedly load Roarr in the same process.
+
 ### Logging errors
 
 This is not specific to Roarr – this suggestion applies to any kind of logging.

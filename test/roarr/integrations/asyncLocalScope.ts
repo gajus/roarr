@@ -15,9 +15,14 @@ const time = -1;
 const version = '2.0.0';
 
 test.beforeEach(() => {
+  globalThis.ROARR?.teardown?.();
   globalThis.ROARR = null;
 
   globalThis.ROARR = createRoarrInitialGlobalState({});
+});
+
+test.afterEach(() => {
+  globalThis.ROARR?.teardown?.();
 });
 
 const createLoggerWithHistory = (): Logger & { messages: Message[] } => {

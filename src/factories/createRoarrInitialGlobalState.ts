@@ -35,12 +35,14 @@ export const createRoarrInitialGlobalState = (
       const AsyncLocalStorage = require('node:async_hooks').AsyncLocalStorage;
 
       const asyncLocalStorage = new AsyncLocalStorage();
+      const nodeWriter = createNodeWriter();
 
       newState = {
         ...newState,
 
         asyncLocalStorage,
-        write: createNodeWriter(),
+        teardown: nodeWriter.teardown,
+        write: nodeWriter.write,
       };
       // eslint-disable-next-line no-empty
     } catch {}

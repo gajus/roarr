@@ -1,25 +1,41 @@
 import { type LogWriter } from '../types';
 
+export type NodeWriter = {
+  teardown: () => void;
+  write: LogWriter;
+};
+
 const createBlockingWriter = (stream: NodeJS.WritableStream): LogWriter => {
   return (message: string) => {
     stream.write(message + '\n');
   };
 };
 
-export const createNodeWriter = (): LogWriter => {
+const createOnError = () => {
+  return (error) => {
+    if (error.code === 'EPIPE') {
+      return;
+    }
+
+    throw error;
+  };
+};
+
+export const createNodeWriter = (): NodeWriter => {
   // eslint-disable-next-line node/no-process-env
   const targetStream = (process.env.ROARR_STREAM ?? 'STDOUT').toUpperCase();
 
   const stream =
     targetStream.toUpperCase() === 'STDOUT' ? process.stdout : process.stderr;
 
-  stream.on('error', (error) => {
-    if (error.code === 'EPIPE') {
-      return;
-    }
+  const onError = createOnError();
 
-    throw error;
-  });
+  stream.on('error', onError);
 
-  return createBlockingWriter(stream);
+  return {
+    teardown: () => {
+      stream.removeListener('error', onError);
+    },
+    write: createBlockingWriter(stream),
+  };
 };
