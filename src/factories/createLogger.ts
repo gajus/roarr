@@ -148,9 +148,9 @@ for (const logLevelName of Object.keys(logLevels) as Array<
 }
 
 loggerPrototype.child = function (this: any, context: any) {
-  const onMessage = this._onMessage;
-  const parentMessageContext = this._parentMessageContext;
-  const transforms = this._transforms;
+  const onMessage = this.onMessage;
+  const parentMessageContext = this.parentMessageContext;
+  const transforms = this.transforms;
 
   let asyncLocalContext: AsyncLocalContext;
 
@@ -161,6 +161,7 @@ loggerPrototype.child = function (this: any, context: any) {
   }
 
   if (typeof context === 'function') {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     return createLogger(
       onMessage,
       {
@@ -172,6 +173,7 @@ loggerPrototype.child = function (this: any, context: any) {
     );
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
   return createLogger(
     onMessage,
     {
@@ -184,7 +186,7 @@ loggerPrototype.child = function (this: any, context: any) {
 };
 
 loggerPrototype.getContext = function (this: any) {
-  const parentMessageContext = this._parentMessageContext;
+  const parentMessageContext = this.parentMessageContext;
 
   let asyncLocalContext: AsyncLocalContext;
 
@@ -200,16 +202,12 @@ loggerPrototype.getContext = function (this: any) {
   };
 };
 
-loggerPrototype.adopt = async function (
-  this: any,
-  routine: any,
-  context: any,
-) {
+loggerPrototype.adopt = async function (this: any, routine: any, context: any) {
   if (!isAsyncLocalContextAvailable()) {
     if (loggedWarningAsyncLocalContext === false) {
       loggedWarningAsyncLocalContext = true;
 
-      this._onMessage({
+      this.onMessage({
         context: {
           logLevel: logLevels.warn,
           package: 'roarr',
@@ -282,7 +280,7 @@ export const createLogger = (
   transforms: ReadonlyArray<TransformMessageFunction<MessageContext>> = [],
 ): Logger => {
   if (!isBrowser() && typeof process !== 'undefined') {
-    // eslint-disable-next-line node/no-process-env
+    // eslint-disable-next-line n/no-process-env
     const enabled = isTruthy(process.env.ROARR_LOG ?? '');
 
     if (!enabled) {
@@ -398,9 +396,9 @@ export const createLogger = (
     onMessage(packet);
   };
 
-  log._onMessage = onMessage;
-  log._parentMessageContext = parentMessageContext;
-  log._transforms = transforms;
+  log.onMessage = onMessage;
+  log.parentMessageContext = parentMessageContext;
+  log.transforms = transforms;
 
   Object.setPrototypeOf(log, loggerPrototype);
 

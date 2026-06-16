@@ -22,7 +22,7 @@ const createOnError = () => {
 };
 
 export const createNodeWriter = (): NodeWriter => {
-  // eslint-disable-next-line node/no-process-env
+  // eslint-disable-next-line n/no-process-env
   const targetStream = (process.env.ROARR_STREAM ?? 'STDOUT').toUpperCase();
 
   const stream =

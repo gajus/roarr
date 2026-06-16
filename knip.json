@@ -5,8 +5,7 @@
     "src/browser.ts"
   ],
   "ignoreDependencies": [
-    "husky",
-    "tsimp"
+    "husky"
   ],
   "project": [
     "src/**/*!",

@@ -1,4 +1,4 @@
-/* eslint-disable node/no-process-env */
+/* eslint-disable n/no-process-env */
 /* eslint-disable ava/use-test */
 
 import anyTest, { type TestFn } from 'ava';

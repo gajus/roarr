@@ -16,7 +16,8 @@ mockLoggerPrototype.adopt = async function (_routine: any) {
 };
 
 mockLoggerPrototype.child = function (this: any) {
-  return createMockLogger(this._onMessage, this._parentMessageContext);
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  return createMockLogger(this.onMessage, this.parentMessageContext);
 };
 
 mockLoggerPrototype.getContext = function () {
@@ -34,12 +35,13 @@ export const createMockLogger = (
   onMessage: MessageEventHandler,
   parentContext?: MessageContext,
 ): Logger => {
+  // eslint-disable-next-line unicorn/consistent-function-scoping
   const log: any = () => {
     return undefined;
   };
 
-  log._onMessage = onMessage;
-  log._parentMessageContext = parentContext;
+  log.onMessage = onMessage;
+  log.parentMessageContext = parentContext;
 
   Object.setPrototypeOf(log, mockLoggerPrototype);
 
