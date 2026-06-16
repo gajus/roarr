@@ -43,6 +43,7 @@ export type RoarrGlobalState = {
   onceLog: Set<string>;
   sequence: number;
   serializeMessage?: MessageSerializer;
+  teardown?: () => void;
   versions: readonly string[];
   write: LogWriter;
 };

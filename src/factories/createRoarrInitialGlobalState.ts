@@ -31,16 +31,23 @@ export const createRoarrInitialGlobalState = (
 
   if (currentIsLatestVersion || !newState.write) {
     try {
+      newState.teardown?.();
+      // eslint-disable-next-line no-empty
+    } catch {}
+
+    try {
       // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
       const AsyncLocalStorage = require('node:async_hooks').AsyncLocalStorage;
 
       const asyncLocalStorage = new AsyncLocalStorage();
+      const nodeWriter = createNodeWriter();
 
       newState = {
         ...newState,
 
         asyncLocalStorage,
-        write: createNodeWriter(),
+        teardown: nodeWriter.teardown,
+        write: nodeWriter.write,
       };
       // eslint-disable-next-line no-empty
     } catch {}

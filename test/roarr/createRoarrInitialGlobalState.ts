@@ -5,6 +5,10 @@ import test from 'ava';
 test('creates new state', (t) => {
   const state = createRoarrInitialGlobalState({});
 
+  t.teardown(() => {
+    state.teardown?.();
+  });
+
   t.like(state, {
     sequence: 0,
     versions: [ROARR_VERSION],
@@ -14,6 +18,10 @@ test('creates new state', (t) => {
 test('respects existing sequence', (t) => {
   const state = createRoarrInitialGlobalState({
     sequence: 1,
+  });
+
+  t.teardown(() => {
+    state.teardown?.();
   });
 
   t.like(state, {
@@ -27,6 +35,10 @@ test('appends the latest version', (t) => {
     versions: ['0.0.1'],
   });
 
+  t.teardown(() => {
+    state.teardown?.();
+  });
+
   t.like(state, {
     sequence: 0,
     versions: ['0.0.1', ROARR_VERSION],
@@ -36,6 +48,10 @@ test('appends the latest version', (t) => {
 test('sets "write" method if current is the first version', (t) => {
   const state = createRoarrInitialGlobalState({});
 
+  t.teardown(() => {
+    state.teardown?.();
+  });
+
   t.is(typeof state.write, 'function');
 });
 
@@ -43,6 +59,10 @@ test('overrides "write" method if current is the latest version', (t) => {
   const state = createRoarrInitialGlobalState({
     versions: ['0.0.1'],
     write: 'foo',
+  });
+
+  t.teardown(() => {
+    state.teardown?.();
   });
 
   t.is(typeof state.write, 'function');
