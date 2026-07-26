@@ -1,4 +1,4 @@
-import { configure } from 'safe-stable-stringify';
+import { configure } from "safe-stable-stringify";
 
 const safeStringify = configure({
   deterministic: false,
@@ -16,17 +16,17 @@ const safeStringify = configure({
 
 export const stringify = (value: unknown): string => {
   try {
-    return JSON.stringify(value) ?? '';
+    return JSON.stringify(value) ?? "";
   } catch {
     // Swallow the error and try with safe-stable-stringify
   }
 
   try {
-    return safeStringify(value) ?? '';
+    return safeStringify(value) ?? "";
   } catch (error) {
     // The only time I've seen this happen is when the value was excessively large.
     // eslint-disable-next-line no-console
-    console.error('[roarr] could not serialize value', value);
+    console.error("[roarr] could not serialize value", value);
 
     throw error;
   }

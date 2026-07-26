@@ -1,8 +1,8 @@
 /* eslint-disable node/no-process-env */
 /* eslint-disable ava/use-test */
 
-import anyTest, { type TestFn } from 'ava';
-import * as sinon from 'sinon';
+import anyTest, { type TestFn } from "ava";
+import * as sinon from "sinon";
 
 export const createIntegrationTest = ({
   writeLogs,
@@ -16,14 +16,14 @@ export const createIntegrationTest = ({
   }>;
 
   test.beforeEach(async (t) => {
-    process.env.ROARR_LOG = writeLogs ? '1' : '0';
+    process.env.ROARR_LOG = writeLogs ? "1" : "0";
 
     // This import is affected by the `process.env.ROARR_LOG` value.
-    const { Roarr, ROARR } = await import('../../src/Roarr');
+    const { Roarr, ROARR } = await import("../../src/Roarr");
 
     sinon.restore();
 
-    const write = sinon.stub(ROARR, 'write');
+    const write = sinon.stub(ROARR, "write");
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     write.callsFake(() => {});

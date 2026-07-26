@@ -1,4 +1,4 @@
-import { type AsyncLocalStorage } from 'node:async_hooks';
+import { type AsyncLocalStorage } from "node:async_hooks";
 
 type JsonValue =
   | JsonObject
@@ -118,9 +118,9 @@ export type Logger<Z = MessageContext> = LogMethod<Z> & {
 export type MessageEventHandler = (message: Message<MessageContext>) => void;
 
 export type LogLevelName =
-  | 'debug'
-  | 'error'
-  | 'fatal'
-  | 'info'
-  | 'trace'
-  | 'warn';
+  | "debug"
+  | "error"
+  | "fatal"
+  | "info"
+  | "trace"
+  | "warn";

@@ -1,5 +1,5 @@
-import { ROARR_LOG_FORMAT_VERSION } from '../config';
-import { logLevels } from '../constants';
+import { ROARR_LOG_FORMAT_VERSION } from "../config";
+import { logLevels } from "../constants";
 import {
   type AsyncLocalContext,
   type Logger,
@@ -8,13 +8,13 @@ import {
   type RoarrGlobalState,
   type TopLevelAsyncLocalContext,
   type TransformMessageFunction,
-} from '../types';
-import { hasOwnProperty } from '../utilities/hasOwnProperty';
-import { isBrowser } from '../utilities/isBrowser';
-import { isTruthy } from '../utilities/isTruthy';
-import { createMockLogger } from './createMockLogger';
-import { printf } from 'fast-printf';
-import safeStringify from 'safe-stable-stringify';
+} from "../types";
+import { hasOwnProperty } from "../utilities/hasOwnProperty";
+import { isBrowser } from "../utilities/isBrowser";
+import { isTruthy } from "../utilities/isTruthy";
+import { createMockLogger } from "./createMockLogger";
+import { printf } from "fast-printf";
+import safeStringify from "safe-stable-stringify";
 
 let loggedWarningAsyncLocalContext = false;
 
@@ -31,7 +31,7 @@ const getAsyncLocalContext = (): AsyncLocalContext => {
   const asyncLocalStorage = getGlobalRoarrContext().asyncLocalStorage;
 
   if (!asyncLocalStorage) {
-    throw new Error('AsyncLocalContext is unavailable.');
+    throw new Error("AsyncLocalContext is unavailable.");
   }
 
   const asyncLocalContext = asyncLocalStorage.getStore();
@@ -52,13 +52,13 @@ const getSequence = () => {
     const asyncLocalContext = getAsyncLocalContext();
 
     if (
-      hasOwnProperty(asyncLocalContext, 'sequenceRoot') &&
-      hasOwnProperty(asyncLocalContext, 'sequence') &&
-      typeof asyncLocalContext.sequence === 'number'
+      hasOwnProperty(asyncLocalContext, "sequenceRoot") &&
+      hasOwnProperty(asyncLocalContext, "sequence") &&
+      typeof asyncLocalContext.sequence === "number"
     ) {
       return (
         String(asyncLocalContext.sequenceRoot) +
-        '.' +
+        "." +
         String(asyncLocalContext.sequence++)
       );
     }
@@ -72,7 +72,7 @@ const getSequence = () => {
 const MAX_ONCE_ENTRIES = 1_000;
 
 const buildOnceKey = (logLevel: number, a: unknown, b: unknown): string => {
-  if (typeof a === 'string') {
+  if (typeof a === "string") {
     return `${logLevel}:${a}`;
   }
 
@@ -106,14 +106,14 @@ for (const logLevelName of Object.keys(logLevels) as Array<
     index: unknown,
     index_: unknown,
   ) {
-    if (typeof a === 'string') {
+    if (typeof a === "string") {
       this({ logLevel }, a, b, c, d, e, f, g, h, index);
     } else {
       this({ ...(a as object), logLevel }, b, c, d, e, f, g, h, index, index_);
     }
   };
 
-  loggerPrototype[logLevelName + 'Once'] = function (
+  loggerPrototype[logLevelName + "Once"] = function (
     this: any,
     a: unknown,
     b: unknown,
@@ -139,7 +139,7 @@ for (const logLevelName of Object.keys(logLevels) as Array<
       onceLog.clear();
     }
 
-    if (typeof a === 'string') {
+    if (typeof a === "string") {
       this({ logLevel }, a, b, c, d, e, f, g, h, index);
     } else {
       this({ ...(a as object), logLevel }, b, c, d, e, f, g, h, index, index_);
@@ -160,7 +160,7 @@ loggerPrototype.child = function (this: any, context: any) {
     asyncLocalContext = defaultAsyncLocalContext;
   }
 
-  if (typeof context === 'function') {
+  if (typeof context === "function") {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     return createLogger(
       onMessage,
@@ -210,10 +210,10 @@ loggerPrototype.adopt = async function (this: any, routine: any, context: any) {
       this.onMessage({
         context: {
           logLevel: logLevels.warn,
-          package: 'roarr',
+          package: "roarr",
         },
         message:
-          'async_hooks are unavailable; Roarr.adopt will not function as expected',
+          "async_hooks are unavailable; Roarr.adopt will not function as expected",
         sequence: getSequence(),
         time: Date.now(),
         version: ROARR_LOG_FORMAT_VERSION,
@@ -228,13 +228,13 @@ loggerPrototype.adopt = async function (this: any, routine: any, context: any) {
   let sequenceRoot;
 
   if (
-    hasOwnProperty(asyncLocalContext, 'sequenceRoot') &&
-    hasOwnProperty(asyncLocalContext, 'sequence') &&
-    typeof asyncLocalContext.sequence === 'number'
+    hasOwnProperty(asyncLocalContext, "sequenceRoot") &&
+    hasOwnProperty(asyncLocalContext, "sequence") &&
+    typeof asyncLocalContext.sequence === "number"
   ) {
     sequenceRoot =
       asyncLocalContext.sequenceRoot +
-      '.' +
+      "." +
       String(asyncLocalContext.sequence++);
   } else {
     sequenceRoot = String(getGlobalRoarrContext().sequence++);
@@ -246,7 +246,7 @@ loggerPrototype.adopt = async function (this: any, routine: any, context: any) {
 
   const nextTransforms = [...asyncLocalContext.transforms];
 
-  if (typeof context === 'function') {
+  if (typeof context === "function") {
     nextTransforms.push(context);
   } else {
     nextContext = {
@@ -258,7 +258,7 @@ loggerPrototype.adopt = async function (this: any, routine: any, context: any) {
   const asyncLocalStorage = getGlobalRoarrContext().asyncLocalStorage;
 
   if (!asyncLocalStorage) {
-    throw new Error('Async local context unavailable.');
+    throw new Error("Async local context unavailable.");
   }
 
   return asyncLocalStorage.run(
@@ -308,12 +308,12 @@ const logMessage = function (
 
   let sequence: string;
   if (
-    'sequenceRoot' in asyncLocalContext &&
-    typeof asyncLocalContext.sequence === 'number'
+    "sequenceRoot" in asyncLocalContext &&
+    typeof asyncLocalContext.sequence === "number"
   ) {
     sequence =
       asyncLocalContext.sequenceRoot +
-      '.' +
+      "." +
       String(asyncLocalContext.sequence++);
   } else {
     sequence = String(globalContext.sequence++);
@@ -322,7 +322,7 @@ const logMessage = function (
   let context;
   let message;
 
-  if (typeof a === 'string') {
+  if (typeof a === "string") {
     context = {
       ...asyncLocalContext.messageContext,
       ...parentMessageContext,
@@ -335,12 +335,12 @@ const logMessage = function (
     };
   }
 
-  if (typeof a === 'string' && b === undefined) {
+  if (typeof a === "string" && b === undefined) {
     message = a;
-  } else if (typeof a === 'string') {
-    if (!a.includes('%')) {
+  } else if (typeof a === "string") {
+    if (!a.includes("%")) {
       throw new Error(
-        'When a string parameter is followed by other arguments, then it is assumed that you are attempting to format a message using printf syntax. You either forgot to add printf bindings or if you meant to add context to the log message, pass them in an object as the first parameter.',
+        "When a string parameter is followed by other arguments, then it is assumed that you are attempting to format a message using printf syntax. You either forgot to add printf bindings or if you meant to add context to the log message, pass them in an object as the first parameter.",
       );
     }
 
@@ -348,12 +348,12 @@ const logMessage = function (
   } else {
     let fallbackMessage = b;
 
-    if (typeof b !== 'string') {
+    if (typeof b !== "string") {
       if (b === undefined) {
-        fallbackMessage = '';
+        fallbackMessage = "";
       } else {
         throw new TypeError(
-          'Message must be a string. Received ' + typeof b + '.',
+          "Message must be a string. Received " + typeof b + ".",
         );
       }
     }
@@ -373,9 +373,9 @@ const logMessage = function (
     for (const transform of asyncLocalContext.transforms) {
       packet = transform(packet);
 
-      if (typeof packet !== 'object' || packet === null) {
+      if (typeof packet !== "object" || packet === null) {
         throw new Error(
-          'Message transform function must return a message object.',
+          "Message transform function must return a message object.",
         );
       }
     }
@@ -383,9 +383,9 @@ const logMessage = function (
     for (const transform of transforms) {
       packet = transform(packet);
 
-      if (typeof packet !== 'object' || packet === null) {
+      if (typeof packet !== "object" || packet === null) {
         throw new Error(
-          'Message transform function must return a message object.',
+          "Message transform function must return a message object.",
         );
       }
     }
@@ -406,9 +406,9 @@ export const createLogger = (
   parentMessageContext: MessageContext = {},
   transforms: ReadonlyArray<TransformMessageFunction<MessageContext>> = [],
 ): Logger => {
-  if (!isBrowser() && typeof process !== 'undefined') {
+  if (!isBrowser() && typeof process !== "undefined") {
     // eslint-disable-next-line node/no-process-env
-    const enabled = isTruthy(process.env.ROARR_LOG ?? '');
+    const enabled = isTruthy(process.env.ROARR_LOG ?? "");
 
     if (!enabled) {
       return createMockLogger(onMessage, parentMessageContext);

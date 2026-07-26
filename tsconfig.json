@@ -16,8 +16,5 @@
     "strict": true,
     "target": "es2018"
   },
-  "include": [
-    "src",
-    "test"
-  ]
+  "include": ["src", "test"]
 }

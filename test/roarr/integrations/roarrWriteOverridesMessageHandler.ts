@@ -1,13 +1,13 @@
-import { createIntegrationTest } from '../../helpers/createIntegrationTest';
+import { createIntegrationTest } from "../../helpers/createIntegrationTest";
 
 const test = createIntegrationTest({
   writeLogs: true,
 });
 
-test('ROARR.write overrides message handler', (t) => {
+test("ROARR.write overrides message handler", (t) => {
   const { Roarr, write } = t.context;
 
-  Roarr.info('foo');
+  Roarr.info("foo");
 
   t.is(write.callCount, 1);
   t.is(write.firstCall.args.length, 1);

@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
 
-import { createLogger } from '../src/factories/createLogger';
-import { Roarr } from '../src/Roarr';
-import { Suite } from 'benchmark';
+import { createLogger } from "../src/factories/createLogger";
+import { Roarr } from "../src/Roarr";
+import { Suite } from "benchmark";
 
 // eslint-disable-next-line node/no-process-env
-if (process.env.ROARR_LOG !== 'true') {
-  throw new Error('Must run benchmark with ROARR_LOG=true.');
+if (process.env.ROARR_LOG !== "true") {
+  throw new Error("Must run benchmark with ROARR_LOG=true.");
 }
 
 // `ROARR_LOG` is unset by default, so the mock logger is what most programs
@@ -16,7 +16,7 @@ const createDisabledLogger = () => {
   /* eslint-disable n/no-process-env */
   const enabled = process.env.ROARR_LOG;
 
-  process.env.ROARR_LOG = '';
+  process.env.ROARR_LOG = "";
 
   try {
     return createLogger(() => {});
@@ -29,7 +29,7 @@ const createDisabledLogger = () => {
 const disabledLog = createDisabledLogger();
 
 (() => {
-  const suite = new Suite('roarr', {
+  const suite = new Suite("roarr", {
     onCycle: (event) => {
       console.log(String(event.target));
     },
@@ -39,9 +39,9 @@ const disabledLog = createDisabledLogger();
   });
 
   suite.add(
-    'simple message',
+    "simple message",
     () => {
-      Roarr.info('foo');
+      Roarr.info("foo");
     },
     {
       setup: () => {
@@ -53,9 +53,9 @@ const disabledLog = createDisabledLogger();
   );
 
   suite.add(
-    'message with printf',
+    "message with printf",
     () => {
-      Roarr.info('foo %s %s %s', 'bar', 'baz', 'qux');
+      Roarr.info("foo %s %s %s", "bar", "baz", "qux");
     },
     {
       setup: () => {
@@ -67,13 +67,13 @@ const disabledLog = createDisabledLogger();
   );
 
   suite.add(
-    'message with context',
+    "message with context",
     () => {
       Roarr.info(
         {
-          foo: 'bar',
+          foo: "bar",
         },
-        'foo',
+        "foo",
       );
     },
     {
@@ -88,9 +88,9 @@ const disabledLog = createDisabledLogger();
   let largeContext;
 
   suite.add(
-    'message with large context',
+    "message with large context",
     () => {
-      Roarr.info(largeContext, 'foo');
+      Roarr.info(largeContext, "foo");
     },
     {
       setup: () => {
@@ -112,9 +112,9 @@ const disabledLog = createDisabledLogger();
   let largeContextWithCircularReference;
 
   suite.add(
-    'message with large context',
+    "message with large context",
     () => {
-      Roarr.info(largeContextWithCircularReference, 'foo');
+      Roarr.info(largeContextWithCircularReference, "foo");
     },
     {
       setup: () => {
@@ -140,9 +140,9 @@ const disabledLog = createDisabledLogger();
   );
 
   suite.add(
-    'child logger creation',
+    "child logger creation",
     () => {
-      Roarr.child({ queryId: '123' });
+      Roarr.child({ queryId: "123" });
     },
     {
       setup: () => {
@@ -154,10 +154,10 @@ const disabledLog = createDisabledLogger();
   );
 
   suite.add(
-    'child logger creation + log',
+    "child logger creation + log",
     () => {
-      const child = Roarr.child({ queryId: '123' });
-      child.info('foo');
+      const child = Roarr.child({ queryId: "123" });
+      child.info("foo");
     },
     {
       setup: () => {
@@ -168,21 +168,21 @@ const disabledLog = createDisabledLogger();
     },
   );
 
-  suite.add('disabled logging: simple message', () => {
-    disabledLog.info('foo');
+  suite.add("disabled logging: simple message", () => {
+    disabledLog.info("foo");
   });
 
-  suite.add('disabled logging: message with context', () => {
-    disabledLog.info({ foo: 'bar' }, 'foo');
+  suite.add("disabled logging: message with context", () => {
+    disabledLog.info({ foo: "bar" }, "foo");
   });
 
-  suite.add('disabled logging: child logger creation', () => {
-    disabledLog.child({ queryId: '123' });
+  suite.add("disabled logging: child logger creation", () => {
+    disabledLog.child({ queryId: "123" });
   });
 
-  suite.add('disabled logging: child logger creation + log', () => {
-    const child = disabledLog.child({ queryId: '123' });
-    child.info('foo');
+  suite.add("disabled logging: child logger creation + log", () => {
+    const child = disabledLog.child({ queryId: "123" });
+    child.info("foo");
   });
 
   suite.run();

@@ -16,19 +16,19 @@ Then there is [pino](https://github.com/pinojs/pino). pino is fast JSON logger, 
 
 I needed a logger that:
 
-* Does not block the event cycle (=fast).
-* Does not require initialization.
-* Produces structured data.
-* [Decouples transports](#transports).
-* Has a [CLI program](#cli-program).
-* Works in Node.js and browser.
-* Configurable using environment variables.
+- Does not block the event cycle (=fast).
+- Does not require initialization.
+- Produces structured data.
+- [Decouples transports](#transports).
+- Has a [CLI program](#cli-program).
+- Works in Node.js and browser.
+- Configurable using environment variables.
 
 In other words,
 
-* a logger that I can use in an application code and in dependencies.
-* a logger that allows to correlate logs between the main application code and the dependency code.
-* a logger that works well with transports in external processes.
+- a logger that I can use in an application code and in dependencies.
+- a logger that allows to correlate logs between the main application code and the dependency code.
+- a logger that works well with transports in external processes.
 
 Roarr is this logger.
 
@@ -44,11 +44,9 @@ Roarr logger API for producing logs is the same in Node.js and browser.
 Example:
 
 ```ts
-import {
-  Roarr as log,
-} from 'roarr';
+import { Roarr as log } from "roarr";
 
-log('foo');
+log("foo");
 ```
 
 ### Consuming logs
@@ -70,9 +68,7 @@ All logs will be written to stdout.
 In a browser, you must implement `ROARR.write` method to read logs, e.g.
 
 ```ts
-import {
-  ROARR,
-} from 'roarr';
+import { ROARR } from "roarr";
 
 ROARR.write = () => {};
 ```
@@ -86,9 +82,7 @@ The API of the `ROARR.write` is:
 Example implementation:
 
 ```ts
-import {
-  ROARR,
-} from 'roarr';
+import { ROARR } from "roarr";
 
 ROARR.write = (message) => {
   console.log(JSON.parse(message));
@@ -99,7 +93,7 @@ or if you are initializing `ROARR.write` _before_ `roarr` is loaded:
 
 ```ts
 // Ensure that `globalThis.ROARR` is configured.
-const ROARR = globalThis.ROARR = globalThis.ROARR || {};
+const ROARR = (globalThis.ROARR = globalThis.ROARR || {});
 
 ROARR.write = (message) => {
   console.log(JSON.parse(message));
@@ -138,13 +132,13 @@ globalThis.ROARR.write = (message) => {
 
 ## Log message format
 
-|Property name|Contents|
-|---|---|
-|`context`|Arbitrary, user-provided structured data. See [context property names](#context-property-names).|
-|`message`|User-provided message formatted using [printf](https://en.wikipedia.org/wiki/Printf_format_string).|
-|`sequence`|Incremental sequence ID (see [`adopt`](#adopt) for description of the format and its meaning).|
-|`time`|Unix timestamp in milliseconds.|
-|`version`|Roarr log message format version.|
+| Property name | Contents                                                                                            |
+| ------------- | --------------------------------------------------------------------------------------------------- |
+| `context`     | Arbitrary, user-provided structured data. See [context property names](#context-property-names).    |
+| `message`     | User-provided message formatted using [printf](https://en.wikipedia.org/wiki/Printf_format_string). |
+| `sequence`    | Incremental sequence ID (see [`adopt`](#adopt) for description of the format and its meaning).      |
+| `time`        | Unix timestamp in milliseconds.                                                                     |
+| `version`     | Roarr log message format version.                                                                   |
 
 Example:
 
@@ -197,11 +191,11 @@ export type Logger =
 
 To put it into words:
 
-* First parameter can be either a string (message) or an object.
-  * If first parameter is an object (context), the second parameter must be a string (message).
-* Arguments after the message parameter are used to enable [printf message formatting](https://en.wikipedia.org/wiki/Printf_format_string).
-  * Printf arguments must be of a primitive type (`string | number | boolean | null`).
-  * There can be up to 9 printf arguments (or 8 if the first parameter is the context object).
+- First parameter can be either a string (message) or an object.
+  - If first parameter is an object (context), the second parameter must be a string (message).
+- Arguments after the message parameter are used to enable [printf message formatting](https://en.wikipedia.org/wiki/Printf_format_string).
+  - Printf arguments must be of a primitive type (`string | number | boolean | null`).
+  - There can be up to 9 printf arguments (or 8 if the first parameter is the context object).
 
 Refer to the [Usage documentation](#usage) for common usage examples.
 
@@ -218,19 +212,19 @@ When using `adopt`, context properties will be added to all _all_ Roarr messages
 ```ts
 log.adopt(
   () => {
-    log('foo 0');
+    log("foo 0");
 
     log.adopt(
       () => {
-        log('foo 1');
+        log("foo 1");
       },
       {
-        baz: 'baz 1',
+        baz: "baz 1",
       },
     );
   },
   {
-    bar: 'bar 0',
+    bar: "bar 0",
   },
 );
 ```
@@ -252,16 +246,16 @@ Members of sequence value represent log index relative to the async execution co
 
 ```ts
 log.adopt(() => {
-  log('foo 0');
+  log("foo 0");
   log.adopt(() => {
-    log('bar 0');
+    log("bar 0");
     log.adopt(() => {
-      log('baz 0');
+      log("baz 0");
       setTimeout(() => {
-        log('baz 1');
+        log("baz 1");
       }, 10);
     });
-    log('bar 1');
+    log("bar 1");
   });
 });
 ```
@@ -278,7 +272,7 @@ Notice that even though logs `baz 0` and `baz 1` were produced at different time
 
 #### Requirements
 
-* `adopt` method only works in Node.js.
+- `adopt` method only works in Node.js.
 
 ### `child`
 
@@ -298,17 +292,15 @@ Creates a child logger that appends child `context` to every subsequent message.
 Example:
 
 ```ts
-import {
-  Roarr as log,
-} from 'roarr';
+import { Roarr as log } from "roarr";
 
 const barLog = log.child({
-  foo: 'bar'
+  foo: "bar",
 });
 
-log.debug('foo 1');
+log.debug("foo 1");
 
-barLog.debug('foo 2');
+barLog.debug("foo 2");
 ```
 
 ```json
@@ -327,29 +319,30 @@ Creates a child logger that translates every subsequent message.
 Example:
 
 ```ts
-import {
-  Roarr as log,
-} from 'roarr';
+import { Roarr as log } from "roarr";
 
-const barLog = log.child<{error: Error}>((message) => {
+const barLog = log.child<{ error: Error }>((message) => {
   return {
     ...message,
     context: {
       ...message.context,
-      ...message.context.error && {
+      ...(message.context.error && {
         error: {
           message: message.context.error.message,
         },
-      },
+      }),
     },
   };
 });
 
-log.debug('foo 1');
+log.debug("foo 1");
 
-barLog.debug({
-  error: new Error('bar'),
-}, 'foo 2');
+barLog.debug(
+  {
+    error: new Error("bar"),
+  },
+  "foo 2",
+);
 ```
 
 ```json
@@ -366,12 +359,10 @@ Returns the current context.
 Example:
 
 ```ts
-import {
-  Roarr as log,
-} from 'roarr';
+import { Roarr as log } from "roarr";
 
 const childLogger = log.child({
-  foo: 'bar'
+  foo: "bar",
 });
 
 childLogger.getContext();
@@ -380,25 +371,28 @@ childLogger.getContext();
 ```
 
 ### `trace`
+
 ### `debug`
+
 ### `info`
+
 ### `warn`
+
 ### `error`
+
 ### `fatal`
 
 Convenience methods for logging a message with `logLevel` context property value set to a numeric value representing the [log level](#log-levels), e.g.
 
 ```ts
-import {
-  Roarr as log,
-} from 'roarr';
+import { Roarr as log } from "roarr";
 
-log.trace('foo');
-log.debug('foo');
-log.info('foo');
-log.warn('foo');
-log.error('foo');
-log.fatal('foo');
+log.trace("foo");
+log.debug("foo");
+log.info("foo");
+log.warn("foo");
+log.error("foo");
+log.fatal("foo");
 ```
 
 Produces output:
@@ -413,15 +407,20 @@ Produces output:
 ```
 
 ### `traceOnce`
+
 ### `debugOnce`
+
 ### `infoOnce`
+
 ### `warnOnce`
+
 ### `errorOnce`
+
 ### `fatalOnce`
 
 Just like the regular logger methods, but logs the message only once.
 
-Note: Internally, Roarr keeps a record of the last 1,000 `Once` invocations. If this buffer overflows, then the message is going to be logged again until the next time the buffer overflows again. 
+Note: Internally, Roarr keeps a record of the last 1,000 `Once` invocations. If this buffer overflows, then the message is going to be logged again until the next time the buffer overflows again.
 
 ## Utilities
 
@@ -449,17 +448,15 @@ getLogLevelName(numericLogLevel: number): LogLevelName;
 Roarr logger supports middlewares implemented as [`child`](#child) message translate functions, e.g.
 
 ```ts
-import {
-  Roarr as log,
-} from 'roarr';
-import createSerializeErrorMiddleware from '@roarr/middleware-serialize-error';
+import { Roarr as log } from "roarr";
+import createSerializeErrorMiddleware from "@roarr/middleware-serialize-error";
 
 const childLog = log.child(createSerializeErrorMiddleware());
 
-const error = new Error('foo');
+const error = new Error("foo");
 
-log.debug({error}, 'bar');
-childLog.debug({error}, 'bar');
+log.debug({ error }, "bar");
+childLog.debug({ error }, "bar");
 ```
 
 ```json
@@ -471,7 +468,7 @@ Roarr middlewares enable translation of every bit of information that is used to
 
 The following are the official middlewares:
 
-* [`@roarr/middleware-serialize-error`](https://github.com/gajus/roarr-middleware-serialize-error)
+- [`@roarr/middleware-serialize-error`](https://github.com/gajus/roarr-middleware-serialize-error)
 
 Raise an issue to add your middleware of your own creation.
 
@@ -499,18 +496,18 @@ Roarr does not support in-process transports because Node processes are single t
 
 Depending on your configuration, consider one of the following log transports:
 
-* [Beats](https://www.elastic.co/products/beats) for aggregating at a process level (written in Go).
-* [logagent](https://github.com/sematext/logagent-js) for aggregating at a process level (written in JavaScript).
-* [Fluentd](https://www.fluentd.org/) for aggregating logs at a container orchestration level (e.g. Kubernetes) (written in Ruby).
+- [Beats](https://www.elastic.co/products/beats) for aggregating at a process level (written in Go).
+- [logagent](https://github.com/sematext/logagent-js) for aggregating at a process level (written in JavaScript).
+- [Fluentd](https://www.fluentd.org/) for aggregating logs at a container orchestration level (e.g. Kubernetes) (written in Ruby).
 
 ## Node.js environment variables
 
 Use environment variables to control `roarr` behavior.
 
-|Name||Function|Default|
-|---|---|---|---|
-|`ROARR_LOG`|Boolean|Enables/ disables logging.|`false`|
-|`ROARR_STREAM`|`STDOUT`, `STDERR`|Name of the stream where the logs will be written.|`STDOUT`|
+| Name           |                    | Function                                           | Default  |
+| -------------- | ------------------ | -------------------------------------------------- | -------- |
+| `ROARR_LOG`    | Boolean            | Enables/ disables logging.                         | `false`  |
+| `ROARR_STREAM` | `STDOUT`, `STDERR` | Name of the stream where the logs will be written. | `STDOUT` |
 
 When using `ROARR_STREAM=STDERR`, use [`3>&1 1>&2 2>&3 3>&-`](https://stackoverflow.com/a/2381643/368691) to pipe stderr output.
 
@@ -520,12 +517,12 @@ When using `ROARR_STREAM=STDERR`, use [`3>&1 1>&2 2>&3 3>&-`](https://stackoverf
 
 Roarr does not have reserved context property names. However, I encourage use of the following conventions:
 
-|Context property name|Use case|
-|---|---|
-|`application`|Name of the application (do not use in code intended for distribution; see `package` property instead).|
-|`logLevel`|A numeric value indicating the [log level](#log-levels). See [API](#api) for the build-in loggers with a pre-set log-level.|
-|`namespace`|Namespace within a package, e.g. function name. Treat the same way that you would construct namespaces when using the [`debug`](https://github.com/visionmedia/debug) package.|
-|`package`|Name of the NPM package.|
+| Context property name | Use case                                                                                                                                                                       |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `application`         | Name of the application (do not use in code intended for distribution; see `package` property instead).                                                                        |
+| `logLevel`            | A numeric value indicating the [log level](#log-levels). See [API](#api) for the build-in loggers with a pre-set log-level.                                                    |
+| `namespace`           | Namespace within a package, e.g. function name. Treat the same way that you would construct namespaces when using the [`debug`](https://github.com/visionmedia/debug) package. |
+| `package`             | Name of the NPM package.                                                                                                                                                       |
 
 The `roarr pretty-print` [CLI program](#cli-program) is using the context property names suggested in the conventions to pretty-print the logs for the developer inspection purposes.
 
@@ -533,14 +530,14 @@ The `roarr pretty-print` [CLI program](#cli-program) is using the context proper
 
 The `roarr pretty-print` [CLI program](#cli-program) translates `logLevel` values to the following human-readable names:
 
-|`logLevel`|Human-readable name|
-|---|---|
-|10|TRACE|
-|20|DEBUG|
-|30|INFO|
-|40|WARN|
-|50|ERROR|
-|60|FATAL|
+| `logLevel` | Human-readable name |
+| ---------- | ------------------- |
+| 10         | TRACE               |
+| 20         | DEBUG               |
+| 30         | INFO                |
+| 40         | WARN                |
+| 50         | ERROR               |
+| 60         | FATAL               |
 
 ### Using Roarr in an application
 
@@ -553,14 +550,12 @@ I recommend to create a file `Logger.js` in the project directory. Inside this f
  * @file Example contents of a Logger.js file.
  */
 
-import {
-  Roarr,
-} from 'roarr';
+import { Roarr } from "roarr";
 
 export const Logger = Roarr.child({
   // .foo property is going to appear only in the logs that are created using
   // the current instance of a Roarr logger.
-  foo: 'bar'
+  foo: "bar",
 });
 ```
 
@@ -575,11 +570,9 @@ Roarr is opinionated about how it serializes (converts objects to JSON string) l
 You can override this serializer by defining `ROARR.serializeMessage`:
 
 ```ts
-import type {
-  MessageSerializer,
-} from 'roarr';
+import type { MessageSerializer } from "roarr";
 
-const ROARR = globalThis.ROARR = globalThis.ROARR || {};
+const ROARR = (globalThis.ROARR = globalThis.ROARR || {});
 
 const serializeMessage: MessageSerializer = (message) => {
   return JSON.stringify(message);
@@ -593,9 +586,7 @@ ROARR.serializeMessage = serializeMessage;
 In Node.js, Roarr registers an `error` listener on the configured output stream to ignore `EPIPE` errors. Test runners that create isolated module environments may need to remove that listener during teardown.
 
 ```ts
-import {
-  ROARR,
-} from 'roarr';
+import { ROARR } from "roarr";
 
 afterEach(() => {
   ROARR.teardown?.();
@@ -613,18 +604,19 @@ If you want to include an instance of [`Error`](https://developer.mozilla.org/en
 The least-error prone way to do this is to use an existing library, e.g. [`serialize-error`](https://www.npmjs.com/package/serialize-error).
 
 ```ts
-import {
-  Roarr as log,
-} from 'roarr';
-import serializeError from 'serialize-error';
+import { Roarr as log } from "roarr";
+import serializeError from "serialize-error";
 
 // [..]
 
 send((error, result) => {
   if (error) {
-    log.error({
-      error: serializeError(error)
-    }, 'message not sent due to a remote error');
+    log.error(
+      {
+        error: serializeError(error),
+      },
+      "message not sent due to a remote error",
+    );
 
     return;
   }
@@ -779,7 +771,19 @@ Roarr by default truncates context properties if the context object is wider or 
 When the context goes over this limit, you will start seeing `...` entries in your logs, e.g.
 
 ```json
-{"a":"a","b":"b","c":"c","d":"d","e":"e","f":"f","g":"g","h":"h","i":"i","j":"j","...":"1 item not stringified"}
+{
+  "a": "a",
+  "b": "b",
+  "c": "c",
+  "d": "d",
+  "e": "e",
+  "f": "f",
+  "g": "g",
+  "h": "h",
+  "i": "i",
+  "j": "j",
+  "...": "1 item not stringified"
+}
 ```
 
 The reason for this is to prevent accidental logging of massive objects that can cause context truncation and performance issues.
