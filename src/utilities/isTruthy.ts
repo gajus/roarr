@@ -1,5 +1,5 @@
 export const isTruthy = (value: string) => {
-  return ['true', 't', 'yes', 'y', 'on', '1'].includes(
+  return ['1', 'on', 't', 'true', 'y', 'yes'].includes(
     value.trim().toLowerCase(),
   );
 };

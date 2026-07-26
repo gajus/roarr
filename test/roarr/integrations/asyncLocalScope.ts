@@ -1,6 +1,3 @@
-/* eslint-disable max-nested-callbacks */
-/* eslint-disable ava/use-test */
-
 import { createLogger } from '../../../src/factories/createLogger';
 import { createRoarrInitialGlobalState } from '../../../src/factories/createRoarrInitialGlobalState';
 import { type Logger, type Message } from '../../../src/types';
@@ -50,16 +47,10 @@ test.serial('warns if async_hooks are unavailable', async (t) => {
 
   globalThis.ROARR.asyncLocalStorage = null;
 
-  await log.adopt(
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    () => {},
-  );
+  await log.adopt(() => {});
 
   // Ensure that we log only once.
-  await log.adopt(
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    () => {},
-  );
+  await log.adopt(() => {});
 
   t.deepEqual(firstLog.messages, [
     {

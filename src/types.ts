@@ -1,14 +1,7 @@
 import { type AsyncLocalStorage } from 'node:async_hooks';
 
-type JsonValue =
-  | JsonObject
-  | JsonValue[]
-  | boolean
-  | number
-  | string
-  | readonly JsonValue[]
-  | null
-  | undefined;
+export type AsyncLocalContext =
+  NestedAsyncLocalContext | TopLevelAsyncLocalContext;
 
 /**
  * @see https://stackoverflow.com/a/77390832/368691
@@ -18,23 +11,43 @@ export type JsonObject = {
   [k: string]: JsonValue;
 };
 
+export type Logger<Z = MessageContext> = LogMethod<Z> & {
+  adopt: <T>(
+    routine: () => T,
+    context?: MessageContext | TransformMessageFunction<MessageContext>,
+  ) => Promise<T>;
+  child: Child<Z>;
+  debug: LogMethod<Z>;
+  debugOnce: LogMethod<Z>;
+  error: LogMethod<Z>;
+  errorOnce: LogMethod<Z>;
+  fatal: LogMethod<Z>;
+  fatalOnce: LogMethod<Z>;
+  getContext: () => MessageContext;
+  info: LogMethod<Z>;
+  infoOnce: LogMethod<Z>;
+  trace: LogMethod<Z>;
+  traceOnce: LogMethod<Z>;
+  warn: LogMethod<Z>;
+  warnOnce: LogMethod<Z>;
+};
+
+export type LogLevelName =
+  'debug' | 'error' | 'fatal' | 'info' | 'trace' | 'warn';
+
 export type LogWriter = (message: string) => void;
+
+export type Message<T = MessageContext> = {
+  readonly context: T;
+  readonly message: string;
+  readonly sequence: string;
+  readonly time: number;
+  readonly version: string;
+};
 
 export type MessageContext<T = {}> = JsonObject & T;
 
-export type TopLevelAsyncLocalContext = {
-  messageContext: MessageContext;
-  transforms: ReadonlyArray<TransformMessageFunction<MessageContext>>;
-};
-
-type NestedAsyncLocalContext = TopLevelAsyncLocalContext & {
-  sequence: number;
-  sequenceRoot: string;
-};
-
-export type AsyncLocalContext =
-  | NestedAsyncLocalContext
-  | TopLevelAsyncLocalContext;
+export type MessageEventHandler = (message: Message<MessageContext>) => void;
 
 export type MessageSerializer = (message: Message<MessageContext>) => string;
 
@@ -48,19 +61,29 @@ export type RoarrGlobalState = {
   write: LogWriter;
 };
 
-type SprintfArgument = boolean | number | string | null;
-
-export type Message<T = MessageContext> = {
-  readonly context: T;
-  readonly message: string;
-  readonly sequence: string;
-  readonly time: number;
-  readonly version: string;
+export type TopLevelAsyncLocalContext = {
+  messageContext: MessageContext;
+  transforms: ReadonlyArray<TransformMessageFunction<MessageContext>>;
 };
 
 export type TransformMessageFunction<T> = (
   message: Message<T>,
 ) => Message<MessageContext>;
+
+type Child<Z> = {
+  <T = Z>(context: TransformMessageFunction<MessageContext<T>>): Logger<T | Z>;
+  (context: MessageContext): Logger<Z>;
+};
+
+type JsonValue =
+  | boolean
+  | JsonObject
+  | JsonValue[]
+  | null
+  | number
+  | readonly JsonValue[]
+  | string
+  | undefined;
 
 type LogMethod<Z> = {
   <T extends string = string>(
@@ -89,38 +112,9 @@ type LogMethod<Z> = {
   ): void;
 };
 
-type Child<Z> = {
-  <T = Z>(context: TransformMessageFunction<MessageContext<T>>): Logger<T | Z>;
-  (context: MessageContext): Logger<Z>;
+type NestedAsyncLocalContext = TopLevelAsyncLocalContext & {
+  sequence: number;
+  sequenceRoot: string;
 };
 
-export type Logger<Z = MessageContext> = LogMethod<Z> & {
-  adopt: <T>(
-    routine: () => T,
-    context?: MessageContext | TransformMessageFunction<MessageContext>,
-  ) => Promise<T>;
-  child: Child<Z>;
-  debug: LogMethod<Z>;
-  debugOnce: LogMethod<Z>;
-  error: LogMethod<Z>;
-  errorOnce: LogMethod<Z>;
-  fatal: LogMethod<Z>;
-  fatalOnce: LogMethod<Z>;
-  getContext: () => MessageContext;
-  info: LogMethod<Z>;
-  infoOnce: LogMethod<Z>;
-  trace: LogMethod<Z>;
-  traceOnce: LogMethod<Z>;
-  warn: LogMethod<Z>;
-  warnOnce: LogMethod<Z>;
-};
-
-export type MessageEventHandler = (message: Message<MessageContext>) => void;
-
-export type LogLevelName =
-  | 'debug'
-  | 'error'
-  | 'fatal'
-  | 'info'
-  | 'trace'
-  | 'warn';
+type SprintfArgument = boolean | null | number | string;

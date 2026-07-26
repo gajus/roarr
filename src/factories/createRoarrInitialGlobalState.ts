@@ -36,7 +36,7 @@ export const createRoarrInitialGlobalState = (
     } catch {}
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+      // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires, n/global-require
       const AsyncLocalStorage = require('node:async_hooks').AsyncLocalStorage;
 
       const asyncLocalStorage = new AsyncLocalStorage();

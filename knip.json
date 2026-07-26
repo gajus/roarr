@@ -1,14 +1,13 @@
 {
-  "$schema": "https://unpkg.com/knip@2/schema.json",
-  "entry": [
-    "src/Roarr.ts",
-    "src/browser.ts"
-  ],
+  "$schema": "https://unpkg.com/knip@6/schema.json",
   "ignoreDependencies": [
-    "husky"
+    "husky",
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/github",
+    "@semantic-release/npm"
   ],
   "project": [
-    "src/**/*!",
+    "src/**/*",
     "test/**/*"
   ]
 }

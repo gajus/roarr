@@ -39,7 +39,6 @@ export const createMockLogger = (
   onMessage: MessageEventHandler,
   parentContext?: MessageContext,
 ): Logger => {
-  // eslint-disable-next-line unicorn/consistent-function-scoping
   const log: any = () => {
     return undefined;
   };

@@ -295,7 +295,6 @@ const logMessage = function (
   index: any,
   index_: any,
 ) {
-  // eslint-disable-next-line @babel/no-invalid-this
   const { onMessage, parentMessageContext, transforms } = this;
 
   const time = Date.now();

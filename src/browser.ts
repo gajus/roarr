@@ -21,6 +21,11 @@ const Roarr = createLogger((message) => {
   }
 });
 
+export { logLevels } from './constants';
+
+export { ROARR, Roarr };
+
+export { getLogLevelName } from './getLogLevelName';
 export type {
   Logger,
   LogLevelName,
@@ -31,8 +36,3 @@ export type {
   RoarrGlobalState,
   TransformMessageFunction,
 } from './types';
-
-export { ROARR, Roarr };
-
-export { logLevels } from './constants';
-export { getLogLevelName } from './getLogLevelName';

@@ -1,5 +1,4 @@
 /* eslint-disable n/no-process-env */
-/* eslint-disable ava/use-test */
 
 import anyTest, { type TestFn } from 'ava';
 import * as sinon from 'sinon';
@@ -25,7 +24,6 @@ export const createIntegrationTest = ({
 
     const write = sinon.stub(ROARR, 'write');
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     write.callsFake(() => {});
 
     t.context = {

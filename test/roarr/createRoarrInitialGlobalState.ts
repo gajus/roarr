@@ -69,7 +69,6 @@ test('overrides "write" method if current is the latest version', (t) => {
 });
 
 test('does not override "write" method if current is not the latest version', (t) => {
-  // eslint-disable-next-line  @typescript-eslint/no-empty-function
   const write = () => {};
 
   const state = createRoarrInitialGlobalState({
