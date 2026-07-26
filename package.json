@@ -59,7 +59,7 @@
   "name": "roarr",
   "repository": {
     "type": "git",
-    "url": "git@github.com:gajus/roarr.git"
+    "url": "git+https://github.com/gajus/roarr.git"
   },
   "scripts": {
     "benchmark": "ROARR_LOG=true tsx test/benchmark.ts",
