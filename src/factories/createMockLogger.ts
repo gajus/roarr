@@ -1,9 +1,9 @@
-import { logLevels } from "../constants";
+import { logLevels } from '../constants';
 import {
   type Logger,
   type MessageContext,
   type MessageEventHandler,
-} from "../types";
+} from '../types';
 
 const noopLevelMethod = () => {
   return undefined;
@@ -32,7 +32,7 @@ for (const logLevelName of Object.keys(logLevels) as Array<
   keyof typeof logLevels
 >) {
   mockLoggerPrototype[logLevelName] = noopLevelMethod;
-  mockLoggerPrototype[logLevelName + "Once"] = noopLevelMethod;
+  mockLoggerPrototype[logLevelName + 'Once'] = noopLevelMethod;
 }
 
 export const createMockLogger = (

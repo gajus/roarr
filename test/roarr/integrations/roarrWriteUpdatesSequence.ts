@@ -1,17 +1,17 @@
-import { createIntegrationTest } from "../../helpers/createIntegrationTest";
+import { createIntegrationTest } from '../../helpers/createIntegrationTest';
 
 const test = createIntegrationTest({
   writeLogs: true,
 });
 
-test("updates sequence", (t) => {
+test('updates sequence', (t) => {
   const { Roarr, write } = t.context;
 
   const log = Roarr;
 
   log.adopt(() => {
     log.adopt(() => {
-      log.info("foo");
+      log.info('foo');
     });
   });
 

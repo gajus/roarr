@@ -1,10 +1,10 @@
-import { createIntegrationTest } from "../../helpers/createIntegrationTest";
+import { createIntegrationTest } from '../../helpers/createIntegrationTest';
 
 const test = createIntegrationTest({
   writeLogs: true,
 });
 
-test("serialize message", (t) => {
+test('serialize message', (t) => {
   const { Roarr, ROARR, write } = t.context;
 
   const log = Roarr;
@@ -15,7 +15,7 @@ test("serialize message", (t) => {
     });
   };
 
-  log.info("test");
+  log.info('test');
 
   t.is(write.firstCall.args[0], '{"message":"test"}');
 });

@@ -1,8 +1,8 @@
-import { ROARR_VERSION } from "../../src/config";
-import { createRoarrInitialGlobalState } from "../../src/factories/createRoarrInitialGlobalState";
-import test from "ava";
+import { ROARR_VERSION } from '../../src/config';
+import { createRoarrInitialGlobalState } from '../../src/factories/createRoarrInitialGlobalState';
+import test from 'ava';
 
-test("creates new state", (t) => {
+test('creates new state', (t) => {
   const state = createRoarrInitialGlobalState({});
 
   t.teardown(() => {
@@ -15,7 +15,7 @@ test("creates new state", (t) => {
   });
 });
 
-test("respects existing sequence", (t) => {
+test('respects existing sequence', (t) => {
   const state = createRoarrInitialGlobalState({
     sequence: 1,
   });
@@ -30,9 +30,9 @@ test("respects existing sequence", (t) => {
   });
 });
 
-test("appends the latest version", (t) => {
+test('appends the latest version', (t) => {
   const state = createRoarrInitialGlobalState({
-    versions: ["0.0.1"],
+    versions: ['0.0.1'],
   });
 
   t.teardown(() => {
@@ -41,7 +41,7 @@ test("appends the latest version", (t) => {
 
   t.like(state, {
     sequence: 0,
-    versions: ["0.0.1", ROARR_VERSION],
+    versions: ['0.0.1', ROARR_VERSION],
   });
 });
 
@@ -52,20 +52,20 @@ test('sets "write" method if current is the first version', (t) => {
     state.teardown?.();
   });
 
-  t.is(typeof state.write, "function");
+  t.is(typeof state.write, 'function');
 });
 
 test('overrides "write" method if current is the latest version', (t) => {
   const state = createRoarrInitialGlobalState({
-    versions: ["0.0.1"],
-    write: "foo",
+    versions: ['0.0.1'],
+    write: 'foo',
   });
 
   t.teardown(() => {
     state.teardown?.();
   });
 
-  t.is(typeof state.write, "function");
+  t.is(typeof state.write, 'function');
 });
 
 test('does not override "write" method if current is not the latest version', (t) => {
@@ -73,7 +73,7 @@ test('does not override "write" method if current is not the latest version', (t
   const write = () => {};
 
   const state = createRoarrInitialGlobalState({
-    versions: ["100.0.0"],
+    versions: ['100.0.0'],
     write,
   });
 

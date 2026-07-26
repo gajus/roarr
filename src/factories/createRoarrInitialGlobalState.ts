@@ -1,7 +1,7 @@
-import { ROARR_VERSION } from "../config";
-import { type RoarrGlobalState } from "../types";
-import { createNodeWriter } from "./createNodeWriter";
-import compareSemver from "semver-compare";
+import { ROARR_VERSION } from '../config';
+import { type RoarrGlobalState } from '../types';
+import { createNodeWriter } from './createNodeWriter';
+import compareSemver from 'semver-compare';
 
 export const createRoarrInitialGlobalState = (
   currentState: any,
@@ -37,7 +37,7 @@ export const createRoarrInitialGlobalState = (
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
-      const AsyncLocalStorage = require("node:async_hooks").AsyncLocalStorage;
+      const AsyncLocalStorage = require('node:async_hooks').AsyncLocalStorage;
 
       const asyncLocalStorage = new AsyncLocalStorage();
       const nodeWriter = createNodeWriter();
