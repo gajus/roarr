@@ -35,7 +35,7 @@
     "eslint-config-canonical": "^47.4.2",
     "husky": "^8.0.3",
     "knip": "^6.29.0",
-    "nyc": "^15.1.0",
+    "nyc": "^18.0.0",
     "semantic-release": "^25.0.2",
     "sinon": "^17.0.0",
     "tsx": "^4.23.1",
